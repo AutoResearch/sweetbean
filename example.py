@@ -1,19 +1,32 @@
-from sweetbean.primitives import SimpleStimulus, TimelineVariable, TrialSequence, DerivedLevel, DerivedParameter
+from sweetbean.primitives import SimpleStimulus, TimelineVariable, TrialSequence, DerivedLevel, DerivedParameter, Feedback
 from sweetbean import TrialBlock, Experiment
 
 train_sequence = TrialSequence(
     [{'task': 'word_reading', 'word': 'red', 'color': 'red', 'correct': 'f', 'soa': 2000},
-     {'task': 'color_naming', 'word': 'green', 'color': 'green', 'correct': 'j',
-      'soa': 1000}])
+     {'task': 'color_naming', 'word': 'green', 'color': 'green', 'correct': 'j', 'soa': 1000},
+     {'task': 'word_reading', 'word': 'green', 'color': 'red', 'correct': 'j', 'soa': 500},
+     {'task': 'color_naming', 'word': 'red', 'color': 'green', 'correct': 'f', 'soa': 1500},
+     {'task': 'word_reading', 'word': 'green', 'color': 'red', 'correct': 'j', 'soa': 500},
+     {'task': 'color_naming', 'word': 'red', 'color': 'green', 'correct': 'f', 'soa': 1500},
+     ])
 
 experiment_sequence = TrialSequence(
     [{'task': 'word_reading', 'word': 'green', 'color': 'red', 'correct': 'j', 'soa': 500},
-     {'task': 'color_naming', 'word': 'red', 'color': 'green', 'correct': 'f', 'soa': 1500}])
+     {'task': 'color_naming', 'word': 'red', 'color': 'green', 'correct': 'f', 'soa': 1500},
+     {'task': 'word_reading', 'word': 'green', 'color': 'red', 'correct': 'j', 'soa': 500},
+     {'task': 'color_naming', 'word': 'red', 'color': 'green', 'correct': 'f', 'soa': 1500},
+     {'task': 'word_reading', 'word': 'green', 'color': 'red', 'correct': 'j', 'soa': 500},
+     {'task': 'color_naming', 'word': 'red', 'color': 'green', 'correct': 'f', 'soa': 1500},
+     {'task': 'word_reading', 'word': 'green', 'color': 'red', 'correct': 'j', 'soa': 500},
+     {'task': 'color_naming', 'word': 'red', 'color': 'green', 'correct': 'f', 'soa': 1500},
+     ])
+
+######## HERE STARTS THE  *** SWEETBEAN *** CODE
 
 ## STIMULI
 
 soa = SimpleStimulus(duration=TimelineVariable('soa'))
-stroop = SimpleStimulus(duration=1500, v_shape=TimelineVariable('word'), v_color=TimelineVariable('color'))
+feedback = Feedback()
 
 
 ## CONDITIONAL STIMULI
@@ -29,7 +42,7 @@ def is_plus(task):
 x_shape = DerivedLevel('x', is_x, [TimelineVariable('task')])
 plus_shape = DerivedLevel('+', is_plus, [TimelineVariable('task')])
 
-fixation_shape = DerivedParameter([x_shape, plus_shape])
+fixation_shape = DerivedParameter("fixation_shape",[x_shape, plus_shape])
 
 fixation = SimpleStimulus(duration=500, v_shape=fixation_shape)
 
@@ -41,26 +54,28 @@ def is_f(task):
 
 
 def is_j(task):
-    not (is_f(task))
+    not is_f(task)
 
 
 f_letter = DerivedLevel('f', is_f, [TimelineVariable('task')])
 j_letter = DerivedLevel('j', is_j, [TimelineVariable('task')])
 
-correct_letter = DerivedParameter([f_letter, j_letter])
+correct_letter = DerivedParameter('correct',[f_letter, j_letter])
 
 stroop = SimpleStimulus(duration=1500, v_shape=TimelineVariable('word'), v_color=TimelineVariable('color'),
-                        correct=correct_letter)
+                        correct=correct_letter, choices=['j', 'f'])
 
 ## TRIAL BLOCK
 
-train_block = TrialBlock([fixation, soa, stroop], train_sequence)
+train_block = TrialBlock([fixation, soa, stroop, feedback], train_sequence)
 
-experiment_block = TrialBlock([fixation, soa, stroop], experiment_sequence)
+experiment_block = TrialBlock([fixation, soa, stroop, feedback], experiment_sequence)
 
 ## experiment
 
 experiment = Experiment([train_block, experiment_block])
+
+##### HERE STOPS THE *** SWEETBEAN *** CODE
 
 text = experiment.to_psych()
 

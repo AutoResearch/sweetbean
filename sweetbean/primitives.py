@@ -15,6 +15,8 @@ class TimelineVariable:
 
 
 def _param_to_psych(param):
+    if isinstance(param, List):
+        return param
     if isinstance(param, TimelineVariable) or isinstance(param, DerivedParameter):
         return param.to_psych()
     else:
@@ -85,6 +87,33 @@ class SimpleStimulus(Stimulus):
         return res
 
 
+class Feedback(Stimulus):
+    def __int__(self):
+        pass
+    def to_psych(self):
+        res = '{'
+        res += 'type: jsPsychHtmlKeyboardResponse,'
+        res += 'trial_duration: 1000,'
+        res += 'stimulus: () => {'
+        res += 'let last_trial_correct = jsPsych.data.get().last(1).values()[0].correct;'
+        res += 'if (last_trial_correct) {'
+        res += 'return "<div class='+"'feedback'"+'>Correct!</div>";'
+        res += '} else {'
+        res += 'let last_trial_response = jsPsych.data.get().last(1).values()[0].response;'
+        res += 'if (last_trial_response) {'
+        res += 'return "<div class='+"'feedback'"+'>Wrong!</div>";'
+        res += '} else {'
+        res += 'return "<div class='+"'feedback'"+'>Too slow!</div>";'
+        res += '}'
+        res += '}'
+        res += '},'
+        res += 'response_ends_trial: false'
+        res += '}'
+        return res
+
+
+
+
 class TrialSequence:
     def __init__(self, sequence):
         self.sequence = sequence
@@ -115,9 +144,8 @@ class DerivedParameter:
     name: str
     levels: List[DerivedLevel]
 
-    def __init__(self, levels):
-        letters = string.ascii_lowercase
-        self.name = ''.join(random.choice(letters) for _ in range(10))
+    def __init__(self, name, levels):
+        self.name = name
         self.levels = levels
 
     def to_psych(self):
