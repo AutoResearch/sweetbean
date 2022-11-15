@@ -8,14 +8,14 @@ class TimelineVariable:
         self.name = str(name)
 
     def to_psych(self):
-        return f'jsPsych.timelineVariable("{self.name}")'
+        return f"jsPsych.timelineVariable('{self.name}')"
 
 
 def _param_to_psych(param):
     if isinstance(param, TimelineVariable):
         return param.to_psych()
     else:
-        return str(param)
+        return '"' + str(param) + '"'
 
 
 class Stimulus:
@@ -47,14 +47,21 @@ class SimpleStimulus(Stimulus):
         res = '{' \
                f'type: {self.type},' \
                f'trial_duration: {self.duration},' \
-               'stimulus: () => {' \
-               f'return <div style="color: {self.v_color}">{self.v_shape}</div>' \
-               '},' \
-               f'choices: {self.choices}'
+               'stimulus: () => { return '
+        res += '"<div style='
+        res += "'"
+        res += 'color: " + '
+        res += self.v_color
+        res += ' + "\'>" +'
+        res += self.v_shape
+        res += " + '</div>'"
+        res += '},'
+        res += f'choices: {self.choices}'
         if self.correct:
             res += ','\
                'on_finish: (data) => {' \
                f'data["correct"] = {self.correct} == data["response"]'
+            res += '}'
 
         res += '}'
         return res
