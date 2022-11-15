@@ -88,30 +88,31 @@ class SimpleStimulus(Stimulus):
 
 
 class Feedback(Stimulus):
-    def __int__(self):
-        pass
+    def __int__(self, duration: int = 0):
+        self.duration = _param_to_psych(duration)
+        if isinstance(duration, DerivedParameter):
+            self.sequence_splicers.append(duration)
+
     def to_psych(self):
         res = '{'
         res += 'type: jsPsychHtmlKeyboardResponse,'
-        res += 'trial_duration: 1000,'
+        res += f'trial_duration: {self.duration},'
         res += 'stimulus: () => {'
         res += 'let last_trial_correct = jsPsych.data.get().last(1).values()[0].correct;'
         res += 'if (last_trial_correct) {'
-        res += 'return "<div class='+"'feedback'"+'>Correct!</div>";'
+        res += 'return "<div class=' + "'feedback'" + '>Correct!</div>";'
         res += '} else {'
         res += 'let last_trial_response = jsPsych.data.get().last(1).values()[0].response;'
         res += 'if (last_trial_response) {'
-        res += 'return "<div class='+"'feedback'"+'>Wrong!</div>";'
+        res += 'return "<div class=' + "'feedback'" + '>Wrong!</div>";'
         res += '} else {'
-        res += 'return "<div class='+"'feedback'"+'>Too slow!</div>";'
+        res += 'return "<div class=' + "'feedback'" + '>Too slow!</div>";'
         res += '}'
         res += '}'
         res += '},'
         res += 'response_ends_trial: false'
         res += '}'
         return res
-
-
 
 
 class TrialSequence:
