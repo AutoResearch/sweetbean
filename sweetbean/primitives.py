@@ -1,7 +1,5 @@
 from __future__ import annotations
 from typing import List, Callable
-import string
-import random
 
 
 class TimelineVariable:
@@ -86,6 +84,7 @@ class TextStimulus(Stimulus):
 
 class FlankerStimulus(Stimulus):
     type = 'jsPsychHtmlKeyboardResponse'
+
     def __init__(self, direction='left', distractor='left', color='white', choices=[], correct='', duration=0):
         self.direction = _param_to_psych(direction)
         self.distractor = _param_to_psych(distractor)
@@ -117,6 +116,21 @@ class FlankerStimulus(Stimulus):
                    f'data["correct"] = {self.correct} == data["response"]'
             res += '}'
 
+        res += '}'
+        return res
+
+
+class Fixation(Stimulus):
+    def __init__(self, duration=0):
+        self.duration = _param_to_psych(duration)
+        super(Fixation, self).__init__(duration)
+
+    def to_psych(self):
+        res = '{'
+        res += 'type: jsPsychHtmlKeyboardResponse,'
+        res += f'trial_duration: {self.duration},'
+        res += 'stimulus: +,'
+        res += 'response_ends_trial: false'
         res += '}'
         return res
 
