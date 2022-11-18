@@ -57,7 +57,7 @@ class TextStimulus(Stimulus):
     choices: List = []
     correct: str = ''
 
-    def __init__(self, text='', color='white', choices=[], correct='', duration=None):
+    def __init__(self, duration=None, text='', color='white', choices=[], correct=''):
         self.text = _param_to_psych(text)
         self.color = _param_to_psych(color)
         self.choices = _param_to_psych(choices)
@@ -92,7 +92,7 @@ class TextStimulus(Stimulus):
 class SymbolStimulus(Stimulus):
     type = 'jsPsychHtmlKeyboardResponse'
 
-    def __init__(self, symbol='square', color='white', choices=[], correct='', duration=None):
+    def __init__(self, duration=None, symbol='square', color='white', choices=[], correct=''):
         self.symbol = _param_to_psych(symbol)
         self.color = _param_to_psych(color)
         self.choices = _param_to_psych(choices)
@@ -127,7 +127,7 @@ class SymbolStimulus(Stimulus):
 class FlankerStimulus(Stimulus):
     type = 'jsPsychHtmlKeyboardResponse'
 
-    def __init__(self, direction='left', distractor='left', color='white', choices=[], correct='', duration=None):
+    def __init__(self, duration=None, direction='left', distractor='left', color='white', choices=[], correct=''):
         self.direction = _param_to_psych(direction)
         self.distractor = _param_to_psych(distractor)
         self.color = _param_to_psych(color)
@@ -163,7 +163,7 @@ class FlankerStimulus(Stimulus):
 
 
 class FixationStimulus(Stimulus):
-    def __init__(self, duration=0):
+    def __init__(self, duration=None):
         self.duration = _param_to_psych(duration)
         super(FixationStimulus, self).__init__(duration)
 
@@ -176,16 +176,29 @@ class FixationStimulus(Stimulus):
         res += '}'
         return res
 
+
 class BlankStimulus(Stimulus):
-    def __init(self, duration=None):
+    def __init__(self, duration=None, choices=[], correct=''):
         self.duration = _param_to_psych(duration)
-        super(BlankStimulus, self).__init__(duration)
+        self.choices = _param_to_psych(choices)
+        self.correct = _param_to_psych(correct)
+        super(BlankStimulus, self).__init__(duration, choices, correct)
+
     def to_psych(self):
         res = '{'
         res += 'type: jsPsychHtmlKeyboardResponse,'
         res += f'trial_duration: {self.duration},'
         res += 'stimulus: "",'
-        res += 'response_ends_trial: false'
+        res += 'response_ends_trial: () => {'
+        res += 'if (' + self.correct + '){ return true;'
+        res += '} else {'
+        res += 'return true;}},'
+        res += f'choices: {self.choices}'
+        if self.correct:
+            res += ',' \
+                   'on_finish: (data) => {' \
+                   f'data["correct"] = {self.correct} == data["response"]'
+            res += '}'
         res += '}'
         return res
 
