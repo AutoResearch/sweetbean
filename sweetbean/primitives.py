@@ -82,6 +82,42 @@ class TextStimulus(Stimulus):
         return res
 
 
+class SymbolStimulus(Stimulus):
+    type = 'jsPsychHtmlKeyboardResponse'
+
+    def __init__(self, symbol='square', color='white', choices=[], correct='', duration=0):
+        self.symbol = _param_to_psych(symbol)
+        self.color = _param_to_psych(color)
+        self.choices = _param_to_psych(choices)
+        self.correct = _param_to_psych(correct)
+        self.duration = _param_to_psych(duration)
+        super(SymbolStimulus, self).__init__(symbol, color, choices, correct, duration)
+
+    def to_psych(self):
+        res = '{' \
+              f'type: {self.type},' \
+              f'trial_duration: {self.duration},' \
+              'stimulus: () => { '
+        res += 'let c = "sweetbean-"+jsPsych.timelineVariable(\'symbol\');'
+        res += 'return '
+        res += f'"<div class=\'" + c + "\' style=" + '
+        res += '"\'background: " + ('
+        res += self.symbol + ' == "triangle" ? "transparent" : ' + self.color + ')'
+        res += ' + (' + self.symbol + ' == "triangle" ? "; border-bottom: solid 10vw " + ' + self.color + ' : "") '
+        res += ' + "\'></div>"'
+        res += '},'
+        res += f'choices: {self.choices}'
+        if self.correct:
+            res += ',' \
+                   'on_finish: (data) => {' \
+                   f'data["correct"] = {self.correct} == data["response"]'
+            res += '}'
+
+        res += '}'
+        return res
+
+
+
 class FlankerStimulus(Stimulus):
     type = 'jsPsychHtmlKeyboardResponse'
 
