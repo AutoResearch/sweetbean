@@ -17,6 +17,11 @@ def _param_to_psych(param):
         return param
     if isinstance(param, TimelineVariable) or isinstance(param, DerivedParameter):
         return param.to_psych()
+    elif isinstance(param, bool):
+        if param:
+            return 'true'
+        else:
+            return 'false'
     else:
         return '"' + str(param) + '"'
 
@@ -117,7 +122,6 @@ class SymbolStimulus(Stimulus):
         return res
 
 
-
 class FlankerStimulus(Stimulus):
     type = 'jsPsychHtmlKeyboardResponse'
 
@@ -156,42 +160,74 @@ class FlankerStimulus(Stimulus):
         return res
 
 
-class Fixation(Stimulus):
+class FixationStimulus(Stimulus):
     def __init__(self, duration=0):
         self.duration = _param_to_psych(duration)
-        super(Fixation, self).__init__(duration)
+        super(FixationStimulus, self).__init__(duration)
 
     def to_psych(self):
         res = '{'
         res += 'type: jsPsychHtmlKeyboardResponse,'
         res += f'trial_duration: {self.duration},'
-        res += 'stimulus: +,'
+        res += 'stimulus: <div>+</div>,'
+        res += 'response_ends_trial: false'
+        res += '}'
+        return res
+
+class BlankStimulus(Stimulus):
+    def __init(self, duration=0):
+        self.duration = _param_to_psych(duration)
+        super(BlankStimulus, self).__init__(duration)
+    def to_psych(self):
+        res = '{'
+        res += 'type: jsPsychHtmlKeyboardResponse,'
+        res += f'trial_duration: {self.duration},'
+        res += 'stimulus: "",'
         res += 'response_ends_trial: false'
         res += '}'
         return res
 
 
-class Feedback(Stimulus):
-    def __init__(self, duration: int = 0):
+class FeedbackStimulus(Stimulus):
+    def __init__(self, duration: int = 0, kind: str = 'message', on_correct: bool = True):
         self.duration = _param_to_psych(duration)
-        if isinstance(duration, DerivedParameter):
-            self.sequence_splicers.append(duration)
+        self.kind = _param_to_psych(kind)
+        self.on_correct = _param_to_psych(on_correct)
+        super(FeedbackStimulus, self).__init__(duration, kind, on_correct)
 
     def to_psych(self):
         res = '{'
         res += 'type: jsPsychHtmlKeyboardResponse,'
-        res += f'trial_duration: {self.duration},'
+        res += 'trial_duration: () => {'
+        res += 'let last_trial_correct = jsPsych.data.get().last(1).values()[0].correct;'
+        res += 'if ((' + self.on_correct + '&& last_trial_correct) || !last_trial_correct) {'
+        res += 'return ' + self.duration
+        res += '} else {'
+        res += 'return 0'
+        res += '}},'
         res += 'stimulus: () => {'
         res += 'let last_trial_correct = jsPsych.data.get().last(1).values()[0].correct;'
         res += 'if (last_trial_correct) {'
+        res += 'if (' + self.on_correct + '){'
+        res += 'if (' + self.kind + ' == "message"){'
         res += 'return "<div class=' + "'feedback'" + '>Correct!</div>";'
+        res += '} else if (' + self.kind + ' == "screen"){'
+        res += 'return "<div class=\'feedback-screen-green\'></div>";'
+        res += '}} else {'
+        res += 'return ""}'
         res += '} else {'
         res += 'let last_trial_response = jsPsych.data.get().last(1).values()[0].response;'
         res += 'if (last_trial_response) {'
+        res += 'if (' + self.kind + ' == "message"){'
         res += 'return "<div class=' + "'feedback'" + '>Wrong!</div>";'
-        res += '} else {'
+        res += '} else if (' + self.kind + ' == "screen"){'
+        res += 'return "<div class=\'feedback-screen-red\'></div>";'
+        res += '}} else {'
+        res += 'if (' + self.kind + ' == "message"){'
         res += 'return "<div class=' + "'feedback'" + '>Too slow!</div>";'
-        res += '}'
+        res += '} else if (' + self.kind + ' == "screen"){'
+        res += 'return "<div class=\'feedback-screen-red\'></div>";'
+        res += '}}'
         res += '}'
         res += '},'
         res += 'response_ends_trial: false'
