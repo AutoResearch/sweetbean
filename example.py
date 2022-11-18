@@ -1,5 +1,5 @@
 from sweetbean.primitives import TextStimulus, TimelineVariable, TrialSequence, DerivedLevel, DerivedParameter, \
-    Feedback, FlankerStimulus, SymbolStimulus
+    FeedbackStimulus, FlankerStimulus, SymbolStimulus
 from sweetbean import TrialBlock, Experiment
 
 train_sequence = TrialSequence(
@@ -33,7 +33,7 @@ experiment_sequence = TrialSequence(
 ## STIMULI
 
 soa = TextStimulus(duration=TimelineVariable('soa'))
-feedback = Feedback(duration=800)
+feedback = FeedbackStimulus(duration=2000, kind='screen')
 symbol = SymbolStimulus(duration=2000, symbol=TimelineVariable('symbol'), color=TimelineVariable('color'))
 
 
@@ -92,7 +92,7 @@ flanker = FlankerStimulus(duration=2000, direction=TimelineVariable('direction')
                           distractor=distractor, choices=['j', 'f'])
 ## TRIAL BLOCK
 
-train_block = TrialBlock([fixation, symbol, feedback], train_sequence)
+train_block = TrialBlock([fixation, flanker, feedback], train_sequence)
 
 # experiment_block = TrialBlock([fixation, soa, stroop, feedback], experiment_sequence)
 
