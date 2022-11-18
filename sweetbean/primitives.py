@@ -13,9 +13,11 @@ class TimelineVariable:
 
 
 def _param_to_psych(param):
-    if isinstance(param, List):
+    if param is None:
+        return 'null'
+    elif isinstance(param, List):
         return param
-    if isinstance(param, TimelineVariable) or isinstance(param, DerivedParameter):
+    elif isinstance(param, TimelineVariable) or isinstance(param, DerivedParameter):
         return param.to_psych()
     elif isinstance(param, bool):
         if param:
@@ -55,7 +57,7 @@ class TextStimulus(Stimulus):
     choices: List = []
     correct: str = ''
 
-    def __init__(self, text='', color='white', choices=[], correct='', duration=0):
+    def __init__(self, text='', color='white', choices=[], correct='', duration=None):
         self.text = _param_to_psych(text)
         self.color = _param_to_psych(color)
         self.choices = _param_to_psych(choices)
@@ -90,7 +92,7 @@ class TextStimulus(Stimulus):
 class SymbolStimulus(Stimulus):
     type = 'jsPsychHtmlKeyboardResponse'
 
-    def __init__(self, symbol='square', color='white', choices=[], correct='', duration=0):
+    def __init__(self, symbol='square', color='white', choices=[], correct='', duration=None):
         self.symbol = _param_to_psych(symbol)
         self.color = _param_to_psych(color)
         self.choices = _param_to_psych(choices)
@@ -125,7 +127,7 @@ class SymbolStimulus(Stimulus):
 class FlankerStimulus(Stimulus):
     type = 'jsPsychHtmlKeyboardResponse'
 
-    def __init__(self, direction='left', distractor='left', color='white', choices=[], correct='', duration=0):
+    def __init__(self, direction='left', distractor='left', color='white', choices=[], correct='', duration=None):
         self.direction = _param_to_psych(direction)
         self.distractor = _param_to_psych(distractor)
         self.color = _param_to_psych(color)
@@ -175,7 +177,7 @@ class FixationStimulus(Stimulus):
         return res
 
 class BlankStimulus(Stimulus):
-    def __init(self, duration=0):
+    def __init(self, duration=None):
         self.duration = _param_to_psych(duration)
         super(BlankStimulus, self).__init__(duration)
     def to_psych(self):
@@ -189,7 +191,7 @@ class BlankStimulus(Stimulus):
 
 
 class FeedbackStimulus(Stimulus):
-    def __init__(self, duration: int = 0, kind: str = 'message', on_correct: bool = True):
+    def __init__(self, duration: int = None, kind: str = 'message', on_correct: bool = True):
         self.duration = _param_to_psych(duration)
         self.kind = _param_to_psych(kind)
         self.on_correct = _param_to_psych(on_correct)
