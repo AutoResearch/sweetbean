@@ -1,5 +1,5 @@
 from typing import List
-from sweetbean.primitives import Stimulus, SimpleStimulus, TrialSequence
+from sweetbean.primitives import Stimulus, TextStimulus, TrialSequence
 
 
 class TrialBlock:
