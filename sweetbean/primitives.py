@@ -31,37 +31,34 @@ class Stimulus:
     duration: int = 0
     sequence_splicers: List = []
 
+    def __init__(self, *args):
+        self.sequence_splicers = []
+        for a in args:
+            if isinstance(a, DerivedParameter):
+                self.sequence_splicers.append(a)
+
     def to_psych(self):
-        return 'hi'
+        return ''
 
     def splice_into_sequence(self, trial_sequence):
         for s in self.sequence_splicers:
             s.splice_into_sequence(trial_sequence)
 
 
-class SimpleStimulus(Stimulus):
+class TextStimulus(Stimulus):
     type = 'jsPsychHtmlKeyboardResponse'
-    v_shape: str = ''
-    v_color: str = 'white'
+    text: str = ''
+    color: str = 'white'
     choices: List = []
     correct: str = ''
 
-    def __init__(self, v_shape='', v_color='white', choices=[], correct='', duration=0):
-        self.v_shape = _param_to_psych(v_shape)
-        self.v_color = _param_to_psych(v_color)
+    def __init__(self, text='', color='white', choices=[], correct='', duration=0):
+        self.text = _param_to_psych(text)
+        self.color = _param_to_psych(color)
         self.choices = _param_to_psych(choices)
         self.correct = _param_to_psych(correct)
         self.duration = _param_to_psych(duration)
-        if isinstance(v_shape, DerivedParameter):
-            self.sequence_splicers.append(v_shape)
-        if isinstance(v_color, DerivedParameter):
-            self.sequence_splicers.append(v_color)
-        if isinstance(choices, DerivedParameter):
-            self.sequence_splicers.append(choices)
-        if isinstance(correct, DerivedParameter):
-            self.sequence_splicers.append(correct)
-        if isinstance(duration, DerivedParameter):
-            self.sequence_splicers.append(duration)
+        super(TextStimulus, self).__init__(text, color, choices, correct, duration)
 
     def to_psych(self):
         res = '{' \
@@ -71,9 +68,46 @@ class SimpleStimulus(Stimulus):
         res += '"<div style='
         res += "'"
         res += 'color: " + '
-        res += self.v_color
+        res += self.color
         res += ' + "\'>" +'
-        res += self.v_shape
+        res += self.text
+        res += " + '</div>'"
+        res += '},'
+        res += f'choices: {self.choices}'
+        if self.correct:
+            res += ',' \
+                   'on_finish: (data) => {' \
+                   f'data["correct"] = {self.correct} == data["response"]'
+            res += '}'
+
+        res += '}'
+        return res
+
+
+class FlankerStimulus(Stimulus):
+    type = 'jsPsychHtmlKeyboardResponse'
+    def __init__(self, direction='left', distractor='left', color='white', choices=[], correct='', duration=0):
+        self.direction = _param_to_psych(direction)
+        self.distractor = _param_to_psych(distractor)
+        self.color = _param_to_psych(color)
+        self.choices = _param_to_psych(choices)
+        self.correct = _param_to_psych(correct)
+        self.duration = _param_to_psych(duration)
+        super(FlankerStimulus, self).__init__(direction, distractor, color, choices, correct, duration)
+
+    def to_psych(self):
+        res = '{' \
+              f'type: {self.type},' \
+              f'trial_duration: {self.duration},' \
+              'stimulus: () => { return '
+        res += '"<div style='
+        res += "'"
+        res += 'color: " + '
+        res += self.color
+        res += ' + "\'>" +'
+        res += '(' + self.distractor + ' == "left" ? "< <" : "> >") +'
+        res += '(' + self.direction + ' == "left" ? " < " : " > ")  +'
+        res += '(' + self.distractor + ' == "left" ? "< <" : "> >")'
         res += " + '</div>'"
         res += '},'
         res += f'choices: {self.choices}'
@@ -88,7 +122,7 @@ class SimpleStimulus(Stimulus):
 
 
 class Feedback(Stimulus):
-    def __int__(self, duration: int = 0):
+    def __init__(self, duration: int = 0):
         self.duration = _param_to_psych(duration)
         if isinstance(duration, DerivedParameter):
             self.sequence_splicers.append(duration)

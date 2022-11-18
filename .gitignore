@@ -4,3 +4,4 @@ dist
 pyproject.toml
 venv
 readme_build
+test
