@@ -1,13 +1,20 @@
-from sweetbean.primitives import TextStimulus, TimelineVariable, TrialSequence, DerivedLevel, DerivedParameter, Feedback, FlankerStimulus
+from sweetbean.primitives import TextStimulus, TimelineVariable, TrialSequence, DerivedLevel, DerivedParameter, \
+    Feedback, FlankerStimulus, SymbolStimulus
 from sweetbean import TrialBlock, Experiment
 
 train_sequence = TrialSequence(
-    [{'task': 'word_reading', 'word': 'red', 'color': 'red', 'correct': 'f', 'soa': 2000, 'direction':'left', 'congruency':'congruent'},
-     {'task': 'color_naming', 'word': 'green', 'color': 'green', 'correct': 'j', 'soa': 1000, 'direction':'right','congruency':'incocngruent'},
-     {'task': 'word_reading', 'word': 'green', 'color': 'red', 'correct': 'j', 'soa': 500, 'direction':'right', 'congruency':'incongruent'},
-     {'task': 'color_naming', 'word': 'red', 'color': 'green', 'correct': 'f', 'soa': 1500, 'direction':'left', 'congruency':'congruent'},
-     {'task': 'word_reading', 'word': 'green', 'color': 'red', 'correct': 'j', 'soa': 500, 'direction':'right', 'congruency':'incongruent'},
-     {'task': 'color_naming', 'word': 'red', 'color': 'green', 'correct': 'f', 'soa': 1500, 'direction':'left', 'congruency':'congruent'},
+    [{'task': 'word_reading', 'word': 'red', 'color': 'red', 'correct': 'f', 'soa': 2000, 'direction': 'left',
+      'congruency': 'congruent', 'symbol': 'square'},
+     {'task': 'color_naming', 'word': 'green', 'color': 'green', 'correct': 'j', 'soa': 1000, 'direction': 'right',
+      'congruency': 'incocngruent', 'symbol': 'circle'},
+     {'task': 'word_reading', 'word': 'green', 'color': 'red', 'correct': 'j', 'soa': 500, 'direction': 'right',
+      'congruency': 'incongruent', 'symbol': 'triangle'},
+     {'task': 'color_naming', 'word': 'red', 'color': 'green', 'correct': 'f', 'soa': 1500, 'direction': 'left',
+      'congruency': 'congruent', 'symbol': 'square'},
+     {'task': 'word_reading', 'word': 'green', 'color': 'red', 'correct': 'j', 'soa': 500, 'direction': 'right',
+      'congruency': 'incongruent', 'symbol': 'triangle'},
+     {'task': 'color_naming', 'word': 'red', 'color': 'green', 'correct': 'f', 'soa': 1500, 'direction': 'left',
+      'congruency': 'congruent', 'symbol': 'circle'},
      ])
 
 experiment_sequence = TrialSequence(
@@ -27,12 +34,15 @@ experiment_sequence = TrialSequence(
 
 soa = TextStimulus(duration=TimelineVariable('soa'))
 feedback = Feedback(duration=800)
+symbol = SymbolStimulus(duration=2000, symbol=TimelineVariable('symbol'), color=TimelineVariable('color'))
 
 
 ## CONDITIONAL STIMULI
 # determine the shape of the fixation (x if word_reading, y if color_naming)
 def is_x(task):
     return task == 'word_reading'
+
+
 def is_plus(task):
     return task == 'color_naming'
 
@@ -40,7 +50,7 @@ def is_plus(task):
 x_shape = DerivedLevel('x', is_x, [TimelineVariable('task')])
 plus_shape = DerivedLevel('+', is_plus, [TimelineVariable('task')])
 
-fixation_shape = DerivedParameter("fixation_shape" ,[x_shape, plus_shape])
+fixation_shape = DerivedParameter("fixation_shape", [x_shape, plus_shape])
 
 fixation = TextStimulus(duration=500, text=fixation_shape)
 
@@ -50,6 +60,7 @@ def is_f(task):
     return (task == 'word_reading' and task == 'green') or \
            (task == 'color_naming' and task == 'green')
 
+
 def is_j(task):
     return not is_f(task)
 
@@ -57,16 +68,20 @@ def is_j(task):
 f_letter = DerivedLevel('f', is_f, [TimelineVariable('task')])
 j_letter = DerivedLevel('j', is_j, [TimelineVariable('task')])
 
-correct_letter = DerivedParameter('correct',[f_letter, j_letter])
+correct_letter = DerivedParameter('correct', [f_letter, j_letter])
 
 stroop = TextStimulus(duration=1500, text=TimelineVariable('word'), color=TimelineVariable('color'),
-                        correct=correct_letter, choices=['j', 'f'])
+                      correct=correct_letter, choices=['j', 'f'])
+
 
 def is_distractor_left(direction, congruency):
     return (direction == 'left' and congruency == 'congruent') or \
            (direction == 'right' and congruency == 'incongruent')
+
+
 def is_distractor_right(direction, congruency):
     return not is_distractor_left(direction, congruency)
+
 
 dist_left = DerivedLevel('left', is_distractor_left, [TimelineVariable('direction'), TimelineVariable('congruency')])
 dist_right = DerivedLevel('right', is_distractor_right, [TimelineVariable('direction'), TimelineVariable('congruency')])
@@ -77,9 +92,9 @@ flanker = FlankerStimulus(duration=2000, direction=TimelineVariable('direction')
                           distractor=distractor, choices=['j', 'f'])
 ## TRIAL BLOCK
 
-train_block = TrialBlock([fixation, flanker, feedback], train_sequence)
+train_block = TrialBlock([fixation, symbol, feedback], train_sequence)
 
-#experiment_block = TrialBlock([fixation, soa, stroop, feedback], experiment_sequence)
+# experiment_block = TrialBlock([fixation, soa, stroop, feedback], experiment_sequence)
 
 ## experiment
 
@@ -91,5 +106,3 @@ text = experiment.to_psych()
 
 with open('test.js', 'w') as f:
     f.write(text)
-
-# JEPS LEARNING, MEMORY AND COGNITION
