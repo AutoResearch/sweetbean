@@ -178,7 +178,7 @@ class FixationStimulus(Stimulus):
 
 
 class BlankStimulus(Stimulus):
-    def __init(self, duration=None, choices=[], correct=''):
+    def __init__(self, duration=None, choices=[], correct=''):
         self.duration = _param_to_psych(duration)
         self.choices = _param_to_psych(choices)
         self.correct = _param_to_psych(correct)
@@ -189,7 +189,10 @@ class BlankStimulus(Stimulus):
         res += 'type: jsPsychHtmlKeyboardResponse,'
         res += f'trial_duration: {self.duration},'
         res += 'stimulus: "",'
-        res += 'response_ends_trial: false'
+        res += 'response_ends_trial: () => {'
+        res += 'if (' + self.correct + '){ return true;'
+        res += '} else {'
+        res += 'return true;}},'
         res += f'choices: {self.choices}'
         if self.correct:
             res += ',' \
