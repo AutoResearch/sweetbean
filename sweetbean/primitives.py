@@ -171,7 +171,7 @@ class FixationStimulus(Stimulus):
         res = '{'
         res += 'type: jsPsychHtmlKeyboardResponse,'
         res += f'trial_duration: {self.duration},'
-        res += 'stimulus: <div>+</div>,'
+        res += 'stimulus: "<div>+</div>",'
         res += 'response_ends_trial: false'
         res += '}'
         return res
