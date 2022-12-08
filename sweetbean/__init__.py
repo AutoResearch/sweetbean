@@ -6,18 +6,15 @@ class TrialBlock:
     stimuli: List[Stimulus] = []
     sequence: TrialSequence = None
 
-    def __init__(self, stimuli: List[Stimulus], trial_sequence: TrialSequence):
+    def __init__(self, stimuli: List[Stimulus]):
         self.stimuli = stimuli
-        for s in self.stimuli:
-            s.splice_into_sequence(trial_sequence)
-        self.sequence = trial_sequence
 
     def to_psych(self):
         res = '{timeline: ['
         for s in self.stimuli:
             res += s.to_psych() + ','
         res = res[:-1]
-        res += f'], timeline_variables: {self.sequence.to_psych()}' \
+        res += f'], timeline_variables: []' \
                '}'
         return res
 
