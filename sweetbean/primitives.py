@@ -1,6 +1,11 @@
 from __future__ import annotations
 from typing import List, Callable
 import itertools
+import os
+import time
+
+from selenium import webdriver
+from selenium.webdriver.firefox.options import Options
 
 
 class TimelineVariable:
@@ -45,6 +50,9 @@ class Stimulus:
     def to_psych(self):
         return ''
 
+    def to_img(self, name):
+        pass
+
 
 class TextStimulus(Stimulus):
     type = 'jsPsychHtmlKeyboardResponse'
@@ -54,6 +62,11 @@ class TextStimulus(Stimulus):
     correct: str = ''
 
     def __init__(self, duration=None, text='', color='white', choices=[], correct=''):
+        self._duration = duration
+        self._text = text
+        self._color = color
+        self._choices = choices
+        self._correct = correct
         self.text = _param_to_psych(text)
         self.color = _param_to_psych(color)
         self.choices = _param_to_psych(choices)
@@ -84,7 +97,7 @@ class TextStimulus(Stimulus):
         res += f'choices: {self.choices}'
         if self.correct and self.correct != '""':
             res += ',on_finish: (data) => {'
-            res += f'let correct = {self.correct}'
+            res += f'let correct = {self.correct};'
             res += f'data["correct"] = correct'
             if self.correct.startswith('()'):
                 res += '()'
@@ -93,11 +106,94 @@ class TextStimulus(Stimulus):
         res += '}'
         return res
 
+    def to_img(self, name):
+        trial = self.to_psych()
+        timeline_factors = []
+        timeline_levels = []
+        if isinstance(self._duration, TimelineVariable):
+            timeline_factors.append(self._duration.name)
+            timeline_levels.append(self._duration.levels)
+        if isinstance(self._duration, DerivedParameter):
+            for level in self._duration.levels:
+                for factors in level.factors:
+                    timeline_factors.append(factors.name)
+                    timeline_levels.append(factors.levels)
+        if isinstance(self._text, TimelineVariable):
+            timeline_factors.append(self._text.name)
+            timeline_levels.append(self._text.levels)
+        if isinstance(self._text, DerivedParameter):
+            for level in self._text.levels:
+                for factors in level.factors:
+                    timeline_factors.append(factors.name)
+                    timeline_levels.append(factors.levels)
+        if isinstance(self._color, TimelineVariable):
+            timeline_factors.append(self._color.name)
+            timeline_levels.append(self._color.levels)
+        if isinstance(self._color, DerivedParameter):
+            for level in self._color.levels:
+                for factors in level.factors:
+                    timeline_factors.append(factors.name)
+                    timeline_levels.append(factors.levels)
+        if isinstance(self._choices, TimelineVariable):
+            timeline_factors.append(self._choices.name)
+            timeline_levels.append(self._choices.levels)
+        if isinstance(self._choices, DerivedParameter):
+            for level in self._choices.levels:
+                for factors in level.factors:
+                    timeline_factors.append(factors.name)
+                    timeline_levels.append(factors.levels)
+        if isinstance(self._correct, TimelineVariable):
+            timeline_factors.append(self._correct.name)
+            timeline_levels.append(self._correct.levels)
+        if isinstance(self._correct, DerivedParameter):
+            for level in self._correct.levels:
+                for factors in level.factors:
+                    timeline_factors.append(factors.name)
+                    timeline_levels.append(factors.levels)
+
+        timeline_f = []
+        timeline_l = []
+        for i in range(len(timeline_factors)):
+            f = timeline_factors[i]
+            l = timeline_levels[i]
+            if f not in timeline_f:
+                timeline_f.append(f)
+
+                timeline_l.append(l[0])
+        if not timeline_f:
+            timeline_f = ["dummy"]
+        if not timeline_l:
+            timeline_l = ["dummy"]
+        timeline_str = '[{'
+        for i in range(len(timeline_f)):
+            timeline_str += f'"{timeline_f[i]}":"{timeline_l[i]}",'
+        timeline_str += '}]'
+        _dir = os.path.dirname(__file__)
+        file = os.path.join(_dir, f'{name}_tmp.html')
+
+        create_html(trial, timeline_str, file)
+
+        # initializinwebdriver for Chrome
+        options = Options()
+        options.headless = True
+        driver = webdriver.Firefox(options=options)
+
+        # getting GeekForGeeks webpage
+        driver.get(f'file://{file}')
+
+        driver.get_screenshot_as_file(f"{name}_screenshot.png")
+        os.remove(file)
+
 
 class SymbolStimulus(Stimulus):
     type = 'jsPsychHtmlKeyboardResponse'
 
     def __init__(self, duration=None, symbol='square', color='white', choices=[], correct=''):
+        self._duration = duration
+        self._symbol = symbol
+        self._color = color
+        self._choices = choices
+        self._correct = correct
         self.symbol = _param_to_psych(symbol)
         self.color = _param_to_psych(color)
         self.choices = _param_to_psych(choices)
@@ -142,7 +238,7 @@ class SymbolStimulus(Stimulus):
         res += f'choices: {self.choices}'
         if self.correct and self.correct != '""':
             res += ',on_finish: (data) => {'
-            res += f'let correct = {self.correct}'
+            res += f'let correct = {self.correct};'
             res += f'data["correct"] = correct'
             if self.correct.startswith('()'):
                 res += '()'
@@ -150,6 +246,84 @@ class SymbolStimulus(Stimulus):
             res += '}'
         res += '}'
         return res
+
+    def to_img(self, name):
+        trial = self.to_psych()
+        timeline_factors = []
+        timeline_levels = []
+        if isinstance(self._duration, TimelineVariable):
+            timeline_factors.append(self._duration.name)
+            timeline_levels.append(self._duration.levels)
+        if isinstance(self._duration, DerivedParameter):
+            for level in self._duration.levels:
+                for factors in level.factors:
+                    timeline_factors.append(factors.name)
+                    timeline_levels.append(factors.levels)
+        if isinstance(self._symbol, TimelineVariable):
+            timeline_factors.append(self._symbol.name)
+            timeline_levels.append(self._symbol.levels)
+        if isinstance(self._symbol, DerivedParameter):
+            for level in self._symbol.levels:
+                for factors in level.factors:
+                    timeline_factors.append(factors.name)
+                    timeline_levels.append(factors.levels)
+        if isinstance(self._color, TimelineVariable):
+            timeline_factors.append(self._color.name)
+            timeline_levels.append(self._color.levels)
+        if isinstance(self._color, DerivedParameter):
+            for level in self._color.levels:
+                for factors in level.factors:
+                    timeline_factors.append(factors.name)
+                    timeline_levels.append(factors.levels)
+        if isinstance(self._choices, TimelineVariable):
+            timeline_factors.append(self._choices.name)
+            timeline_levels.append(self._choices.levels)
+        if isinstance(self._choices, DerivedParameter):
+            for level in self._choices.levels:
+                for factors in level.factors:
+                    timeline_factors.append(factors.name)
+                    timeline_levels.append(factors.levels)
+        if isinstance(self._correct, TimelineVariable):
+            timeline_factors.append(self._correct.name)
+            timeline_levels.append(self._correct.levels)
+        if isinstance(self._correct, DerivedParameter):
+            for level in self._correct.levels:
+                for factors in level.factors:
+                    timeline_factors.append(factors.name)
+                    timeline_levels.append(factors.levels)
+
+        timeline_f = []
+        timeline_l = []
+        for i in range(len(timeline_factors)):
+            f = timeline_factors[i]
+            l = timeline_levels[i]
+            if f not in timeline_f:
+                timeline_f.append(f)
+                timeline_l.append(l[0])
+        if not timeline_f:
+            timeline_f = ["dummy"]
+        if not timeline_l:
+            timeline_l = ["dummy"]
+        timeline_str = '[{'
+        for i in range(len(timeline_f)):
+            timeline_str += f'"{timeline_f[i]}":"{timeline_l[i]}",'
+        timeline_str += '}]'
+
+        _dir = os.path.dirname(__file__)
+        file = os.path.join(_dir, f'{name}_tmp.html')
+
+        create_html(trial, timeline_str, file)
+
+        # initializinwebdriver for Chrome
+        options = Options()
+        options.headless = True
+        driver = webdriver.Firefox(options=options)
+
+        # getting GeekForGeeks webpage
+        driver.get(f'file://{file}')
+
+        driver.get_screenshot_as_file(f"{name}_screenshot.png")
+        os.remove(file)
 
 
 class FlankerStimulus(Stimulus):
@@ -209,6 +383,9 @@ class FixationStimulus(Stimulus):
 
 class BlankStimulus(Stimulus):
     def __init__(self, duration=None, choices=[], correct=''):
+        self._duration = duration
+        self._choices = choices
+        self._correct = correct
         self.duration = _param_to_psych(duration)
         self.choices = _param_to_psych(choices)
         self.correct = _param_to_psych(correct)
@@ -222,7 +399,7 @@ class BlankStimulus(Stimulus):
         res += f'choices: {self.choices}'
         if self.correct and self.correct != '""':
             res += ',on_finish: (data) => {'
-            res += f'let correct = {self.correct}'
+            res += f'let correct = {self.correct};'
             res += f'data["correct"] = correct'
             if self.correct.startswith('()'):
                 res += '()'
@@ -230,6 +407,68 @@ class BlankStimulus(Stimulus):
             res += '}'
         res += '}'
         return res
+
+    def to_img(self, name):
+        trial = self.to_psych()
+        timeline_factors = []
+        timeline_levels = []
+        if isinstance(self._duration, TimelineVariable):
+            timeline_factors.append(self._duration.name)
+            timeline_levels.append(self._duration.levels)
+        if isinstance(self._duration, DerivedParameter):
+            for level in self._duration.levels:
+                for factors in level.factors:
+                    timeline_factors.append(factors.name)
+                    timeline_levels.append(factors.levels)
+        if isinstance(self._choices, TimelineVariable):
+            timeline_factors.append(self._choices.name)
+            timeline_levels.append(self._choices.levels)
+        if isinstance(self._choices, DerivedParameter):
+            for level in self._choices.levels:
+                for factors in level.factors:
+                    timeline_factors.append(factors.name)
+                    timeline_levels.append(factors.levels)
+        if isinstance(self._correct, TimelineVariable):
+            timeline_factors.append(self._correct.name)
+            timeline_levels.append(self._correct.levels)
+        if isinstance(self._correct, DerivedParameter):
+            for level in self._correct.levels:
+                for factors in level.factors:
+                    timeline_factors.append(factors.name)
+                    timeline_levels.append(factors.levels)
+
+        timeline_f = []
+        timeline_l = []
+        for i in range(len(timeline_factors)):
+            f = timeline_factors[i]
+            l = timeline_levels[i]
+            if f not in timeline_f:
+                timeline_f.append(f)
+                timeline_l.append(l[0])
+        if not timeline_f:
+            timeline_f = ["dummy"]
+        if not timeline_l:
+            timeline_l = ["dummy"]
+        timeline_str = '[{'
+        for i in range(len(timeline_f)):
+            timeline_str += f'"{timeline_f[i]}":"{timeline_l[i]}",'
+        timeline_str += '}]'
+
+        _dir = os.path.dirname(__file__)
+        file = os.path.join(_dir, f'{name}_tmp.html')
+
+        create_html(trial, timeline_str, file)
+
+        # initializinwebdriver for Chrome
+        options = Options()
+        options.headless = True
+        driver = webdriver.Firefox(options=options)
+
+        # getting GeekForGeeks webpage
+        driver.get(f'file://{file}')
+
+        driver.get_screenshot_as_file(f"{name}_screenshot.png")
+        os.remove(file)
 
 
 class FeedbackStimulus(Stimulus):
@@ -335,13 +574,41 @@ class DerivedParameter:
         return js_string
 
 
+def create_html(trial: str = '', timeline_variables: str = '', out_path: str = ''):
+    html = '<!DOCTYPE html>\n' \
+           '<head>\n' \
+           '<title>My awesome expmeriment</title>' \
+           '<script src="https://unpkg.com/jspsych@7.3.1"></script>\n' \
+           '<script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.2"></script>\n' \
+           '<link href="https://unpkg.com/jspsych@7.3.1/css/jspsych.css" rel="stylesheet" type="text/css"/>\n' \
+           '<style>\n' \
+           'body {background: #000; color: #fff;}\n' \
+           'div {font-size:24pt}' \
+           '.sweetbean-square {width:10vw; height:10vw}' \
+           '.sweetbean-circle {width:10vw; height:10vw; border-radius:50%}' \
+           '.sweetbean-triangle {width:0; height: 0; border-left: 5vw solid transparent; border-right: 5vw solid transparent}' \
+           '.feedback-screen-red {position:absolute; left:0; top:0; width:100vw; height: 100vh; background: red}' \
+           '.feedback-screen-green {position:absolute; left:0; top: 0; width:100vw; height: 100vh; background: green}' \
+           '</style>\n' \
+           '</head>\n' \
+           '<body></body>\n' \
+           '<script>\n' \
+           'jsPsych = initJsPsych();' \
+           'trials = [' \
+           '{' \
+           'timeline: [' \
+           f'{trial}' \
+           f'], timeline_variables: {timeline_variables}' \
+           '}];' \
+           'jsPsych.run(trials);' \
+           '</script>\n' \
+           '</html>'
+
+    with open(out_path, 'w') as f:
+        f.write(html)
+
+
 if __name__ == '__main__':
-    train_sequence = TrialSequence(
-        [{'task': 'word_reading', 'word': 'red', 'color': 'red', 'correct': 'f', 'soa': 2000},
-         {'task': 'color_naming', 'word': 'green', 'color': 'green', 'correct': 'j',
-          'soa': 1000}])
-
-
     def is_x(task, color, number):
         return task == 'w_r' and color == 'r' and number > 2
 
@@ -362,6 +629,7 @@ if __name__ == '__main__':
         TimelineVariable('number', [1, 2, 3]),
     ])
 
-    print(x_shape.to_psych())
+    fix = TextStimulus(200, text=DerivedParameter('hi', [x_shape, y_shape]))
+    fix.to_img('fixation')
 
     # print(train_sequence.sequence)

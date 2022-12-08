@@ -8,6 +8,7 @@ letter_list = ['j', 'n', 'd', 'f']
 
 task = TimelineVariable('task', ['word_naming', 'color_naming'])
 color = TimelineVariable('color', ['red', 'green', 'blue', 'yellow'])
+word = TimelineVariable('word', ['red', 'green', 'blue', 'yellow'])
 response = TimelineVariable('response', ['red', 'green', 'blue', 'yellow'])
 
 
@@ -28,7 +29,7 @@ cue_shape = DerivedParameter("shape", [square_shape, triangle_shape])
 
 cue = SymbolStimulus(400, cue_shape)
 
-fixation = FixationStimulus(500)
+fixation = TextStimulus(500, text='+')
 
 
 def is_correct_1(response):
@@ -54,11 +55,13 @@ letter_4 = DerivedLevel(letter_list[3], is_correct_4, [response])
 
 correct_letter = DerivedParameter('correct', [letter_1, letter_2, letter_3, letter_4])
 
-stroop = TextStimulus(2000, TimelineVariable('word'), color, ['j', 'n', 'd', 'f'], correct_letter)
+stroop = TextStimulus(2000, word, color, ['j', 'n', 'd', 'f'], correct_letter)
 
 blank = BlankStimulus(400)
 
 train_block = TrialBlock([cue, fixation, stroop, blank])
+
+train_block.to_image()
 
 experiment = Experiment([train_block])
 
