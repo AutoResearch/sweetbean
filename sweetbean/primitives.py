@@ -1,21 +1,21 @@
 from __future__ import annotations
 from typing import List, Callable
+import itertools
 
 
 class TimelineVariable:
     name: str = ''
 
-    def __init__(self, name):
+    def __init__(self, name, levels=[]):
         self.name = str(name)
+        self.levels = levels
 
     def to_psych(self):
         return f"jsPsych.timelineVariable('{self.name}')"
 
 
 def _param_to_psych(param):
-    if param is None:
-        return 'null'
-    elif isinstance(param, List):
+    if isinstance(param, List):
         return param
     elif isinstance(param, TimelineVariable) or isinstance(param, DerivedParameter):
         return param.to_psych()
@@ -45,10 +45,6 @@ class Stimulus:
     def to_psych(self):
         return ''
 
-    def splice_into_sequence(self, trial_sequence):
-        for s in self.sequence_splicers:
-            s.splice_into_sequence(trial_sequence)
-
 
 class TextStimulus(Stimulus):
     type = 'jsPsychHtmlKeyboardResponse'
@@ -66,25 +62,34 @@ class TextStimulus(Stimulus):
         super(TextStimulus, self).__init__(text, color, choices, correct, duration)
 
     def to_psych(self):
-        res = '{' \
-              f'type: {self.type},' \
-              f'trial_duration: {self.duration},' \
-              'stimulus: () => { return '
+        res = '{'
+        res += f'type: {self.type},'
+        res += f'trial_duration: {self.duration},'
+        res += 'stimulus: () => {'
+        res += f'let color = {self.color};'
+        res += f'let text = {self.text};'
+        res += 'return '
         res += '"<div style='
         res += "'"
         res += 'color: " + '
-        res += self.color
+        res += 'color'
+        if self.color.startswith('()'):
+            res += '()'
         res += ' + "\'>" +'
-        res += self.text
+        res += 'text'
+        if self.text.startswith('()'):
+            res += '()'
         res += " + '</div>'"
         res += '},'
         res += f'choices: {self.choices}'
-        if self.correct:
-            res += ',' \
-                   'on_finish: (data) => {' \
-                   f'data["correct"] = {self.correct} == data["response"]'
+        if self.correct and self.correct != '""':
+            res += ',on_finish: (data) => {'
+            res += f'let correct = {self.correct}'
+            res += f'data["correct"] = correct'
+            if self.correct.startswith('()'):
+                res += '()'
+            res += '== data["response"]'
             res += '}'
-
         res += '}'
         return res
 
@@ -101,25 +106,48 @@ class SymbolStimulus(Stimulus):
         super(SymbolStimulus, self).__init__(symbol, color, choices, correct, duration)
 
     def to_psych(self):
-        res = '{' \
-              f'type: {self.type},' \
-              f'trial_duration: {self.duration},' \
-              'stimulus: () => { '
-        res += 'let c = "sweetbean-"+jsPsych.timelineVariable(\'symbol\');'
+        res = '{'
+        res += f'type: {self.type},'
+        res += f'trial_duration: {self.duration},'
+        res += 'stimulus: () => { '
+        res += f'let symbol = {self.symbol};'
+        res += f'let color = {self.color};'
+        res += f'let symbol_class = symbol'
+        if self.symbol.startswith("()"):
+            res += '()'
+        res += ';'
+        res += 'let c = "sweetbean-"+symbol_class;'
         res += 'return '
         res += f'"<div class=\'" + c + "\' style=" + '
         res += '"\'background: " + ('
-        res += self.symbol + ' == "triangle" ? "transparent" : ' + self.color + ')'
-        res += ' + (' + self.symbol + ' == "triangle" ? "; border-bottom: solid 10vw " + ' + self.color + ' : "") '
+        res += 'symbol'
+        if self.symbol.startswith("()"):
+            res += '()'
+        res += ' == "triangle" ? "transparent" : '
+        res += 'color'
+        if self.color.startswith('()'):
+            res += '()'
+        res += ')'
+        res += ' + ('
+        res += 'symbol'
+        if self.symbol.startswith('()'):
+            res += '()'
+        res += '== "triangle" ? "; border-bottom: solid 10vw " + '
+        res += 'color'
+        if self.color.startswith('()'):
+            res += "()"
+        res += ' : "") '
         res += ' + "\'></div>"'
         res += '},'
         res += f'choices: {self.choices}'
-        if self.correct:
-            res += ',' \
-                   'on_finish: (data) => {' \
-                   f'data["correct"] = {self.correct} == data["response"]'
+        if self.correct and self.correct != '""':
+            res += ',on_finish: (data) => {'
+            res += f'let correct = {self.correct}'
+            res += f'data["correct"] = correct'
+            if self.correct.startswith('()'):
+                res += '()'
+            res += '== data["response"]'
             res += '}'
-
         res += '}'
         return res
 
@@ -152,12 +180,14 @@ class FlankerStimulus(Stimulus):
         res += " + '</div>'"
         res += '},'
         res += f'choices: {self.choices}'
-        if self.correct:
-            res += ',' \
-                   'on_finish: (data) => {' \
-                   f'data["correct"] = {self.correct} == data["response"]'
+        if self.correct and self.correct != '""':
+            res += ',on_finish: (data) => {'
+            res += f'let correct = {self.correct}'
+            res += f'data["correct"] = correct'
+            if self.correct.startswith('()'):
+                res += '()'
+            res += '== data["response"]'
             res += '}'
-
         res += '}'
         return res
 
@@ -189,15 +219,14 @@ class BlankStimulus(Stimulus):
         res += 'type: jsPsychHtmlKeyboardResponse,'
         res += f'trial_duration: {self.duration},'
         res += 'stimulus: "",'
-        res += 'response_ends_trial: () => {'
-        res += 'if (' + self.correct + '){ return true;'
-        res += '} else {'
-        res += 'return true;}},'
         res += f'choices: {self.choices}'
-        if self.correct:
-            res += ',' \
-                   'on_finish: (data) => {' \
-                   f'data["correct"] = {self.correct} == data["response"]'
+        if self.correct and self.correct != '""':
+            res += ',on_finish: (data) => {'
+            res += f'let correct = {self.correct}'
+            res += f'data["correct"] = correct'
+            if self.correct.startswith('()'):
+                res += '()'
+            res += '== data["response"]'
             res += '}'
         res += '}'
         return res
@@ -268,12 +297,23 @@ class DerivedLevel:
         self.predicate = predicate
         self.factors = factors
 
-    def splice(self, param_name, trial_sequence):
-        name_lis = [f.name for f in self.factors]
-        for trial in trial_sequence.sequence:
-            args = [trial[name] for name in name_lis]
-            if self.predicate(*args):
-                trial[param_name] = self.value
+    def to_psych(self):
+        level_list = [f.levels for f in self.factors]
+        level_combination = list(itertools.product(*level_list))
+        js_string = ''
+        for comb in level_combination:
+            arg = [f for f in comb]
+            if self.predicate(*arg):
+                js_string += '('
+                for i in range(len(comb)):
+                    js_string += f'{self.factors[i].to_psych()} === {_param_to_psych(arg[i])}'
+                    if i < len(comb) - 1:
+                        js_string += ' && '
+                    else:
+                        js_string += ') || '
+        if js_string == '':
+            return ''
+        return js_string[:-4]
 
 
 class DerivedParameter:
@@ -285,11 +325,14 @@ class DerivedParameter:
         self.levels = levels
 
     def to_psych(self):
-        return f"jsPsych.timelineVariable('{self.name}')"
-
-    def splice_into_sequence(self, sequence):
+        js_string = '() => {'
         for l in self.levels:
-            l.splice(self.name, sequence)
+            js_string += f'if ({l.to_psych()})'
+            js_string += '{'
+            js_string += f'return {_param_to_psych(l.value)}'
+            js_string += '}'
+        js_string += '}'
+        return js_string
 
 
 if __name__ == '__main__':
@@ -299,12 +342,26 @@ if __name__ == '__main__':
           'soa': 1000}])
 
 
-    def is_x(task):
-        return task == 'word_reading'
+    def is_x(task, color, number):
+        return task == 'w_r' and color == 'r' and number > 2
 
 
-    x_shape = DerivedLevel('x', is_x, [TimelineVariable('task')])
+    def is_plus(task, color, number):
+        return not is_x(task, color, number)
 
-    x_shape._splice('fixation_shape', train_sequence)
 
-    print(train_sequence.sequence)
+    x_shape = DerivedLevel('x', is_x, [
+        TimelineVariable('task', ['w_r', 'c_n', 'n_n']),
+        TimelineVariable('color', ['r', 'g', 'r']),
+        TimelineVariable('number', [1, 2, 3]),
+    ])
+
+    y_shape = DerivedLevel('+', is_plus, [
+        TimelineVariable('task', ['w_r', 'c_n', 'n_n']),
+        TimelineVariable('color', ['r', 'g', 'r']),
+        TimelineVariable('number', [1, 2, 3]),
+    ])
+
+    print(x_shape.to_psych())
+
+    # print(train_sequence.sequence)
