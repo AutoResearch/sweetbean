@@ -17,6 +17,9 @@ class TrialBlock:
         res += f'], timeline_variables: []' \
                '}'
         return res
+    def to_image(self):
+        for i in range(len(self.stimuli)):
+            self.stimuli[i].to_img(f's_{i}')
 
 
 class Experiment:
@@ -31,7 +34,7 @@ class Experiment:
             res += b.to_psych()
             res += ','
         res = res[:-1] + ']\n'
-        res += 'jsPsych.run(trials)'
+        res += ';jsPsych.run(trials)'
         return res
 
 
