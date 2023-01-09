@@ -2,7 +2,6 @@ from __future__ import annotations
 from typing import List, Callable
 import itertools
 import os
-import time
 
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
@@ -39,19 +38,16 @@ class Stimulus:
     """
     type: str = None
     duration: int = 0
-    sequence_splicers: List = []
 
     def __init__(self, *args):
-        self.sequence_splicers = []
-        for a in args:
-            if isinstance(a, DerivedParameter):
-                self.sequence_splicers.append(a)
+        pass
 
     def to_psych(self):
         return ''
 
     def to_img(self, name):
         pass
+
 
 
 class TextStimulus(Stimulus):
@@ -183,7 +179,6 @@ class TextStimulus(Stimulus):
 
         driver.get_screenshot_as_file(os.path.join(_dir, f"{name}_screenshot.png"))
         os.remove(file)
-
 
 class SymbolStimulus(Stimulus):
     type = 'jsPsychHtmlKeyboardResponse'
@@ -325,7 +320,6 @@ class SymbolStimulus(Stimulus):
         driver.get_screenshot_as_file(os.path.join(_dir, f"{name}_screenshot.png"))
         os.remove(file)
 
-
 class FlankerStimulus(Stimulus):
     type = 'jsPsychHtmlKeyboardResponse'
 
@@ -365,7 +359,6 @@ class FlankerStimulus(Stimulus):
         res += '}'
         return res
 
-
 class FixationStimulus(Stimulus):
     def __init__(self, duration=None):
         self.duration = _param_to_psych(duration)
@@ -379,7 +372,6 @@ class FixationStimulus(Stimulus):
         res += 'response_ends_trial: false'
         res += '}'
         return res
-
 
 class BlankStimulus(Stimulus):
     def __init__(self, duration=None, choices=[], correct=''):
@@ -469,7 +461,6 @@ class BlankStimulus(Stimulus):
 
         driver.get_screenshot_as_file(os.path.join(_dir, f"{name}_screenshot.png"))
         os.remove(file)
-
 
 class FeedbackStimulus(Stimulus):
     def __init__(self, duration: int = None, kind: str = 'message', on_correct: bool = True):
