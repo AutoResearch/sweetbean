@@ -178,3 +178,28 @@ class SymbolStimulus(Stimulus):
         self.text_trial += f'"<div class=\'sweetbean-"+{self._set_get_variable("symbol")}+"\' style=\'background-color: "+{self._set_get_variable("color")}+"\'></div>"' + '},'
         self._set_data_text('symbol')
         self._set_data_text('color')
+
+
+class SurveyStimulus(Stimulus):
+    def __init__(self, args):
+        super().__init__(args)
+
+    def to_psych(self):
+        self._type_to_psych()
+        self._stimulus_to_psych()
+        self.text_js += self.text_trial + self.text_data + '}}'
+
+
+class TextSurveyStimulus(SurveyStimulus):
+    def __init__(self, prompts=[]):
+        type = 'jsPsychSurveyText'
+        super().__init__(locals())
+
+    def _stimulus_to_psych(self):
+        self.text_trial += self._set_param_js_preamble('questions')
+        self.text_trial += self._set_set_variable('prompts')
+        self.text_trial += '\nlet prompts_ = []'
+        self.text_trial += f'\nfor (const p of {self._set_get_variable("prompts")})' + '{'
+        self.text_trial += '\nprompts_.push({\'prompt\': p})}'
+        self.text_trial += 'return prompts_},'
+        self._set_data_text('prompts')

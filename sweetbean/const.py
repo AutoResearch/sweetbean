@@ -3,6 +3,7 @@ HTML_PREAMBLE = '<!DOCTYPE html>\n' \
                 '<title>My awesome expmeriment</title>' \
                 '<script src="https://unpkg.com/jspsych@7.3.1"></script>\n' \
                 '<script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.2"></script>\n' \
+                '<script src="https://unpkg.com/@jspsych/plugin-survey-text@1.1.2"></script>\n' \
                 '<link href="https://unpkg.com/jspsych@7.3.1/css/jspsych.css" rel="stylesheet" type="text/css"/>\n' \
                 '<style>\n' \
                 'body {background: #000; color: #fff;}\n' \
