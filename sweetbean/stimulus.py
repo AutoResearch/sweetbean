@@ -1,4 +1,4 @@
-from parameter import param_to_psych
+from sweetbean.parameter import param_to_psych, DataVariable, DerivedLevel, DerivedParameter, TimelineVariable
 
 
 class Stimulus:
@@ -92,4 +92,89 @@ class TextStimulus(Stimulus):
         self.text_trial += 'return '
         self.text_trial += f'"<div style=\'color: "+{self._set_get_variable("color")}+"\'>"+{self._set_get_variable("text")}+"</div>"' + '},'
         self._set_data_text('text')
+        self._set_data_text('color')
+
+
+StroopStimulus = TextStimulus
+
+
+class BlankStimulus(TextStimulus):
+    def __init__(self, duration=None, choices=[], correct_key=''):
+        super().__init__(duration=duration, text='', choices=choices, correct_key=correct_key)
+
+
+class FixationStimulus(TextStimulus):
+    def __init__(self, duration=None):
+        super().__init__(duration=duration, text='+', color='white', choices=[], correct_key='')
+
+
+class FeedbackStimulus(TextStimulus):
+    def __init__(self, duration=None, window=1):
+        correct = DataVariable('correct', [True, False])
+
+        def is_correct(correct):
+            return correct
+
+        def is_false(correct):
+            return not correct
+
+        correct_feedback = DerivedLevel('correct', is_correct, [correct], window)
+        false_feedback = DerivedLevel('false', is_false, [correct], window)
+
+        feedback_text = DerivedParameter('feedback_text', [correct_feedback, false_feedback])
+        super().__init__(duration, feedback_text)
+
+
+class FlankerStimulus(TextStimulus):
+    def __init__(self, duration=None, direction='left', distractor='left', choices=[], correct_key=''):
+        target_text = '<'
+        distractor_text = '<<'
+        if not isinstance(direction, TimelineVariable) and (direction.lower() == 'right' or direction.lower() == 'r'):
+            target_text = '>'
+        if not isinstance(distractor, TimelineVariable) and (
+                distractor.lower() == 'right' or distractor.lower() == 'r'):
+            distractor_text = '>>'
+
+        text = distractor_text + target_text + distractor_text
+
+        if isinstance(direction, TimelineVariable) or isinstance(distractor, TimelineVariable):
+            def is_left_left(t_dir, d_dir):
+                return (t_dir.lower() == 'left' or t_dir.lower() == 'l') and (
+                        d_dir.lower() == 'left' or d_dir.lower() == 'l')
+
+            def is_left_right(t_dir, d_dir):
+                return (t_dir.lower() == 'left' or t_dir.lower() == 'l') and (
+                        d_dir.lower() == 'right' or d_dir.lower() == 'r')
+
+            def is_right_left(t_dir, d_dir):
+                return (t_dir.lower() == 'right' or t_dir.lower() == 'r') and (
+                        d_dir.lower() == 'left' or d_dir.lower() == 'l')
+
+            def is_right_right(t_dir, d_dir):
+                return (t_dir.lower() == 'right' or t_dir.lower() == 'r') and (
+                        d_dir.lower() == 'right' or d_dir.lower() == 'r')
+
+            left_left = DerivedLevel('<<<<<', is_left_left, [direction, distractor])
+            left_right = DerivedLevel('>><>>', is_left_right, [direction, distractor])
+            right_left = DerivedLevel('<<><<', is_right_left, [direction, distractor])
+            right_right = DerivedLevel('>>>>>', is_right_right, [direction, distractor])
+
+            text = DerivedParameter('flanker_stimulus', [left_left, left_right, right_left, right_right])
+
+        super().__init__(duration=duration, text=text, color='white', choices=choices, correct_key=correct_key)
+
+
+class SymbolStimulus(Stimulus):
+
+    def __init__(self, duration=None, symbol='', color='white', choices=[], correct_key=''):
+        type = 'jsPsychHtmlKeyboardResponse'
+        super().__init__(locals())
+
+    def _stimulus_to_psych(self):
+        self.text_trial += self._set_param_js_preamble('stimulus')
+        self.text_trial += self._set_set_variable('symbol')
+        self.text_trial += self._set_set_variable('color')
+        self.text_trial += 'return '
+        self.text_trial += f'"<div class=\'sweetbean-"+{self._set_get_variable("symbol")}+"\' style=\'background-color: "+{self._set_get_variable("color")}+"\'></div>"' + '},'
+        self._set_data_text('symbol')
         self._set_data_text('color')

@@ -14,17 +14,20 @@ word = TimelineVariable('word', ['RED', 'GREEN'])
 correct_key = TimelineVariable('correct_key', ['j', 'f'])
 
 correct = DataVariable('correct', [True, False])
+
+
 def is_correct(correct):
     return correct
 
+
 def is_false(correct):
     return not correct
+
 
 correct_feedback = DerivedLevel('correct', is_correct, [correct], 2)
 false_feedback = DerivedLevel('false', is_false, [correct], 2)
 
 feedback_text = DerivedParameter('feedback_text', [correct_feedback, false_feedback])
-
 
 fixation = TextStimulus(1000, '+')
 so_s = TextStimulus(400)

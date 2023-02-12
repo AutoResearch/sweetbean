@@ -1,8 +1,6 @@
 from typing import List, Callable
 import itertools
 
-import sweetbean.parameter
-
 
 def param_to_psych(param):
     if isinstance(param, List):
@@ -51,6 +49,11 @@ class DataVariable:
 
     def to_psych(self):
         self.text_js = self.name
+
+
+class CorrectDataVariable(DataVariable):
+    def __init__(self):
+        super().__init__('correct', [True, False])
 
 
 class DerivedLevel:
