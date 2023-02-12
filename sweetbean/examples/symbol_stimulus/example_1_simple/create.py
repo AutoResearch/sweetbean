@@ -1,30 +1,31 @@
-from sweetbean.stimulus import TextStimulus
+from sweetbean.stimulus import TextStimulus, SymbolStimulus
 from sweetbean import TrialBlock, Experiment
 
+
 stim_1 = TextStimulus(
-    text='Welcome! This is a Stroop Task. Press SPACE to continue',
+    text='Welcome! We show some Symbols. Press SPACE to continue',
     choices=[' '],
 )
 
-stim_2 = TextStimulus(
+stim_2 = SymbolStimulus(
     duration=3000,
-    text='RED',
+    symbol='square',
+    color='#f0f',
+    choices=['f', 'j'],
+    correct_key=['f']
+)
+
+stim_3 = SymbolStimulus(
+    duration=3000,
+    symbol='triangle',
     color='red',
     choices=['f', 'j'],
     correct_key=['f']
 )
 
-stim_3 = TextStimulus(
+stim_4 = SymbolStimulus(
     duration=3000,
-    text='GREEN',
-    color='red',
-    choices=['f', 'j'],
-    correct_key=['f']
-)
-
-stim_4 = TextStimulus(
-    duration=3000,
-    text='RED',
+    symbol='circle',
     color='green',
     choices=['f', 'j'],
     correct_key=['j']
