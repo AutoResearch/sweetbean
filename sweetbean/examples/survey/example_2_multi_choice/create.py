@@ -1,4 +1,4 @@
-from sweetbean.stimulus import TextStimulus, TextSurveyStimulus
+from sweetbean.stimulus import TextStimulus, MultiChoiceSurveyStimulus
 from sweetbean import TrialBlock, Experiment
 
 
@@ -7,8 +7,9 @@ stim_1 = TextStimulus(
     choices=[' '],
 )
 
-stim_2 = TextSurveyStimulus(
-    prompts=['How old are you?', 'What is your gender?', 'What is your handedness?']
+stim_2 = MultiChoiceSurveyStimulus(
+    prompts=[{'How are you?': ['bad', 'good', 'fine']},
+             {'What is your handedness?': ['left','right','other','prefer not to say']}]
 )
 
 
