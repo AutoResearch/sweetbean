@@ -1,7 +1,9 @@
 name: Publish documentation to GitHub Pages
 on:
-  release:
-    types: [released]
+  push:
+    branches:
+      - main
+      - master
 jobs:
   deploy:
     runs-on: ubuntu-latest
