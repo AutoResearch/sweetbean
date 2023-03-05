@@ -1,7 +1,6 @@
 from typing import List, Callable
 import itertools
 
-
 def param_to_psych(param):
     if isinstance(param, List):
         return param
