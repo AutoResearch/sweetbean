@@ -22,4 +22,4 @@ feedback = FeedbackStimulus(800, 2)
 train_block = Block([fixation, so_s, flanker, so_f, feedback], timeline)
 experiment = Experiment([train_block])
 
-experiment.to_html('index.html')
+experiment.to_html('predefined.html')

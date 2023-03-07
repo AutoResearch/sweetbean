@@ -34,6 +34,6 @@ stimulus_onset = BlankStimulus(duration=soa)
 # the Stroop stimulus. Here instead of fixed parameters, we use the timeline variables, that we defined previously.
 stroop = TextStimulus(duration=2500, text=word, color=color)
 
-stroop_block = Block([fixation_onset, fixation, stimulus_onset, stroop], timeline)
+stroop_block = Block([fixation_onset, fixation], timeline)
 
-sequence_to_image(stroop_block, durations=['600', '800', '200-500', '2500'])
+sequence_to_image(stroop_block, durations=['600', '800'])

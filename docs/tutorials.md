@@ -8,4 +8,4 @@ In 5 Lessons, we learn the basics of SweetBean by creating a Stroop experiment. 
 - [Lesson 2](https://colab.research.google.com/drive/10fZ6gNRFb5WusGFva5LW9ngkweVNZli8?usp=sharing)
 - [Lesson 3](https://colab.research.google.com/drive/1xgTzAg7vSIEJZNIfZgMQ-WzDyx1ITg2t?usp=sharing)
 - [Lesson 4](https://colab.research.google.com/drive/10bdfJLgjI2LfQ_M95ljslFTEStWjWSQD?usp=sharing)
-
+- [Mastery](https://colab.research.google.com/drive/11qC9v07Iysc1uEpHo69ATMVDc6qMShCR?usp=sharing)

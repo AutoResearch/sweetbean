@@ -1,7 +1,6 @@
 from sweetbean.stimulus import TextStimulus, SymbolStimulus
 from sweetbean.sequence import Block, Experiment
 
-
 stim_1 = TextStimulus(
     text='Welcome! We show some Symbols. Press SPACE to continue',
     choices=[' '],
@@ -31,9 +30,7 @@ stim_4 = SymbolStimulus(
     correct_key=['j']
 )
 
-
-
 trial_sequence = Block([stim_1, stim_2, stim_3, stim_4])
 experiment = Experiment([trial_sequence])
-experiment.to_html('index.html')
+experiment.to_html('basic.html')
 

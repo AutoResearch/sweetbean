@@ -23,4 +23,4 @@ stim_4 = LikertSurveyStimulus.from_scale(
 
 trial_sequence = Block([stim_1, stim_2, stim_3, stim_4])
 experiment = Experiment([trial_sequence])
-experiment.to_html('index.html')
+experiment.to_html('likert.html')

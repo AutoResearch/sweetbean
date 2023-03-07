@@ -31,8 +31,11 @@ fixation_shape = DerivedParameter('fixation_shape', [x_shape, plus_shape])
 def is_correct_f(word, color, task):
     return (task == 'word_reading' and word == 'RED') or \
         (task == 'color_naming' and color == 'red')
+
+
 def is_correct_j(word, color, task):
     return not is_correct_f(word, color, task)
+
 
 j_key = DerivedLevel('j', is_correct_j, [word, color, task])
 f_key = DerivedLevel('f', is_correct_f, [word, color, task])
@@ -47,4 +50,4 @@ so_f = TextStimulus(300)
 train_block = Block([fixation, so_s, stroop, so_f], timeline)
 experiment = Experiment([train_block])
 
-experiment.to_html('index.html')
+experiment.to_html('derived.html')

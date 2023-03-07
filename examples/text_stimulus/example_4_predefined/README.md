@@ -1,1 +1,0 @@
-Some predefined Text Stimuli that are used often (Fixation, Blank Screen, Feedback)

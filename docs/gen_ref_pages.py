@@ -9,7 +9,7 @@ nav = mkdocs_gen_files.Nav()
 ignore = [Path('./sweetbean/const.py')]
 
 source_paths = sorted(Path("./sweetbean").rglob("*.py"))
-special_paths = []#[Path("./docs/docstrings.py")]
+special_paths = []  # [Path("./docs/docstrings.py")]
 
 for path in source_paths + special_paths:
     if path in ignore:

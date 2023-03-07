@@ -9,7 +9,7 @@ nav = mkdocs_gen_files.Nav()
 ignore = []
 
 source_paths = sorted(Path("./examples").rglob("*.py"))
-special_paths = []#[Path("./docs/docstrings.py")]
+special_paths = []  # [Path("./docs/docstrings.py")]
 
 for path in source_paths + special_paths:
     if path in ignore:
@@ -17,9 +17,7 @@ for path in source_paths + special_paths:
     module_path = path.relative_to(".").with_suffix("")
     doc_path = path.relative_to(".").with_suffix(".md")
     full_doc_path = Path("examples", doc_path)
-
     parts = tuple(module_path.parts)
-
 
     if parts[-1] == "__init__":
         parts = parts[:-1]
@@ -40,9 +38,6 @@ for path in source_paths + special_paths:
             for line in lines:
                 print(line, file=f)
         print("```", file=f)
-
-
-
 
     mkdocs_gen_files.set_edit_path(full_doc_path, path)
 
