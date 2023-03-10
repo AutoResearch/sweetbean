@@ -81,19 +81,17 @@ class Stimulus:
 
 
 class TextStimulus(Stimulus):
-    """
-    A class to describe a colored text stimulus
-    """
-    def __init__(self, duration=None, text='', color='white', choices=[], correct_key=''):
+    def __init__(self, duration: int = None, text: str = '', color: str = 'white', choices: list[str] = [],
+                 correct_key: str = ''):
         """
         constructor
 
         Arguments:
-            duration[int]: time in ms the stimulus is presented
-            text[string]: the text should be presented
-            color[string]: the color of the text
-            choices[list]: the keys that will be recorded if pressed
-            correct_key[char]: the correct key to press
+            duration: time in ms the stimulus is presented
+            text: the text should be presented
+            color: the color of the text
+            choices: the keys that will be recorded if pressed
+            correct_key: the correct key to press
         """
         type = 'jsPsychHtmlKeyboardResponse'
         super().__init__(locals())
@@ -112,15 +110,15 @@ StroopStimulus = TextStimulus
 
 
 class ImageStimulus(Stimulus):
-    def __init__(self, duration=None, src='', choices=[], correct_key=''):
+    def __init__(self, duration: int = None, src: str = '', choices: list[str] = [], correct_key: str = ''):
         """
         constructor
 
         Arguments:
-            duration[int]: time in ms the stimulus is presented
-            src[list]: the path to the videos in different formats. ATTENTION: This should be a list
-            choices[list]: the keys that will be recorded if pressed
-            correct_key[char]: the correct key to press
+            duration: time in ms the stimulus is presented
+            src: the path to the image
+            choices: the keys that will be recorded if pressed
+            correct_key: the correct key to press
         """
         type = 'jsPsychImageKeyboardResponse'
         super().__init__(locals())
@@ -134,7 +132,17 @@ class ImageStimulus(Stimulus):
 
 
 class VideoStimulus(Stimulus):
-    def __init__(self, duration=None, src='', choices=[], correct_key=''):
+
+    def __init__(self, duration: int = None, src: list[str] = '', choices: list[str] = [], correct_key: str = ''):
+        """
+        constructor
+
+        Arguments:
+            duration: time in ms the stimulus is presented
+            src: the path to the videos in different formats (needs to be a list)
+            choices: the keys that will be recorded if pressed
+            correct_key: the correct key to press
+        """
         type = 'jsPsychVideoKeyboardResponse'
         super().__init__(locals())
 
