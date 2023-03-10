@@ -6,7 +6,7 @@ import mkdocs_gen_files
 
 nav = mkdocs_gen_files.Nav()
 
-ignore = [Path('./sweetbean/const.py')]
+ignore = [Path('./sweetbean/const.py'), Path('./sweetbean/update_package_honeycomb.py')]
 
 source_paths = sorted(Path("./sweetbean").rglob("*.py"))
 special_paths = []  # [Path("./docs/docstrings.py")]

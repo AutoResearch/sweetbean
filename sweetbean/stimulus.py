@@ -3,7 +3,7 @@ from sweetbean.parameter import param_to_psych, DataVariable, DerivedLevel, Deri
 
 class Stimulus:
     """
-    A base class for visual stimuli
+    A base class for stimuli
     """
     text_js = '{'
     text_trial = ''
@@ -81,11 +81,13 @@ class Stimulus:
 
 
 class TextStimulus(Stimulus):
+    """
+    Show colored text
+    """
+
     def __init__(self, duration: int = None, text: str = '', color: str = 'white', choices: list[str] = [],
                  correct_key: str = ''):
         """
-        constructor
-
         Arguments:
             duration: time in ms the stimulus is presented
             text: the text should be presented
@@ -110,10 +112,12 @@ StroopStimulus = TextStimulus
 
 
 class ImageStimulus(Stimulus):
+    """
+    shows an image
+    """
+
     def __init__(self, duration: int = None, src: str = '', choices: list[str] = [], correct_key: str = ''):
         """
-        constructor
-
         Arguments:
             duration: time in ms the stimulus is presented
             src: the path to the image
@@ -132,11 +136,12 @@ class ImageStimulus(Stimulus):
 
 
 class VideoStimulus(Stimulus):
+    """
+    shows a video
+    """
 
     def __init__(self, duration: int = None, src: list[str] = '', choices: list[str] = [], correct_key: str = ''):
         """
-        constructor
-
         Arguments:
             duration: time in ms the stimulus is presented
             src: the path to the videos in different formats (needs to be a list)
@@ -155,17 +160,45 @@ class VideoStimulus(Stimulus):
 
 
 class BlankStimulus(TextStimulus):
-    def __init__(self, duration=None, choices=[], correct_key=''):
+    """
+    shows a blank screen
+    """
+
+    def __init__(self, duration: int = None, choices: list[str] = [], correct_key: str = ''):
+        """
+        Arguments:
+            duration: time in ms the stimulus is presented
+            choices: the keys that will be recorded if pressed
+            correct_key: the correct key to press
+        """
         super().__init__(duration=duration, text='', choices=choices, correct_key=correct_key)
 
 
 class FixationStimulus(TextStimulus):
-    def __init__(self, duration=None):
+    """
+    show a white cross in the middle of the screen
+    """
+
+    def __init__(self, duration: int = None):
+        """
+        Arguments:
+            duration: time in ms the stimulus is presented
+        """
         super().__init__(duration=duration, text='+', color='white', choices=[], correct_key='')
 
 
 class FeedbackStimulus(TextStimulus):
-    def __init__(self, duration=None, window=1):
+    """
+    show the word correct or incorrect dependent on a correct response to a stimulus before
+    """
+
+    def __init__(self, duration: int = None, window: int = 1):
+        """
+        Arguments:
+            duration: time in ms the stimulus is presented
+            window: how far back is the stimulus to check
+                    (that stimulus needs to have a choice and a correct_key parameter)
+        """
         correct = DataVariable('correct', [True, False])
 
         def is_correct(correct):
@@ -182,7 +215,20 @@ class FeedbackStimulus(TextStimulus):
 
 
 class FlankerStimulus(TextStimulus):
-    def __init__(self, duration=None, direction='left', distractor='left', choices=[], correct_key=''):
+    """
+    show a flankert stimulus (<< < <<; << > <<, >> < >>, ...)
+    """
+
+    def __init__(self, duration: int = None, direction: str = 'left', distractor: str = 'left', choices: list[str] = [],
+                 correct_key: str = ''):
+        """
+        Arguments:
+            duration: time in ms the stimulus is presented
+            direction: the direction of the target (allowed: left, right, l, r, L, R)
+            distractor: the direction of the distractor (allowed: left, right, l, r, L, R)
+            choices: the keys that will be recorded if pressed
+            correct_key: the correct key to press
+        """
         target_text = '<'
         distractor_text = '<<'
         if not isinstance(direction, TimelineVariable) and (direction.lower() == 'right' or direction.lower() == 'r'):
@@ -221,8 +267,20 @@ class FlankerStimulus(TextStimulus):
 
 
 class SymbolStimulus(Stimulus):
+    """
+    show a symbol
+    """
 
-    def __init__(self, duration=None, symbol='', color='white', choices=[], correct_key=''):
+    def __init__(self, duration: int = None, symbol: str = '', color: str = 'white', choices: list[str] = [],
+                 correct_key: str = ''):
+        """
+        Arguments:
+            duration: time in ms the stimulus is presented
+            symbol: the symbol to show (allowed: square, triangle, circle)
+            color: the color of the symbol
+            choices: the keys that will be recorded if pressed
+            correct_key: the correct key to press
+        """
         type = 'jsPsychHtmlKeyboardResponse'
         super().__init__(locals())
 
