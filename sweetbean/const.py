@@ -6,8 +6,10 @@ HTML_PREAMBLE = '<!DOCTYPE html>\n' \
                 '<script src="https://unpkg.com/@jspsych/plugin-survey-text@1.1.2"></script>\n' \
                 '<script src="https://unpkg.com/@jspsych/plugin-survey-multi-choice@1.1.2"></script>\n' \
                 '<script src="https://unpkg.com/@jspsych/plugin-survey-likert@1.1.2"></script>\n' \
+                '<script src="https://unpkg.com/@jspsych/plugin-survey-likert@1.1.2"></script>\n' \
                 '<link href="https://unpkg.com/jspsych@7.3.1/css/jspsych.css" rel="stylesheet" type="text/css"/>\n' \
-                '<style>\n' \
+                '<script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.1.2"></script>\n' \
+                '<script src="https://unpkg.com/@jspsych/plugin-video-keyboard-response@1.1.2"></script>\n' \
                 'body {background: #000; color: #fff;}\n' \
                 'div {font-size:36pt; line-height:40pt}' \
                 '.sweetbean-square {width:10vw; height:10vw}' \
@@ -21,3 +23,21 @@ HTML_PREAMBLE = '<!DOCTYPE html>\n' \
                 '<script>\n'
 HTML_APPENDIX = '</script>\n' \
                 '</html>'
+
+HONEYCOMB_PREAMBLE = 'import \'jspsych/css/jspsych.css\'\n' \
+                     'const jsPsychOptions = {}\n' \
+                     'function buildTimeline(jsPsych) {\n' \
+                     'console.log(jsPsych.version())\n' \
+
+HONEYCOMB_APPENDIX = 'export { jsPsychOptions, buildTimeline }'
+
+JSPSYCH = {'jspsych': '7.3.1'}
+
+DEPENDENCIES = {
+    'jsPsychHtmlKeyboardResponse': {'@jspsych/plugin-html-keyboard-response': '1.1.2'},
+    'jsPsychSurveyText': {'@jspsych/plugin-survey-text': '1.1.2'},
+    'jsPsychSurveyMultiChoice': {'@jspsych/plugin-survey-multi-choice': '1.1.2'},
+    'jsPsychSurveyLikert': {'@jspsych/plugin-survey-likert': '1.1.2'},
+    'jsPsychImageKeyboardResponse': {'@jspsych/plugin-image-keyboard-response': '1.1.2'},
+    'jsPsychVideoKeyboardResponse': {'@jspsych/plugin-video-keyboard-respons': '1.1.2'}
+}

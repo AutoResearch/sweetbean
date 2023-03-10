@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<head>
+    <title>My awesome expmeriment</title>
+    <script src="https://unpkg.com/jspsych@7.3.1"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.2"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-survey-text@1.1.2"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-survey-multi-choice@1.1.2"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-survey-likert@1.1.2"></script>
+    <link href="https://unpkg.com/jspsych@7.3.1/css/jspsych.css" rel="stylesheet" type="text/css"/>
+    <style>
+        body {
+            background: #000;
+            color: #fff;
+        }
+
+        div {
+            font-size: 36pt;
+            line-height: 40pt
+        }
+
+        .sweetbean-square {
+            width: 10vw;
+            height: 10vw
+        }
+
+        .sweetbean-circle {
+            width: 10vw;
+            height: 10vw;
+            border-radius: 50%
+        }
+
+        .sweetbean-triangle {
+            width: 10vw;
+            height: 10vw;
+            clip-path: polygon(50% 0, 0 100%, 100% 100%)
+        }
+
+        .feedback-screen-red {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100vw;
+            height: 100vh;
+            background: red
+        }
+
+        .feedback-screen-green {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100vw;
+            height: 100vh;
+            background: green
+        }</style>
+</head>
+<body></body>
+<script>
+    jsPsych = initJsPsych();
+    trials = [
+        {
+            timeline: [{
+                type: jsPsychImageKeyboardResponse, stimulus: () => {
+                    let src = "test.png";
+                    return src
+                }, choices: () => {
+                    let choices = [' '];
+                    return choices
+                }, on_finish: (data) => {
+                    data["bean_type"] = 'jsPsychImageKeyboardResponse';
+                    let src = "test.png";
+                    data["bean_src"] = src;
+                    let choices = [' '];
+                    data["bean_choices"] = choices;
+                    let correct_key = "";
+                    data["bean_correct_key"] = correct_key;
+                    data["bean_correct"] = correct_key == data["response"]
+                }
+            }], timeline_variables: []
+        }]
+    ;jsPsych.run(trials)</script>
+</html>

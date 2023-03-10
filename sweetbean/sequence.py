@@ -1,13 +1,26 @@
 from sweetbean.stimulus import Stimulus
 from sweetbean.parameter import *
 from sweetbean.const import *
+from sweetbean.update_package_honeycomb import *
 import os
+import shutil
+import time
+
+
+class Timeline:
+    name = ''
+    path = ''
+
+    def __init__(self, name, path):
+        self.name = name
+        self.path = path
 
 
 class Block:
     stimuli: List[Stimulus] = []
     text_js = ''
     html_list = []
+    timeline = None
 
     def __init__(self, stimuli: List[Stimulus], timeline=None):
         if timeline is None:
@@ -22,7 +35,10 @@ class Block:
         for s in self.stimuli:
             self.text_js += s.text_js + ','
         self.text_js = self.text_js[:-1]
-        self.text_js += f'], timeline_variables: {self.timeline}' + '}'
+        if isinstance(self.timeline, Timeline):
+            self.text_js += f'], timeline_variables: {self.timeline.name}' + '}'
+        else:
+            self.text_js += f'], timeline_variables: {self.timeline}' + '}'
 
     def to_html_list(self):
         for s in self.stimuli:
@@ -39,16 +55,65 @@ class Experiment:
         self.to_psych()
 
     def to_psych(self):
-        self.text_js = 'jsPsych = initJsPsych();\n' \
-                       'trials = [\n'
+        self.text_js = 'jsPsych = initJsPsych();\n'
+        self.text_js += 'trials = [\n'
         for b in self.blocks:
             self.text_js += b.text_js
             self.text_js += ','
         self.text_js = self.text_js[:-1] + ']\n'
         self.text_js += ';jsPsych.run(trials)'
 
+    def to_honeycomb(self, path_package='./package.json', path_main='./src/timelines/main.js', backup=True):
+        """
+        This function can be run in a honeycomb package to setup the experiment for honeycomb
+        Arguments:
+            path_package: the path to the package.json file relative from were you run the script
+            path_main: y-intercept of the linear model
+        """
+        if path_main[-2:] != 'js':
+            raise TypeError('Unexpected file extension (main) use js instead!')
+        if path_package[-4:] != 'json':
+            raise TypeError('Unexpected file extension (package) use json instead!')
+
+        text = HONEYCOMB_PREAMBLE + '\n'
+        for b in self.blocks:
+            if b.timeline and isinstance(b.timeline, Timeline):
+                text += f'const {b.timeline.name} = require(`{b.timeline.path}`)\n'
+        text += 'const trials = [\n'
+        for b in self.blocks:
+            text += b.text_js
+            text += ','
+        text = text[:-1] + ']\n'
+        text += 'return trials;}\n'
+        text += HONEYCOMB_APPENDIX
+        dep = {}
+        for k in DEPENDENCIES:
+            if text.find(k) != -1:
+                text = get_import({k: DEPENDENCIES[k]}) + text
+                dep.update(DEPENDENCIES[k])
+
+        update_package(dep, path_package, backup)
+        if backup:
+            if os.path.exists(path_main):
+                file_name, file_ext = os.path.splitext(os.path.basename(path_main))
+                timestamp = time.strftime('%Y%m%d_%H%M%S')
+                if not os.path.exists('backup'):
+                    os.mkdir('backup')
+                new_file_name = f"backup/{file_name}_{timestamp}{file_ext}"
+                shutil.copy(path_main, new_file_name)
+        with open(path_main, 'w') as f:
+            f.write(text)
+
     def to_html(self, path):
-        html = HTML_PREAMBLE + f'{self.text_js}' + HTML_APPENDIX
+        html = HTML_PREAMBLE
+        blocks = 0
+        for b in self.blocks:
+            if b.timeline and isinstance(b.timeline, Timeline):
+                html += f'</script><script src="{b.timeline.path}">\n'
+                blocks += 1
+        if blocks > 0:
+            html += '</script><script>\n'
+        html += f'{self.text_js}' + HTML_APPENDIX
 
         with open(path, 'w') as f:
             f.write(html)

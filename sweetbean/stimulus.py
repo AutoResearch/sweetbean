@@ -22,7 +22,7 @@ class Stimulus:
 
     def _type_to_psych(self):
         self.text_trial += f'type: {self.arg["type"]},'
-        self.text_data += f'data["bean_type"] = {self.arg["type"]};'
+        self.text_data += f'data["bean_type"] = \'{self.arg["type"]}\';'
 
     def _duration_to_psych(self):
         if 'duration' in self.arg and self.arg['duration'] is not None:
@@ -81,7 +81,20 @@ class Stimulus:
 
 
 class TextStimulus(Stimulus):
+    """
+    A class to describe a colored text stimulus
+    """
     def __init__(self, duration=None, text='', color='white', choices=[], correct_key=''):
+        """
+        constructor
+
+        Arguments:
+            duration[int]: time in ms the stimulus is presented
+            text[string]: the text should be presented
+            color[string]: the color of the text
+            choices[list]: the keys that will be recorded if pressed
+            correct_key[char]: the correct key to press
+        """
         type = 'jsPsychHtmlKeyboardResponse'
         super().__init__(locals())
 
@@ -96,6 +109,41 @@ class TextStimulus(Stimulus):
 
 
 StroopStimulus = TextStimulus
+
+
+class ImageStimulus(Stimulus):
+    def __init__(self, duration=None, src='', choices=[], correct_key=''):
+        """
+        constructor
+
+        Arguments:
+            duration[int]: time in ms the stimulus is presented
+            src[list]: the path to the videos in different formats. ATTENTION: This should be a list
+            choices[list]: the keys that will be recorded if pressed
+            correct_key[char]: the correct key to press
+        """
+        type = 'jsPsychImageKeyboardResponse'
+        super().__init__(locals())
+
+    def _stimulus_to_psych(self):
+        self.text_trial += self._set_param_js_preamble('stimulus')
+        self.text_trial += self._set_set_variable('src')
+        self.text_trial += 'return '
+        self.text_trial += self._set_get_variable('src') + '},'
+        self._set_data_text('src')
+
+
+class VideoStimulus(Stimulus):
+    def __init__(self, duration=None, src='', choices=[], correct_key=''):
+        type = 'jsPsychVideoKeyboardResponse'
+        super().__init__(locals())
+
+    def _stimulus_to_psych(self):
+        self.text_trial += self._set_param_js_preamble('stimulus')
+        self.text_trial += self._set_set_variable('src')
+        self.text_trial += 'return '
+        self.text_trial += self._set_get_variable('src') + '},'
+        self._set_data_text('src')
 
 
 class BlankStimulus(TextStimulus):
