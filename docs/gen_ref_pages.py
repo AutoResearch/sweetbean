@@ -1,15 +1,16 @@
 """Generate the code reference pages and navigation."""
 
 from pathlib import Path
+from typing import List
 
 import mkdocs_gen_files
 
 nav = mkdocs_gen_files.Nav()
 
-ignore = [Path('./sweetbean/const.py'), Path('./sweetbean/update_package_honeycomb.py')]
+ignore = [Path("./sweetbean/const.py"), Path("./sweetbean/update_package_honeycomb.py")]
 
 source_paths = sorted(Path("./sweetbean").rglob("*.py"))
-special_paths = []  # [Path("./docs/docstrings.py")]
+special_paths: List[Path] = []  # [Path("./docs/docstrings.py")]
 
 for path in source_paths + special_paths:
     if path in ignore:

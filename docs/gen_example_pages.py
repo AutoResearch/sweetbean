@@ -1,15 +1,16 @@
 """Generate the code reference pages and navigation."""
 
 from pathlib import Path
+from typing import List
 
 import mkdocs_gen_files
 
 nav = mkdocs_gen_files.Nav()
 
-ignore = []
+ignore: List[Path] = []
 
 source_paths = sorted(Path("./examples").rglob("*.py"))
-special_paths = []  # [Path("./docs/docstrings.py")]
+special_paths: List[Path] = []  # [Path("./docs/docstrings.py")]
 
 for path in source_paths + special_paths:
     if path in ignore:
@@ -33,7 +34,7 @@ for path in source_paths + special_paths:
         fd.write(f"::: {ident}")
     with mkdocs_gen_files.open(full_doc_path, "w") as f:
         print("``` py", file=f)
-        with open(path, 'r') as code_file:
+        with open(path, "r") as code_file:
             lines = code_file.readlines()
             for line in lines:
                 print(line, file=f)
