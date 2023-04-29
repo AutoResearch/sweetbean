@@ -148,7 +148,8 @@ class Experiment:
     ):
         """
         This function can be run in an autora template to set up the experiment for autora.
-        Here, the condition is interpreted as array of timelines for each block
+        Here, the condition should be an array of block timeline sequences and the observation
+        is the full jsPsych data.
         Arguments:
             path_package: the path to the package.json file relative from where you run this script
             path_main: y-intercept of the linear model

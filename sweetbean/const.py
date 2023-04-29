@@ -71,5 +71,5 @@ AUTORA_PREAMBLE = (
 
 AUTORA_APPENDIX = (
     "await jsPsych.run(trials)\nconst observation = jsPsych.data.get()\n"
-    "return await condition\n}\nexport default main\n"
+    "return await observation\n}\nexport default main\n"
 )
