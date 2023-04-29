@@ -17,14 +17,4 @@ pip install sweetbean
 
 # usage:
 
-this is a very early version. You can create a js-file with example.py:
-
-```
-python3 example.py
-```
-
-with the main file you can then create the index.html file to run in your browser
-
-```
-python3 main.py
-```
+This is a very early version. You can find examples and documentation here: https://autoresearch.github.io/sweetbean/
