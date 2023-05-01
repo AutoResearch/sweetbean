@@ -73,3 +73,28 @@ AUTORA_APPENDIX = (
     "await jsPsych.run(trials)\nconst observation = jsPsych.data.get()\n"
     "return await observation\n}\nexport default main\n"
 )
+
+
+def FUNCTION_PREAMBLE(is_async):
+    async_string = ""
+    if is_async:
+        async_string = "async "
+    return f"{async_string}function runExperiment() " + "{\n"
+
+
+def FUNCTION_APPENDIX(is_async):
+    async_string = ""
+    if is_async:
+        async_string = "await "
+    return (
+        f"{async_string}jsPsych.run(trials)\nconst observation = jsPsych.data.get()\n"
+        + f"return {async_string}observation\n"
+        + "}"
+    )
+
+
+def TEXT_APPENDIX(is_async):
+    async_string = ""
+    if is_async:
+        async_string = "await "
+    return f"{async_string}jsPsych.run(trials)\n"

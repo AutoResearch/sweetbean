@@ -7,10 +7,13 @@ from sweetbean.const import (
     AUTORA_APPENDIX,
     AUTORA_PREAMBLE,
     DEPENDENCIES,
+    FUNCTION_APPENDIX,
+    FUNCTION_PREAMBLE,
     HONEYCOMB_APPENDIX,
     HONEYCOMB_PREAMBLE,
     HTML_APPENDIX,
     HTML_PREAMBLE,
+    TEXT_APPENDIX,
 )
 from sweetbean.parameter import CodeVariable
 from sweetbean.stimulus import Stimulus, TimelineVariable
@@ -183,6 +186,21 @@ class Experiment:
                 shutil.copy(path_main, new_file_name)
         with open(path_main, "w") as f:
             f.write(text)
+
+    def to_js_string(
+        self,
+        as_function=False,
+        is_async=False,
+    ):
+        text = FUNCTION_PREAMBLE(is_async) if as_function else ""
+        text += "const jsPsych = initJsPsych()\n"
+        text += "const trials = [\n"
+        for b in self.blocks:
+            text += b.text_js
+            text += ","
+        text = text[:-1] + "]\n"
+        text += FUNCTION_APPENDIX(is_async) if as_function else TEXT_APPENDIX(is_async)
+        return text
 
 
 def sequence_to_image(block, durations=None):
