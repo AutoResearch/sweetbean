@@ -1,5 +1,13 @@
+"""
+After the participant is greeted with 'Welcome! We show a survey. Press SPACE to continue' until they press the Spacebar,
+they are asked two multiple-choice questions. One is about how they are, which they can rate as bad, good, or fine. The
+other is about their handedness. They can respond with left, right other or prefer not to say.
+"""
+
 from sweetbean.sequence import Block, Experiment
 from sweetbean.stimulus import MultiChoiceSurveyStimulus, TextStimulus
+
+## EVENT SEQUENCE
 
 stim_1 = TextStimulus(
     text="Welcome! We show a survey. Press SPACE to continue",
@@ -13,6 +21,10 @@ stim_2 = MultiChoiceSurveyStimulus(
     ]
 )
 
-trial_sequence = Block([stim_1, stim_2])
+event_sequence = [stim_1, stim_2]
+
+## BLOCK DESIGN
+
+trial_sequence = Block(event_sequence)
 experiment = Experiment([trial_sequence])
 experiment.to_html("multi_choice.html")
