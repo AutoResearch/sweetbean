@@ -20,6 +20,8 @@ timeline = [
     {"color": "red", "word": "GREEN", "task": "word_reading"},
 ]
 
+## EVENT SEQUENCE
+
 color = TimelineVariable("color", ["red", "green"])
 word = TimelineVariable("word", ["RED", "GREEN"])
 task = TimelineVariable("task", ["color_naming", "word_reading"])
@@ -59,7 +61,11 @@ so_s = TextStimulus(800)
 stroop = TextStimulus(2000, word, color, ["j", "g"], correct_key)
 so_f = TextStimulus(300)
 
-train_block = Block([fixation, so_s, stroop, so_f], timeline)
+event_sequence = [fixation, so_s, stroop, so_f]
+
+## BLOCK DESIGN
+
+train_block = Block(event_sequence, timeline)
 experiment = Experiment([train_block])
 
 experiment.to_autora("package.json", "main.js")
