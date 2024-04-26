@@ -5,7 +5,7 @@ The text 'press a or b or wait' is shown in pink for 2000ms. The allowed respons
 from sweetbean.sequence import Block, Experiment
 from sweetbean.stimulus import TextStimulus
 
-## THE EVENT SEQUENCE
+## EVENT SEQUENCE
 
 text = TextStimulus(
     duration=2000, text="press a or b or wait", color="pink", choices=["a", "b"]
