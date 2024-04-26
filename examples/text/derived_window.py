@@ -23,6 +23,8 @@ timeline = [
     {"color": "red", "word": "GREEN", "correct_key": "j"},
 ]
 
+## EVENT SEQUENCE
+
 color = TimelineVariable("color", ["red", "green"])
 word = TimelineVariable("word", ["RED", "GREEN"])
 
@@ -64,7 +66,11 @@ stroop = TextStimulus(2000, word, color, ["j", "f"], correct_key)
 so_f = TextStimulus(300)
 feedback = TextStimulus(800, feedback_text)
 
-train_block = Block([fixation, so_s, stroop, so_f, feedback], timeline)
+event_sequence = [fixation, so_s, stroop, so_f, feedback]
+
+## BLOCK DESIGN
+
+train_block = Block(event_sequence, timeline)
 experiment = Experiment([train_block])
 
 experiment.to_html("derived_window.html")
