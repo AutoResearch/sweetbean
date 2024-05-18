@@ -1,7 +1,7 @@
 """
-After the participant is greeted with 'Welcome! We show a survey. Press SPACE to continue' until they press the Spacebar,
+After the participant is greeted with 'Welcome! We show a survey. Press SPACE to continue' until they press the spacebar,
 they are asked two multiple-choice questions. One is about how they are, which they can rate as bad, good, or fine. The
-other is about their handedness. They can respond with left, right other or prefer not to say.
+other is about their handedness.
 """
 
 from sweetbean.sequence import Block, Experiment
