@@ -1,6 +1,6 @@
 """
-A text stimulus to welcome the participant is shown until they press the Spacebar. The text says, 'Welcome! We show a survey. Press SPACE to continue'.
-This is followed by a survey with two questions that the participant is supposed to answer on a Likert scale. The first question is 'How are you feeling?' and
+A welcoming text the cipant is shown until the participant presses the spacebar. The text says, 'Welcome! We show a survey. Press SPACE to continue'.
+This is followed by a survey with two questions that the participant is supposed to answer on a likert scale. The first question is 'How are you feeling?' and
 the participant is supposed to rate their feeling on a scale from -2 to 2 with 5 levels. The second question is 'Do you like this tool?' on a scale from 1 to 3.
 Then, the participant is supposed to rate five animals on their cuteness from 1 to 5. The animals are a bunny, a shark, a spider, a cat, and a dog.
 """
