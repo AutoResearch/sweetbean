@@ -1,5 +1,5 @@
 """
-After the participant is greeted with 'Welcome! We show a survey. Press SPACE to continue' until they press the Spacebar,
+After the participant is greeted with 'Welcome! We show a survey. Press SPACE to continue' until they press the spacebar,
 they are asked free-from questions about how old they are, their gender, and their handedness.
 """
 

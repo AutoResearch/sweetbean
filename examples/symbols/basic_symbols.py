@@ -1,7 +1,7 @@
 """
 First, a welcoming text, 'Welcome! We show some Symbols. Press SPACE to continue' is shown until the participant presses the Spacebar.
-Then a square with the color '#f0f' is followed by a triangle in red followed by a circle in green. All of these symbols are shown for
-3000ms or until the participant presses the key f or j. The correct key for the square in #f0f and the red triangle is f, and the correct
+Then a square in purple is followed by a triangle in red followed by a circle in green. All of these symbols are shown for
+3000ms or until the participant presses the key f or j. The correct key for the purple square and the red triangle is f, and the correct
 key for the green circle is j.
 """
 
