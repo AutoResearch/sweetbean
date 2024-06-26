@@ -2,17 +2,18 @@ import os
 import shutil
 import time
 from typing import List
+from pathlib import Path
 
 from sweetbean.const import (
     AUTORA_APPENDIX,
     AUTORA_PREAMBLE,
     DEPENDENCIES,
-    FUNCTION_APPENDIX,
-    FUNCTION_PREAMBLE,
     HONEYCOMB_APPENDIX,
     HONEYCOMB_PREAMBLE,
     HTML_APPENDIX,
     HTML_PREAMBLE,
+    FUNCTION_PREAMBLE,
+    FUNCTION_APPENDIX,
     TEXT_APPENDIX,
 )
 from sweetbean.parameter import CodeVariable
@@ -58,10 +59,10 @@ class Block:
     def to_html_list(self):
         for s in self.stimuli:
             text_js = (
-                "{timeline: ["
-                + s.text_js
-                + f"], timeline_variables: {self.timeline}"
-                + "}"
+                    "{timeline: ["
+                    + s.text_js
+                    + f"], timeline_variables: {self.timeline}"
+                    + "}"
             )
             self.html_list.append(text_js)
 
@@ -84,10 +85,10 @@ class Experiment:
         self.text_js += ";jsPsych.run(trials)"
 
     def to_honeycomb(
-        self,
-        path_package="./package.json",
-        path_main="./src/timelines/main.js",
-        backup=True,
+            self,
+            path_package="./package.json",
+            path_main="./src/timelines/main.js",
+            backup=True,
     ):
         """
         This function can be run in a honeycomb package to set up the experiment for honeycomb
@@ -144,10 +145,10 @@ class Experiment:
             f.write(html)
 
     def to_autora(
-        self,
-        path_package="./package.json",
-        path_main="./src/design/main.js",
-        backup=True,
+            self,
+            path_package="./package.json",
+            path_main="./src/design/main.js",
+            backup=True,
     ):
         """
         This function can be run in an autora template to set up the experiment for autora.
@@ -188,11 +189,11 @@ class Experiment:
             f.write(text)
 
     def to_js_string(
-        self,
-        as_function=False,
-        is_async=False,
+            self,
+            as_function=False,
+            is_async=False,
     ):
-        text = FUNCTION_PREAMBLE(is_async) if as_function else ""
+        text = FUNCTION_PREAMBLE(is_async) if as_function else ''
         text += "const jsPsych = initJsPsych()\n"
         text += "const trials = [\n"
         for b in self.blocks:
@@ -204,33 +205,36 @@ class Experiment:
 
 
 def sequence_to_image(block, durations=None):
-    import cv2
-    import numpy as np
-    from html2image import Html2Image
-    from PIL import Image, ImageDraw, ImageFont, ImageOps
+    try:
+        import cv2
+        import numpy as np
+        from html2image import Html2Image
+        from PIL import Image, ImageDraw, ImageFont, ImageOps
+    except:
+        print("To use the sequence_to_image feature, please install opencv-python and html2image")
 
-    _dir = os.path.dirname(__file__)
-    _dir_temp = os.path.join(_dir, "temp")
+    temp_file = 'page_tmp'
+    png_temp_file = 'stimuli_sequence'
     k = 0
     for html in block.html_list:
         html_full = (
-            HTML_PREAMBLE
-            + "jsPsych = initJsPsych();trials = [\n"
-            + html
-            + "];jsPsych.run(trials)"
-            + HTML_APPENDIX
+                HTML_PREAMBLE
+                + "jsPsych = initJsPsych();trials = [\n"
+                + html
+                + "];jsPsych.run(trials)"
+                + HTML_APPENDIX
         )
-        with open(os.path.join(_dir_temp, f"page_tmp_jxqqlo{k}.html"), "w") as f:
+        with open(f"{temp_file}{k}.html", "w") as f:
             f.write(html_full)
         hti = Html2Image()
         hti.screenshot(
-            html_file=os.path.join(_dir_temp, f"page_tmp_jxqqlo{k}.html"),
-            save_as=f"page_tmp_jxqqlo{k}.png",
+            html_file=f"{temp_file}{k}.html",
+            save_as=f"{png_temp_file}{k}.png",
         )
-        os.remove(os.path.join(_dir_temp, f"page_tmp_jxqqlo{k}.html"))
+        os.remove(f"{temp_file}{k}.html")
         k += 1
 
-    images = [Image.open(f"page_tmp_jxqqlo{i}.png") for i in range(k)]
+    images = [Image.open(f"{png_temp_file}{i}.png") for i in range(k)]
 
     width_cum = 200
     height_cum = 200
@@ -268,14 +272,18 @@ def sequence_to_image(block, durations=None):
 
     pos_x = 100
     pos_y = 100
-    font = ImageFont.truetype(os.path.join(_dir, "arial.ttf"), 128)
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+
+    # Path to the font file within the same directory
+    font_path = os.path.join(current_dir, "arial.ttf")
+    font = ImageFont.truetype(font_path, 256)
     for i in range(k):
         result_img.paste(images[i], (pos_x, pos_y))
         result_img_draw = ImageDraw.Draw(result_img)
         if (
-            "duration" in block.stimuli[i].arg
-            and block.stimuli[i].arg["duration"] is not None
-            and not isinstance(block.stimuli[i].arg["duration"], TimelineVariable)
+                "duration" in block.stimuli[i].arg
+                and block.stimuli[i].arg["duration"] is not None
+                and not isinstance(block.stimuli[i].arg["duration"], TimelineVariable)
         ):
             duration = block.stimuli[i].arg["duration"]
         elif durations and i < len(durations):
@@ -295,4 +303,4 @@ def sequence_to_image(block, durations=None):
 
     result_img.save(os.path.join("stimulus_timeline.png"))
     for i in range(k):
-        os.remove(f"page_tmp_jxqqlo{i}.png")
+        os.remove(f"{png_temp_file}{i}.png")
