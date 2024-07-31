@@ -1,12 +1,13 @@
 """
-After the participant is greeted with 'Welcome! We show a survey. Press SPACE to continue' until they press the spacebar,
-they are asked free-from questions about how old they are, their gender, and their handedness.
+After the participant is greeted with 'Welcome! We show a survey. Press SPACE to continue' until
+they press the spacebar, they are asked free-from questions about how old they are, their gender,
+and their handedness.
 """
 
 from sweetbean.sequence import Block, Experiment
 from sweetbean.stimulus import TextStimulus, TextSurveyStimulus
 
-## EVENT SEQUENCE
+# EVENT SEQUENCE
 
 stim_1 = TextStimulus(
     text="Welcome! We show a survey. Press SPACE to continue",
@@ -19,7 +20,7 @@ stim_2 = TextSurveyStimulus(
 
 event_sequence = [stim_1, stim_2]
 
-## BLOCK DESIGN
+# BLOCK DESIGN
 
 trial_sequence = Block(event_sequence)
 experiment = Experiment([trial_sequence])

@@ -1,4 +1,5 @@
-from typing import List, Union
+from abc import ABC, abstractmethod
+from typing import List, TypeVar, Union
 
 from sweetbean.parameter import (
     DataVariable,
@@ -10,9 +11,10 @@ from sweetbean.parameter import (
 
 StringType = Union[None, str, DerivedParameter, TimelineVariable]
 IntType = Union[None, int, TimelineVariable, DerivedParameter]
+FloatType = Union[None, float, TimelineVariable, DerivedParameter]
 
 
-class Stimulus:
+class Stimulus(ABC):
     """
     A base class for stimuli
     """
@@ -44,6 +46,7 @@ class Stimulus:
             self.text_trial += self._set_get_variable("duration") + "},"
             self._set_data_text("duration")
 
+    @abstractmethod
     def _stimulus_to_psych(self):
         pass
 
@@ -54,6 +57,14 @@ class Stimulus:
             self.text_trial += "return "
             self.text_trial += self._set_get_variable("choices") + "},"
             self._set_data_text("choices")
+
+    def _set_param_full(self, name):
+        if name in self.arg and self.arg[name] is not None:
+            self.text_trial += self._set_param_js_preamble(name)
+            self.text_trial += self._set_set_variable(name)
+            self.text_trial += "return "
+            self.text_trial += self._set_get_variable(name) + "},"
+            self._set_data_text(name)
 
     def _correct_to_psych(self):
         if "correct_key" in self.arg:
@@ -98,6 +109,9 @@ class Stimulus:
         return f"{key}"
 
 
+StimulusVar = TypeVar("StimulusVar", bound=Stimulus)
+
+
 class TextStimulus(Stimulus):
     """
     Show colored text
@@ -137,6 +151,53 @@ class TextStimulus(Stimulus):
 
 
 StroopStimulus = TextStimulus
+
+
+class ROKStimulus(Stimulus):
+    """
+    Show a random-object-kinematogram
+    """
+
+    def __init__(
+        self,
+        duration: Union[None, int, TimelineVariable, DerivedParameter] = None,
+        number_of_oobs: IntType = 300,
+        coherent_movement_direction: IntType = None,
+        coherent_orientation: IntType = None,
+        coherence_movement: IntType = 100,
+        coherence_orientation: IntType = 100,
+        oob_color: StringType = "white",
+        background_color: StringType = "grey",
+        choices: List[str] = [],
+        correct_key: StringType = "",
+    ):
+        """
+        Arguments:
+            duration: time in ms the stimulus is presented // trial_duration
+            number_of_oobs: the number of oriented objects per set in the stimulus
+            coherent_movement_direction: the direction of coherent motion in degrees
+                (0 degre meaning right)
+            coherent_orientation: the orientation of the objects in degree
+                (0 degree meaning right)
+            coherence_movement: the percentage of oriented objects moving in the coherent direction.
+            coherence_orientation: the percentage of oriented objects moving in the coherent
+                direction.
+            oob_color: the color of the orientated objects
+            background_color: the background color
+            choices: the valid keys that the subject can press to indicate a response
+            correct_key: the correct key to press
+        """
+        type = "jsPsychRok"
+        super().__init__(locals())
+
+    def _stimulus_to_psych(self):
+        self._set_param_full("number_of_oobs")
+        self._set_param_full("coherent_movement_direction")
+        self._set_param_full("coherent_orientation")
+        self._set_param_full("coherence_movement")
+        self._set_param_full("coherence_orientation")
+        self._set_param_full("oob_color")
+        self._set_param_full("background_color")
 
 
 class ImageStimulus(Stimulus):

@@ -12,6 +12,7 @@ HTML_PREAMBLE = (
     ' type="text/css"/>\n'
     '<script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.1.2"></script>\n'
     '<script src="https://unpkg.com/@jspsych/plugin-video-keyboard-response@1.1.2"></script>\n'
+    '<script src="https://unpkg.com/@jspsych-contrib/plugin-rok@1.1.1"></script>'
     "<style>"
     "body {"
     "background: #000; color: #fff;"
@@ -56,6 +57,7 @@ DEPENDENCIES = {
     "jsPsychSurveyText": {"@jspsych/plugin-survey-text": "1.1.2"},
     "jsPsychSurveyMultiChoice": {"@jspsych/plugin-survey-multi-choice": "1.1.2"},
     "jsPsychSurveyLikert": {"@jspsych/plugin-survey-likert": "1.1.2"},
+    "jsPsychRok": {"'@jspsych-contrib/plugin-rok": "1.1.1"},
     "jsPsychImageKeyboardResponse": {
         "@jspsych/plugin-image-keyboard-response": "1.1.2"
     },

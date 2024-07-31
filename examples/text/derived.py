@@ -1,11 +1,12 @@
 """
-A fixation cross is followed by a blank screen, followed by a Stroop stimulus, followed by another blank screen. 
-The fixation cross is shown for 1000ms. The first blank screen is shown for 800ms the second for 300ms.
-The Stroop stimulus is shown for 2000ms. This is a task-switching experiment. The shape of the fixation cross
-determines the task. An 'x indicates a word reading task, and a '+' indicates the color naming task. The 
-color of the Stroop task and its word are indicated by a timeline, as is the task. In the word reading task,
-the correct response to "RED" is pressing f, and to "GRREN" is pressing j. Similarly, the correct response 
-to a red word in the color naming task is f, and the correct response to a green word is j. 
+A fixation cross is followed by a blank screen, followed by a Stroop stimulus, followed by another
+blank screen.  The fixation cross is shown for 1000ms. The first blank screen is shown for 800ms
+the second for 300ms. The Stroop stimulus is shown for 2000ms. This is a task-switching experiment.
+The shape of the fixation cross determines the task. An 'x indicates a word reading task, and a '+'
+indicates the color naming task. The color of the Stroop task and its word are indicated by a
+timeline, as is the task. In the word reading task, the correct response to "RED" is pressing f,
+and to "GRREN" is pressing j. Similarly, the correct response to a red word in the color naming
+task is f, and the correct response to a green word is j.
 """
 
 
@@ -20,7 +21,7 @@ timeline = [
     {"color": "red", "word": "GREEN", "task": "word_reading"},
 ]
 
-## EVENT SEQUENCE
+# EVENT SEQUENCE
 
 color = TimelineVariable("color", ["red", "green"])
 word = TimelineVariable("word", ["RED", "GREEN"])
@@ -63,7 +64,7 @@ so_f = TextStimulus(300)
 
 event_sequence = [fixation, so_s, stroop, so_f]
 
-## BLOCK DESIGN
+# BLOCK DESIGN
 
 train_block = Block(event_sequence, timeline)
 experiment = Experiment([train_block])
