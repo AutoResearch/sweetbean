@@ -12,6 +12,8 @@ from sweetbean.parameter import (
 StringType = Union[None, str, DerivedParameter, TimelineVariable]
 IntType = Union[None, int, TimelineVariable, DerivedParameter]
 FloatType = Union[None, float, TimelineVariable, DerivedParameter]
+StringTypeL = Union[List[StringType], StringType]
+IntTypeL = Union[List[IntType], IntType]
 
 
 class Stimulus(ABC):
@@ -161,12 +163,16 @@ class ROKStimulus(Stimulus):
     def __init__(
         self,
         duration: Union[None, int, TimelineVariable, DerivedParameter] = None,
-        number_of_oobs: IntType = 300,
-        coherent_movement_direction: IntType = None,
-        coherent_orientation: IntType = None,
-        coherence_movement: IntType = 100,
-        coherence_orientation: IntType = 100,
-        oob_color: StringType = "white",
+        number_of_oobs: IntTypeL = 300,
+        number_of_apertures: IntType = 1,
+        coherent_movement_direction: IntTypeL = None,
+        coherent_orientation: IntTypeL = None,
+        coherence_movement: IntTypeL = 100,
+        coherence_orientation: IntTypeL = 100,
+        movement_speed: IntTypeL = 2,
+        aperture_position_left: IntTypeL = 50,
+        aperture_position_top: IntTypeL = 50,
+        oob_color: StringTypeL = "white",
         background_color: StringType = "grey",
         choices: List[str] = [],
         correct_key: StringType = "",
@@ -175,6 +181,7 @@ class ROKStimulus(Stimulus):
         Arguments:
             duration: time in ms the stimulus is presented // trial_duration
             number_of_oobs: the number of oriented objects per set in the stimulus
+            number_of_apertures: the number of kinematograms
             coherent_movement_direction: the direction of coherent motion in degrees
                 (0 degre meaning right)
             coherent_orientation: the orientation of the objects in degree
@@ -182,6 +189,11 @@ class ROKStimulus(Stimulus):
             coherence_movement: the percentage of oriented objects moving in the coherent direction.
             coherence_orientation: the percentage of oriented objects moving in the coherent
                 direction.
+            movement_speed: the movement speed of the oobs in (percentage of aperture_width)/second
+            aperture_position_left: position of midpoint of aperture in x direction in percentage
+                of window width
+            aperture_position_top: position of midpoint of aperture in y direction in percentage
+                of window height
             oob_color: the color of the orientated objects
             background_color: the background color
             choices: the valid keys that the subject can press to indicate a response
@@ -192,12 +204,16 @@ class ROKStimulus(Stimulus):
 
     def _stimulus_to_psych(self):
         self._set_param_full("number_of_oobs")
+        self._set_param_full("number_of_apertures")
         self._set_param_full("coherent_movement_direction")
         self._set_param_full("coherent_orientation")
         self._set_param_full("coherence_movement")
         self._set_param_full("coherence_orientation")
         self._set_param_full("oob_color")
         self._set_param_full("background_color")
+        self._set_param_full("movement_speed")
+        self._set_param_full("aperture_position_left")
+        self._set_param_full("aperture_position_top")
 
 
 class ImageStimulus(Stimulus):
