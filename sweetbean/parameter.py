@@ -12,6 +12,8 @@ def param_to_psych(param):
             return "true"
         else:
             return "false"
+    elif isinstance(param, int):
+        return param
     else:
         param = str(param)
         if param.startswith('"') and param.endswith('"'):
