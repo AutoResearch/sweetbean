@@ -4,7 +4,10 @@ from typing import Callable, List
 
 def param_to_psych(param):
     if isinstance(param, List):
-        return param
+        res = "["
+        for el in param:
+            res += str(param_to_psych(el)) + ","
+        return res + "]"
     elif getattr(param, "text_js", None):
         return param.text_js
     elif isinstance(param, bool):

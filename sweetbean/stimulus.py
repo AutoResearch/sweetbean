@@ -101,6 +101,7 @@ class Stimulus(ABC):
     def _set_set_variable(self, key):
         if key not in self.arg_js:
             return ""
+
         return f"let {key} = " + str(self.arg_js[key]) + ";"
 
     def _set_get_variable(self, key):
