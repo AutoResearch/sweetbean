@@ -11,6 +11,7 @@ text = TextStimulus(
     duration=2000, text="press a or b or wait", color="pink", choices=["a", "b"]
 )
 
+
 event_sequence = [text]
 
 # BLOCK DESIGN

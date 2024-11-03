@@ -81,8 +81,9 @@ def FUNCTION_PREAMBLE(is_async):
     async_string = ""
     if is_async:
         async_string = "async "
-    return f"{async_string}function runExperiment() " + ("{\n"
-                                                         "document.body.style.backgroundColor = 'black';\n")
+    return f"{async_string}function runExperiment() " + (
+        "{\n" "document.body.style.backgroundColor = 'black';\n"
+    )
 
 
 def FUNCTION_APPENDIX(is_async):

@@ -1,5 +1,8 @@
+import warnings
 from abc import ABC, abstractmethod
-from typing import List, TypeVar, Union
+from typing import List, Optional, TypeVar, Union
+
+from jinja2 import Template
 
 from sweetbean.parameter import (
     DataVariable,
@@ -16,6 +19,16 @@ StringTypeL = Union[List[StringType], StringType]
 IntTypeL = Union[List[IntType], IntType]
 
 
+def add_warning(test):
+    """Decorator to mark flagged values for an attribute."""
+
+    def decorator(func):
+        func.test_language = test  # Attach flagged values to the function
+        return func
+
+    return decorator
+
+
 class Stimulus(ABC):
     """
     A base class for stimuli
@@ -24,6 +37,10 @@ class Stimulus(ABC):
     text_js = "{"
     text_trial = ""
     text_data = "on_finish: (data) => {"
+    template: Optional[str] = None
+    base_template: Optional[str] = None
+    choices_template: Optional[str] = None
+    duration_template: Optional[str] = None
 
     def __init__(self, args):
         if "self" in args:
@@ -35,6 +52,18 @@ class Stimulus(ABC):
         for key in args:
             self.arg_js[key] = param_to_psych(args[key])
         self.to_psych()
+
+    @classmethod
+    def set_base_template(cls, template):
+        cls.base_template = template
+
+    @classmethod
+    def set_duration_template(cls, template):
+        cls.duration_template = template
+
+    @classmethod
+    def set_choices_template(cls, template):
+        cls.choices_template = template
 
     def _type_to_psych(self):
         self.text_trial += f'type: {self.arg["type"]},'
@@ -51,6 +80,27 @@ class Stimulus(ABC):
     @abstractmethod
     def _stimulus_to_psych(self):
         pass
+
+    def show(self, show_duration=True, **kwargs):
+        self.check_flags(kwargs)
+        if self.template is None:
+            if self.base_template is None:
+                raise ValueError(f"No template set for this stimulus {self}")
+            if self.duration_template is None:
+                self.duration_template = (
+                    "{% if duration %} for {{ duration }} ms{% endif %}"
+                )
+            if self.choices_template is None:
+                self.choices_template = (
+                    "{% if choices %} You can press {{ choices }}. "
+                    "You press <<{% endif %}"
+                )
+            self.template = " " + self.base_template
+            if show_duration:
+                self.template += self.duration_template
+            self.template += "."
+            self.template += self.choices_template
+        return Template(self.template).render(kwargs)
 
     def _choices_to_psych(self):
         if "choices" in self.arg and self.arg["choices"] is not None:
@@ -104,12 +154,28 @@ class Stimulus(ABC):
 
         return f"let {key} = " + str(self.arg_js[key]) + ";"
 
+    def check_flags(self, dict):
+        # Check each attribute for flagged values
+        for attr_name in dir(self):
+            attr = getattr(self.__class__, attr_name, None)
+            if callable(attr) and hasattr(attr, "test_language"):
+                value = dict[attr_name]
+                if attr.test_language(value):
+                    warnings.warn(
+                        f"Warning: {attr_name} is set to {value}, "
+                        f"which may not be implemented for templating.",
+                        UserWarning,
+                    )
+
     def _set_get_variable(self, key):
         if key not in self.arg_js:
             return ""
         if isinstance(self.arg_js[key], str) and self.arg_js[key].startswith("()"):
             return f"{key}()"
         return f"{key}"
+
+    def set_template(self, template):
+        self.template = template
 
 
 StimulusVar = TypeVar("StimulusVar", bound=Stimulus)
@@ -119,6 +185,14 @@ class TextStimulus(Stimulus):
     """
     Show colored text
     """
+
+    base_template = (
+        "{% if text %}"
+        'You see "{{ text }}" written in {{ color }}'
+        "{% else %}"
+        "You see a blank screen"
+        "{% endif %}"
+    )
 
     def __init__(
         self,
@@ -160,6 +234,32 @@ class RandomObjectKinematogramStimulus(Stimulus):
     """
     Show a random-object-kinematogram
     """
+
+    base_template = (
+        "You see {{ number_of_oobs }} moving "
+        "{{ if stimulus_type == 0}} triangles"
+        "{{ elif stimulus_type == 1}} circles"
+        "{{ elif stimulus_type == 2}} squares"
+        "{{ elif stimulus_type == 3}} stylist birds"
+        ". "
+        "{{ endif }} "
+        "They are {{ oob_color }}. "
+        "The background is {{ background_color }}. "
+        "{{ coherence_movement }} of the objects are moving in the same direction. "
+        "The rest moves randomly. "
+        "The speed is {{ movement_speed }}. "
+        "This direction is {{ coherent_movement_direction }} degree. "
+        "{{ coherence_orientation }} of the objects are oriented in the same direction. "
+        "The rest is orientated randomly. "
+        "This orientation is {{ coherent_orientation }} degree"
+    )
+    duration_template = (
+        "{% if duration %} You see them move for {{ duration }} ms{% endif %}"
+    )
+
+    @add_warning(lambda x: x != 1)
+    def number_of_apertures(self):
+        return self.number_of_apertures
 
     def __init__(
         self,
@@ -358,6 +458,8 @@ class BlankStimulus(TextStimulus):
     shows a blank screen
     """
 
+    base_template = "You see a blank screen"
+
     def __init__(
         self,
         duration: IntType = None,
@@ -380,6 +482,8 @@ class FixationStimulus(TextStimulus):
     show a white cross in the middle of the screen
     """
 
+    base_template = "You see a white cross in the middle of the screen"
+
     def __init__(self, duration: IntType = None):
         """
         Arguments:
@@ -394,6 +498,11 @@ class FeedbackStimulus(TextStimulus):
     """
     show the word correct or incorrect dependent on a correct response to a stimulus before
     """
+
+    template = (
+        '{% if feedback_text %} You see "{{ feedback_text }}"'
+        "{% else %} You see a blank screen {% endif %}"
+    )
 
     def __init__(
         self,
@@ -427,6 +536,26 @@ class FlankerStimulus(TextStimulus):
     """
     show a flankert stimulus (<< < <<; << > <<, >> < >>, ...)
     """
+
+    base_template = (
+        'You see "'
+        "{% if distractor == left %}"
+        "<<"
+        "{% else %}"
+        ">>"
+        "{% endif %}"
+        "{% if direction == left %}"
+        "<"
+        "{% else %}"
+        ">"
+        "{% endif %}"
+        "{% if distractor == left %}"
+        "<<"
+        "{% else %}"
+        ">>"
+        "{% endif %}"
+        '"'
+    )
 
     def __init__(
         self,
@@ -513,6 +642,8 @@ class SymbolStimulus(Stimulus):
     """
     show a symbol
     """
+
+    base_template = "You see a {{ color}} {{ symbol }}"
 
     def __init__(
         self,
