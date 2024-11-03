@@ -1,20 +1,32 @@
-[build-system]
-requires=["hatchling"]
-build-backend="hatchling.build"
-
 [project]
-name="sweetbean"
-version="0.0.43"
-authors=[{name="Younes Strittmatter", email="younes_strittmatter@brown.edu"},]
-description="A declarative language in python for creating jsPsych experiments."
-requires-python= ">=3.7"
-classifiers = [
-    "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: MIT License",
-    "Operating System :: OS Independent",
-]
+# UPDATE THIS BEFORE PUBLISHING
+name = "sweetbean"
+description = "A declarative language in python for creating jsPsych experiments"
+authors = [{ name = "Younes Strittmatter", email = "ystrittm@gmail.com" }]
+dynamic = ["version"]
+
 readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.7,<4"
+
+# ADD NEW DEPENDENCIES HERE
+dependencies = [
+    "jinja2",
+]
+
+[project.optional-dependencies]
+dev = [
+    "mkdocs"
+]
 
 [project.urls]
-"Homepage" = "https://github.com/AutoResearch/sweetbean"
-"Bug Tracker" = "https://github.com/AutoResearch/sweetbean/issues"
+homepage = "https://github.com/AutoResearch/sweetbean"
+repository = "https://https://github.com/AutoResearch/sweetbeant"
+documentation = "https://autoresearch.github.io/sweetbean/"
+
+
+[build-system]
+requires = ["setuptools", "setuptools_scm"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools_scm]
