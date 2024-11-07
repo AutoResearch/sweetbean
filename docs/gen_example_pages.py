@@ -9,7 +9,9 @@ nav = mkdocs_gen_files.Nav()
 
 ignore: List[Path] = []
 
-source_paths = sorted(Path("./examples").rglob("*.py"))
+source_paths = sorted(Path("./examples").rglob("*.py")) + sorted(
+    Path("./examples").rglob("*.ipynb")
+)
 special_paths: List[Path] = []  # [Path("./docs/docstrings.py")]
 
 for path in source_paths + special_paths:

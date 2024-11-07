@@ -16,7 +16,7 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
-    "mkdocs"
+    "mkdocs",
 ]
 
 [project.urls]
