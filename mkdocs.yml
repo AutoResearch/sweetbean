@@ -75,6 +75,6 @@ nav:
 - Introduction: 'index.md'
 - Tutorials: 'tutorials.md'
 - Notebooks:
-    - LLM Example: 'Notebook/Basic LLM Experiment.ipynb'
+    - LLM Example: 'Notebooks/Basic LLM Experiment.ipynb'
 - Code Reference: reference/  #
 - Examples: examples/
