@@ -54,6 +54,11 @@ plugins:
         python:
           import:
             - https://scikit-learn.org/stable/objects.inv
+  - mkdocs-jupyter: # required to convert Jupyter notebooks
+      include_source: true
+      execute: false
+
+
 
 
 markdown_extensions:

@@ -16,7 +16,21 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
-    "mkdocs",
+    "sweetbean[test]",
+    "sweetbean[build]",
+    "sweetbean[notebook]",
+    "sweetbean[docs]",
+]
+
+docs = [
+    "mkdocs-material",
+    "mkdocs-gen-files",
+    "mkdocs-literate-nav",
+    "mkdocs-section-index",
+    "mkdocs-multirepo-plugin",
+    "mkdocstrings-python",
+    "mkdocs-jupyter",
+    "pymdown-extensions",
 ]
 
 [project.urls]
