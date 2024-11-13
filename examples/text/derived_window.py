@@ -18,10 +18,10 @@ from sweetbean.sequence import Block, Experiment
 from sweetbean.stimulus import TextStimulus
 
 timeline = [
-    {"color": "red", "word": "RED", "correct_key": "f"},
-    {"color": "green", "word": "GREEN", "correct_key": "j"},
-    {"color": "green", "word": "RED", "correct_key": "f"},
-    {"color": "red", "word": "GREEN", "correct_key": "j"},
+    {"color": "red", "word": "RED"},
+    {"color": "green", "word": "GREEN"},
+    {"color": "green", "word": "RED"},
+    {"color": "red", "word": "GREEN"},
 ]
 
 # EVENT SEQUENCE
@@ -35,7 +35,7 @@ def is_correct_f(color):
 
 
 def is_correct_j(color):
-    return not is_correct_f(word)
+    return not is_correct_f(color)
 
 
 j_key = DerivedLevel("j", is_correct_j, [color])
