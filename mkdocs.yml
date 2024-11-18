@@ -37,17 +37,14 @@ theme:
 hooks:
   - mkdocs/hooks.py
 
-
 watch:
   - src/sweetbean/
-  - examples/
 
 plugins:
   - search
   - gen-files:
       scripts:
         - mkdocs/gen_ref_pages.py
-        - mkdocs/gen_example_pages.py
   - literate-nav:
       nav_file: SUMMARY.md
   - section-index
@@ -59,9 +56,6 @@ plugins:
   - mkdocs-jupyter: # required to convert Jupyter notebooks
       include_source: true
       execute: false
-
-
-
 
 markdown_extensions:
   - pymdownx.arithmatex:
@@ -76,89 +70,13 @@ extra_javascript:
 nav:
   - Introduction: 'index.md'
   - Quickstart Guide: Quickstart Guide/
+  - User Guide: User Guide/index.md
+      - Overview: 'User Guide/overview.md'
+      - Timeline Variables: 'User Guide/timeline_variables.md'
+      - Derived Variables: 'User Guide/derived_variables.md'
+      - Data Variables: 'User Guide/data_variables.md'
+
   - Stimuli: Stimuli/
   - Notebooks:
       - LLM Example: 'Notebooks/Basic LLM Experiment.ipynb'
   - Code Reference: reference/  #
-  - Examples: examples/
-
-## yaml-language-server: $schema=https://squidfunk.github.io/mkdocs-material/schema.json
-#
-#site_name: SweetBean
-#
-#theme:
-#  name: material
-#  features:
-#    - navigation.tabs
-#    - navigation.sections
-#    - toc.integrate
-#    - navigation.top
-#    - search.suggest
-#    - search.highlight
-#    - content.tabs.link
-#    - content.code.annotation
-#    - content.code.copy
-#  language: en
-#  palette:
-#    - scheme: default
-#      toggle:
-#        icon: material/toggle-switch-off-outline
-#        name: Switch to dark mode
-#      primary: default
-#      accent: purple
-#    - scheme: slate
-#      toggle:
-#        icon: material/toggle-switch
-#        name: Switch to light mode
-#      primary: default
-#      accent: lime
-#
-#extra:
-#  social:
-#    - icon: fontawesome/brands/github-alt
-#      link: https://github.com/AutoResearch
-#
-#
-#
-#watch:
-#  - src/sweetbean/
-#  - examples/
-#
-#plugins:
-#  - search
-#  - gen-files:
-#      scripts:
-#        - docs/gen_ref_pages.py
-#        - docs/gen_example_pages.py
-#  - literate-nav:
-#        nav_file: SUMMARY.md
-#  - section-index
-#  - mkdocstrings:
-#      handlers:
-#        python:
-#          import:
-#            - https://scikit-learn.org/stable/objects.inv
-#  - mkdocs-jupyter: # required to convert Jupyter notebooks
-#      include_source: true
-#      execute: false
-#
-#
-#
-#
-#markdown_extensions:
-#  - pymdownx.arithmatex:
-#      generic: true
-#
-#extra_javascript:
-#  - javascripts/mathjax.js
-#  - https://polyfill.io/v3/polyfill.min.js?features=es6
-#  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
-#
-#
-#nav:
-#- Introduction: 'index.md'
-#- Tutorials: 'tutorials.md'
-#- Notebooks:
-#    - LLM Example: 'Notebooks/Basic LLM Experiment.ipynb'
-#- Code Reference: reference/  #
-#- Examples: examples/

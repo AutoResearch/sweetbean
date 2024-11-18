@@ -11,22 +11,21 @@ The same experiments can be run used Large Language Models or Vision Models as s
 
 Crowd-sourced online experiments have become increasingly popular across the behavioral sciences, including cognitive
 psychology, social psychology, and behavioral economics. The success of online experiments can be partly attributed to
-the ability to collect larger data sets within shorter periods compared to lab-based experiments. On a practical level,
-online experiments have been facilitated by the development of open-source software for building online experiments,
-such as [jsPsych](https://www.jspsych.org/7.3/).
+the ability to collect larger data sets within shorter periods compared to lab-based experiments. 
 
-However, the development of online experiments can be time-consuming and error-prone. SweetBean aims to simplify the
+On a practical level,
+online experiments have been facilitated by the development of open-source software for building online experiments,
+such as [jsPsych](https://www.jspsych.org/7.3/). However, the development of online experiments can be time-consuming and error-prone. SweetBean aims to simplify the
 process of creating online experiments by providing a domain-specific language for specifying the structure of an
 experiment. SweetBean is designed to be easy to use, even for researchers with little programming experience.
 
 Additionally, SweetBean experiment can be run with synthetic participants, such as Large Language Models or
 Vision Models, to generate data for pilot studies or to test and fine-tune AI models to generate human-like data.
 
-## Index
-
+## Overview
 
 - [Quickstart Guide](Quickstart%20Guide/index.md) A quick guide to get you started with SweetBean.
-- [Stimuli](Stimuli/index.md) An overview of the stimuli that can be used in SweetBean experiments.
+- [User Guide](User%20Guide/index.md) An overview of SweetBean features.
 
 ## About
 
