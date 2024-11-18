@@ -70,7 +70,8 @@ extra_javascript:
 nav:
   - Introduction: 'index.md'
   - Quickstart Guide: Quickstart Guide/
-  - User Guide: User Guide/index.md
+  - User Guide:
+      - Home: 'User Guide/index.md'
       - Overview: 'User Guide/overview.md'
       - Timeline Variables: 'User Guide/timeline_variables.md'
       - Derived Variables: 'User Guide/derived_variables.md'
