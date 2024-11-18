@@ -353,14 +353,10 @@ class RandomDotPatternsStimulus(ROKStimulus):
             duration: time in ms the stimulus is presented // trial_duration
             number_of_oobs: the number of oriented objects per set in the stimulus
             number_of_apertures: the number of kinematograms
-            coherent_movement_direction: the direction of coherent motion in degrees
-                (0 degre meaning right)
             coherent_orientation: the orientation of the objects in degree
                 (0 degree meaning right)
-            coherence_movement: the percentage of oriented objects moving in the coherent direction.
             coherence_orientation: the percentage of oriented objects moving in the coherent
                 direction.
-            movement_speed: the movement speed of the oobs in (percentage of aperture_width)/second
             aperture_position_left: position of midpoint of aperture in x direction in percentage
                 of window width
             aperture_position_top: position of midpoint of aperture in y direction in percentage
