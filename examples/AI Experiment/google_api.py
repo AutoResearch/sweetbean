@@ -9,10 +9,16 @@ import vertexai
 from vertexai.generative_models import GenerativeModel, SafetySetting
 
 
-def generate(prompt):
+def generate(prompt, model="gemini-1.5-flash-002", max_tokens=5):
+    generation_config = {
+        "max_output_tokens": max_tokens,
+        "temperature": 1,
+        "top_p": 0.95,
+        "stop_sequences": [">>"],
+    }
     vertexai.init(project="auto-centauer", location="us-central1")
     model = GenerativeModel(
-        "gemini-1.5-flash-002",
+        model,
     )
     responses = model.generate_content(
         [prompt],
@@ -25,6 +31,12 @@ def generate(prompt):
 
 
 def multiturn_generate(system_instruction, prompt):
+    generation_config = {
+        "max_output_tokens": 5,
+        "temperature": 1,
+        "top_p": 0.95,
+        "stop_sequences": [">>"],
+    }
     vertexai.init(project="auto-centauer", location="us-central1")
     model = GenerativeModel(
         "gemini-1.5-flash-002", system_instruction=[system_instruction]
@@ -38,13 +50,6 @@ def multiturn_generate(system_instruction, prompt):
         )
     )
 
-
-generation_config = {
-    "max_output_tokens": 1,
-    "temperature": 1,
-    "top_p": 0.95,
-    "stop_sequences": [">>"],
-}
 
 safety_settings = [
     SafetySetting(

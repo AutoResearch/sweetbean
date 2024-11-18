@@ -31,6 +31,9 @@ docs = [
     "mkdocstrings-python",
     "mkdocs-jupyter",
     "pymdown-extensions",
+    "notebook",
+    "jupyter",
+    "jupyterlab",
 ]
 
 [project.urls]
