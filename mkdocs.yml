@@ -75,7 +75,8 @@ extra_javascript:
 
 nav:
   - Introduction: 'index.md'
-  - Tutorials: 'tutorials.md'
+  - Quickstart Guide: Quickstart Guide/
+  - Stimuli: Stimuli/
   - Notebooks:
       - LLM Example: 'Notebooks/Basic LLM Experiment.ipynb'
   - Code Reference: reference/  #

@@ -1,0 +1,3 @@
+# Symbols
+
+Display colored symbols.
