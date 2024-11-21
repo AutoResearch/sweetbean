@@ -74,7 +74,7 @@ experiment.to_html("stroop.html")
 ```
 
 This way, we could use loops to create experiments with many trials. But a better way is to use
-the `timeline variables`: [Timeline Variable](./timeline_variables)
+the `timeline variables`: [Timeline Variables](./timeline_variables)
 
 
 

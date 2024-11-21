@@ -28,6 +28,7 @@ docs = [
     "mkdocs-literate-nav",
     "mkdocs-section-index",
     "mkdocs-multirepo-plugin",
+    "mkdocs-macros-plugin",
     "mkdocstrings-python",
     "mkdocs-jupyter",
     "pymdown-extensions",

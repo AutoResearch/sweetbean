@@ -76,4 +76,4 @@ experiment.to_html("stroop.html")
 ```
 
 There is one additional variable, that we can use: The data variable. It is a special variable that accesses data from previous stimuli to dynamically adjust the current stimulus. For example, we can create Feedback:
-[Data Variable](data_variable.md)
+[Data Variables](data_variables.md)

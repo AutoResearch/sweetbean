@@ -1,31 +1,55 @@
 # SweetBean
 
 SweetBean is an
-open-source [domain-specific programming language](https://en.wikipedia.org/wiki/Domain-specific_language) in Python
-built for the declarative specification of stimuli sequences and the synthesis of JavaScript or HTML-files ready to be
-served as online experiments to the web.
+open-source [domain-specific programming language](https://en.wikipedia.org/wiki/Domain-specific_language) in Python,
+designed for the declarative specification of stimuli sequences and the synthesis of online experiments. With SweetBean,
+researchers can conveniently specify experiments once and run them with both **real participants** and **synthetic
+participants** using Large Language and Vision Models.
 
-The same experiments can be run used Large Language Models or Vision Models as synthetic participants.
+## Why SweetBean?
 
-## Motivation
+In recent years, crowd-sourced online experiments have gained immense popularity across behavioral sciences like
+cognitive psychology, social psychology, and behavioral economics. These experiments offer several advantages, such as:
 
-Crowd-sourced online experiments have become increasingly popular across the behavioral sciences, including cognitive
-psychology, social psychology, and behavioral economics. The success of online experiments can be partly attributed to
-the ability to collect larger data sets within shorter periods compared to lab-based experiments. 
+- Faster Data Collection: Gather large datasets in a fraction of the time required for lab-based studies.
+- Increased Accessibility: Access participants from diverse populations globally.
 
-On a practical level,
-online experiments have been facilitated by the development of open-source software for building online experiments,
-such as [jsPsych](https://www.jspsych.org/7.3/). However, the development of online experiments can be time-consuming and error-prone. SweetBean aims to simplify the
-process of creating online experiments by providing a domain-specific language for specifying the structure of an
-experiment. SweetBean is designed to be easy to use, even for researchers with little programming experience.
+Despite these benefits, the process of designing and implementing online experiments remains time-consuming and
+error-prone. Existing tools like [jsPsych](https://www.jspsych.org/latest/) have made strides in simplifying this
+process, but there's still a need for a more intuitive solution. We address this need with SweetBean.
 
-Additionally, SweetBean experiment can be run with synthetic participants, such as Large Language Models or
-Vision Models, to generate data for pilot studies or to test and fine-tune AI models to generate human-like data.
+- Declarative Language: Easily specify the structure and flow of experiments, even with minimal programming experience.
+- Synthetic Participant Support: Seamlessly integrate AI models for pilot studies, generating synthetic data
+  to test hypotheses or fine-tune models.
 
 ## Overview
 
-- [Quickstart Guide](Quickstart%20Guide/index.md) A quick guide to get you started with SweetBean.
+- [Quickstart Guide](Quickstart%20Guide/index.md) A quick start guide to get you started with SweetBean.
 - [User Guide](User%20Guide/index.md) An overview of SweetBean features.
+- [Stimuli](Stimuli/index.md) An overview of the different stimuli that can be used in SweetBean.
+- [Code References](reference/sweetbean/) A reference guide to the different classes and functions in SweetBean.
+
+## SweetBean is Growing
+
+![word-cloud](img/word-cloud.png){:.center}
+Our philosophy is rooted in continuous evolution and user-driven development. The initial set of features was based on a
+word cloud to identify frequently used methods, but we are always adding new features and stimuli based on the needs of
+our team and collaborators. If you have any suggestions or feature requests, please feel free to reach out to us via
+e-mail ([ystrittmatter@princeton.edu](mailto: ystrittmatter@princeton.edu)) or create an issue on our GitHub repository
+([https://github.com/AutoResearch/sweetbean/issues](https://github.com/AutoResearch/sweetbean/issues)). We are
+constantly seeking feedback and looking for ways to improve the language.
+
+### Coming Soon
+
+{{ include_file('docs/Announcement.md') }}
+
+## Discover More from Our Suite of Tools
+
+SweetBean is just one part of a powerful set of tools designed to streamline and enhance your research process. It can be used as a standalone product but is most powerful when used in conjunction with our other tools:
+
+- [SweetPea](https://sweetpea.ai/): A powerful tool for **counterbalanced experimental design** similar syntax to SweetBean. Create complex counterbalanced sequences with SweetPea and then use SweetBean to implement them in online experiments.
+
+- [AutoRA](https://autoresearch.github.io/autora/): Our solution for **automated research**, helping you execute and analyze experiments in a closed loop. Experiments created with SweetBean can be implemented seamlessly via AutoRA to collect data from real participants. Even if you are not planning to automate your research in a closed loop, AutoRA can help you to set up and run experiments without the need of a server and collect data from real participants via prolific.
 
 ## About
 
