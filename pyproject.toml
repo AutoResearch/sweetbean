@@ -37,6 +37,10 @@ docs = [
     "jupyterlab",
 ]
 
+test = [
+    "pytest",
+]
+
 [project.urls]
 homepage = "https://github.com/AutoResearch/sweetbean"
 repository = "https://https://github.com/AutoResearch/sweetbeant"
