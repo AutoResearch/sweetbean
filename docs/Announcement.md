@@ -1,0 +1,3 @@
+- Language Model support for surveys and questionnaires
+- Bandit task
+- Support for Vision Models

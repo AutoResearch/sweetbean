@@ -34,6 +34,9 @@ theme:
       - icon: fontawesome/brands/github-alt
         link: https://github.com/AutoResearch
 
+extra_css:
+  - styles.css
+
 hooks:
   - mkdocs/hooks.py
 
@@ -42,6 +45,7 @@ watch:
 
 plugins:
   - search
+  - macros
   - gen-files:
       scripts:
         - mkdocs/gen_ref_pages.py
@@ -57,9 +61,15 @@ plugins:
       include_source: true
       execute: false
 
+
+
 markdown_extensions:
+  - pymdownx.superfences
   - pymdownx.arithmatex:
       generic: true
+  - attr_list
+
+
 
 extra_javascript:
   - javascripts/mathjax.js
@@ -76,8 +86,6 @@ nav:
       - Timeline Variables: 'User Guide/timeline_variables.md'
       - Derived Variables: 'User Guide/derived_variables.md'
       - Data Variables: 'User Guide/data_variables.md'
-
+      - LLM Synthetic Participant: 'User Guide/llm_synthetic_participant.md'
   - Stimuli: Stimuli/
-  - Notebooks:
-      - LLM Example: 'Notebooks/Basic LLM Experiment.ipynb'
   - Code Reference: reference/  #
