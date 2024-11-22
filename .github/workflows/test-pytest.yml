@@ -26,4 +26,4 @@ jobs:
         python-version: ${{ matrix.python-version }}
         cache: "pip"
     - run: pip install ".[test]"
-    - run: pytest --hypothesis-profile ci
+    - run: pytest .tests
