@@ -30,12 +30,20 @@ def test_compile():
 
     for stimulus in stimuli_list:
         try:
+            # Log which stimulus is being tested
+            print(f"Testing {stimulus.__name__}...")
+
             # Test each stimulus
-            stimulus_instance = stimulus()
+            stimulus_instance = stimulus()  # Adjust if parameters are required
             trial_sequence = Block([stimulus_instance])
             experiment = Experiment([trial_sequence])
             experiment.to_html("basic.html")
+            print(f"{stimulus.__name__} compiled successfully.")
+        except Exception as e:
+            print(f"Error testing {stimulus.__name__}: {e}")
         finally:
             # Clean up generated files
             if os.path.exists("basic.html"):
                 os.remove("basic.html")
+            else:
+                raise FileNotFoundError("basic.html not created.")
