@@ -17,13 +17,13 @@ from sweetbean.const import (
     HTML_PREAMBLE,
     TEXT_APPENDIX,
 )
-from sweetbean.parameter import CodeVariable
-from sweetbean.stimulus import (
+from sweetbean.parameter import (
+    CodeVariable,
     DataVariable,
     DerivedParameter,
-    StimulusVar,
     TimelineVariable,
 )
+from sweetbean.stimulus import StimulusVar
 from sweetbean.update_package_honeycomb import get_import, update_package
 
 
