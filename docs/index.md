@@ -11,15 +11,15 @@ participants** (e.g., large-language models).
 In recent years, crowd-sourced online experiments have gained immense popularity across behavioral sciences like
 cognitive psychology, social psychology, and behavioral economics. These experiments offer several advantages, such as:
 
-- Faster Data Collection: Gather large datasets in a fraction of the time required for lab-based studies.
-- Increased Accessibility: Access participants from diverse populations globally.
+- Faster data collection: gather large datasets in a fraction of the time required for in-person studies at the lab.
+- Increased accessibility: access participants from diverse populations globally.
 
 Despite these benefits, the process of designing and implementing online experiments remains time-consuming and
 error-prone. Existing tools like [jsPsych](https://www.jspsych.org/latest/) have made strides in simplifying this
-process, but there's still a need for a more intuitive solution. We address this need with SweetBean.
+process, but there's still a need for a more intuitive solution, in particular for researchers who don't have a background in programming in Java Script. We address this need with SweetBean.
 
-- Declarative Language: Easily specify the structure and flow of experiments, even with minimal programming experience.
-- Synthetic Participant Support: Seamlessly integrate AI models for pilot studies, generating synthetic data
+- Declarative language in Python: easily specify the structure and flow of experiments, even with minimal programming experience.
+- Synthetic participant support: Integrate [large-language models as synthetic participants](https://www.sciencedirect.com/science/article/pii/S1364661323000980) for pilot studies, generating synthetic data
   to test hypotheses or fine-tune models.
 
 ## Overview
