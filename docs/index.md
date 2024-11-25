@@ -2,9 +2,9 @@
 
 SweetBean is an
 open-source [domain-specific programming language](https://en.wikipedia.org/wiki/Domain-specific_language) in Python,
-designed for the declarative specification of stimuli sequences and the synthesis of online [jsPsych](https://www.jspsych.org/) experiments. With SweetBean,
-researchers can conveniently specify experiments once and run them with both **real participants** and **synthetic
-participants** using AI Models.
+designed for the declarative specification of stimuli sequences and the synthesis of online [jsPsych](https://www.jspsych.org/) behavioral experiments. With SweetBean,
+researchers can conveniently specify experiments once and then compile them into a jsPsych experiment for **human participants** or text-based experiment for **synthetic
+participants** (e.g., large-language models).
 
 ## Why SweetBean?
 
