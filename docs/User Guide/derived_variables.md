@@ -1,7 +1,8 @@
 # Derived Variables
 
 In the previous examples, we have seen how to create a simple block with a fixed trials. Here, we will introduce derived
-variables.
+variables. These variables allow us let a ``TimeLineVariable`` depend on another ``TimeLineVariable``. This can be useful when providing feedback as a function of the participant's response. 
+
 Let us assume the same timeline:
 
 ```python
