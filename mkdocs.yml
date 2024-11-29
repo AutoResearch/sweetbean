@@ -80,6 +80,9 @@ extra_javascript:
 nav:
   - Introduction: 'index.md'
   - Quickstart Guide: Quickstart Guide/
+  - Examples:
+    - Home: 'Examples/index.md'
+    - Psychophysics: 'Examples/Psychophysics/psychophysics.ipynb'
   - User Guide:
       - Home: 'User Guide/index.md'
       - Overview: 'User Guide/overview.md'
