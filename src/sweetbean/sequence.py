@@ -313,6 +313,10 @@ def _run_stimuli(
             v_ = v
             if isinstance(v_, TimelineVariable):
                 v_ = timeline_element[v.name]
+            if isinstance(v_, DataVariable):
+                if v_.window < 1:
+                    raise Exception("Window cannot be bellow 1")
+                v_ = data_lst[v_.name][-1 - (v_.window - 1)]
             if isinstance(v_, DerivedParameter):
                 lvls = v_.levels
                 for lvl in lvls:

@@ -17,12 +17,19 @@ def param_to_psych(param):
             return "false"
     elif isinstance(param, int):
         return param
+
     else:
         param = str(param)
-        if param.startswith('"') and param.endswith('"'):
+        if (
+            param.startswith('"')
+            and param.endswith('"')
+            or param.startswith("'")
+            and param.endswith("'")
+        ):
             return param
         else:
-            return f'"{param}"'
+            param_new = param.replace("'", "\\'").replace('"', "\\'")
+            return f'"{param_new}"'
 
 
 def level_to_data(param, i):
@@ -44,7 +51,7 @@ class TimelineVariable:
         self.text_js = f"jsPsych.timelineVariable('{self.name}')"
 
 
-class DataVariable:
+class DataVariableOld:
     name: str = ""
     text_js = ""
 
@@ -54,6 +61,21 @@ class DataVariable:
 
     def to_psych(self):
         self.text_js = self.name
+
+
+class DataVariable:
+    name: str = ""
+    text_js = ""
+
+    def __init__(self, name, window=1):
+        self.name = str(name)
+        self.window = window
+        self.to_psych()
+
+    def to_psych(self):
+        self.text_js = (
+            f"jsPsych.data.get().last({self.window})['trials'][0]['bean_{self.name}']"
+        )
 
 
 class CodeVariable:
@@ -94,7 +116,10 @@ class DerivedLevel:
         for i in range(len(level_list)):
             for j in range(len(level_list[i])):
                 if not isinstance(level_list[i][j], bool):
-                    level_list[i][j] = param_to_psych(level_list[i][j]).replace('"', "")
+                    if isinstance(level_list[i][j], str):
+                        level_list[i][j] = param_to_psych(level_list[i][j]).replace(
+                            '"', ""
+                        )
         level_combination = list(itertools.product(*level_list))
         js_string = ""
         for comb in level_combination:
@@ -110,7 +135,7 @@ class DerivedLevel:
                     right_side = param_to_psych(arg[i])
                     if right_side == '"true"' or right_side == '"false"':
                         right_side = right_side[1:-1]
-                    if right_side.startswith("()"):
+                    if isinstance(right_side, str) and right_side.startswith("()"):
                         right_side = f"({right_side})()"
                     js_string += f"{left_side} === {right_side}"
                     if i < len(comb) - 1:
