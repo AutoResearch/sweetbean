@@ -30,7 +30,7 @@ so_f_duration = TimelineVariable("so_f")
 
 
 def correct_key_fct(color, word):
-    if color == word:
+    if color.lower() == word.lower():
         return "f"
     return "j"
 
@@ -56,4 +56,6 @@ so_f = Text(so_f_duration)
 train_block = Block([fixation, so_s, stroop, feedback, so_f], timeline)
 experiment = Experiment([train_block])
 
-experiment.to_html("timeline.html")
+# experiment.to_html("timeline.html")
+
+experiment.run_on_language()

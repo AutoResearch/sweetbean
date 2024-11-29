@@ -1,7 +1,14 @@
 from abc import ABC, abstractmethod
-from typing import List
+from typing import Any, List, Union
 
-from sweetbean_v2.datatype.variables import to_js
+from jinja2 import Template
+
+from sweetbean_v2.datatype.variables import (
+    DataVariable,
+    FunctionVariable,
+    TimelineVariable,
+    to_js,
+)
 
 
 class _BaseStimulus(ABC):
@@ -15,6 +22,8 @@ class _BaseStimulus(ABC):
     js_data = ""
     excludes: List[str] = []
     type = ""
+    l_template: Union[str, None] = None
+    l_args: List[Any] = []
 
     def __init__(self, args, side_effects=None):
         self.side_effects = side_effects
@@ -31,7 +40,7 @@ class _BaseStimulus(ABC):
             self.arg_js["trial_duration"] = self.arg["duration"]
         for key in self.arg:
             self.arg_js[key] = args[key]
-        self.to_js()
+        # self.to_js()
 
     def to_js(self):
         self.js = ""
@@ -52,6 +61,21 @@ class _BaseStimulus(ABC):
         self._set_before()
         if self.side_effects:
             self._set_side_effects()
+
+    def prepare_l_args(self, timeline_element, data):
+        self.l_args = {}
+        for key, value in self.arg.items():
+            key_ = key
+            value_ = _parse_variable(value, timeline_element, data)
+            self.l_args[key_] = value_
+
+    def get_prompt(self):
+        if self.l_template is None:
+            return self.l_args
+        return Template(self.l_template).render(self.l_args)
+
+    def get_response_prompt(self):
+        return ""
 
     def _param_to_js(self, key, param):
         body, data = _set_param_js(key, param)
@@ -84,6 +108,8 @@ class _KeyboardResponseStimulus(_BaseStimulus, ABC):
     A base class for stimuli that require a correct key and choices
     """
 
+    response_template = "You can press {{ choices }}. You press <<"
+
     response_key = "response"
 
     def _process_response(self):
@@ -91,6 +117,21 @@ class _KeyboardResponseStimulus(_BaseStimulus, ABC):
             f'data["bean_correct"]='
             f'data["bean_correct_key"]===data["{self.response_key}"];'
         )
+
+    def get_response_prompt(self):
+        if not self.l_args["choices"]:
+            return None
+        return Template(self.response_template).render(
+            {"choices": [c.upper() for c in self.l_args["choices"]]}
+        )
+
+    def process_response(self, response):
+        if not self.l_args["correct_key"]:
+            return {"response": response.upper(), "correct": None}
+        return {
+            "response": response.upper(),
+            "correct": response.upper() == self.l_args["correct_key"].upper(),
+        }
 
 
 def _set_param_js(key, param):
@@ -119,3 +160,24 @@ def _set_data_text(key, param):
     res += _set_set_variable(key, param)
     res += f'data["bean_{key}"]={_set_get_variable(key)};'
     return res
+
+
+def _parse_variable(variable, timeline_element, data):
+    if isinstance(variable, list):
+        return [_parse_variable(a, timeline_element, data) for a in variable]
+    if isinstance(variable, dict):
+        return {
+            k: _parse_variable(v, timeline_element, data) for k, v in variable.items()
+        }
+    if isinstance(variable, tuple):
+        return tuple(_parse_variable(a, timeline_element, data) for a in variable)
+    if isinstance(variable, TimelineVariable):
+        return timeline_element[variable.name]
+    if isinstance(variable, DataVariable):
+        if variable.window < 1:
+            raise Exception("Window cannot be bellow 1")
+        return data[-variable.window][variable.raw_name]
+    if isinstance(variable, FunctionVariable):
+        _args = [_parse_variable(a, timeline_element, data) for a in variable.args]
+        return variable.fct(*_args)
+    return variable
