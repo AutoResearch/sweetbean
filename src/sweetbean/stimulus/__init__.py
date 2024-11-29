@@ -1,6 +1,7 @@
 # add the stimuli to the __init__.py file
 
 from sweetbean.stimulus._Stimulus import StimulusVar
+from sweetbean.stimulus.ChoiceStimulus import ChoiceStimulus
 from sweetbean.stimulus.ImageStimulus import ImageStimulus
 from sweetbean.stimulus.ROS import (
     RandomDotPatternsStimulus,
