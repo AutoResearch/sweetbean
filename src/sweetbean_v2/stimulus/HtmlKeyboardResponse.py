@@ -33,6 +33,13 @@ class Text(HtmlKeyboardResponse):
     Show colored text
     """
 
+    l_template: str = (
+        "You see "
+        '{% if text %}"{{text}}" in "{{color}}"'
+        "{% else %}a blank screen{% endif %}"
+        "{% if duration %} for {{duration}}ms{% endif %}."
+    )
+
     def __init__(
         self,
         duration=None,
@@ -58,6 +65,8 @@ class Text(HtmlKeyboardResponse):
 
         stimulus_ = FunctionVariable("stimulus", stim, [color, text])
         super().__init__(duration, stimulus_, choices, correct_key, side_effects)
+
+        self.arg.update({"text": text, "color": color})
 
 
 Stroop = Text

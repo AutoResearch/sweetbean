@@ -49,6 +49,40 @@ class Experiment:
         text += FUNCTION_APPENDIX(is_async) if as_function else TEXT_APPENDIX(is_async)
         return text
 
+    def run_on_language(
+        self,
+        get_input=input,
+    ):
+        data = []
+        prompts = []
+        for b in self.blocks:
+            timeline = b.timeline
+            stimuli = b.stimuli
+            if not timeline:
+                timeline = [{}]
+            for timeline_element in timeline:
+                data, prompts = run_stimuli(
+                    stimuli, timeline_element, data, prompts, get_input
+                )
+
+
+def run_stimuli(stimuli, timeline_element, data, prompts, get_input):
+    for s in stimuli:
+        s_data = {}
+        s.prepare_l_args(timeline_element, data)
+        prompts.append(s.get_prompt())
+        prompt_response = s.get_response_prompt()
+        if prompt_response:
+            prompts[-1] += " " + prompt_response
+            response = get_input(" ".join([p for p in prompts])).upper()
+            s_data.update(s.process_response(response))
+            prompts[-1] += f"{response}>>"
+        data.append(s_data)
+        print(data)
+    return data, prompts
+
+    # return full_chat, current_prompt, data, prompts
+
 
 #
 #     def run_on_language(
