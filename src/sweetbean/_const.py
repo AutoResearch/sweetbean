@@ -14,46 +14,16 @@ HTML_PREAMBLE = (
     '<script src="https://unpkg.com/@jspsych/plugin-video-keyboard-response@1.1.2"></script>\n'
     '<script src="https://unpkg.com/@jspsych-contrib/plugin-rok@1.1.1"></script>\n'
     '<script src="https://unpkg.com/@jspsych-contrib/plugin-html-choice@1.0.0"></script>\n'
-    '<script src="https://cdn.jsdelivr.net/npm/sweetbean@0.0.3/dist/runtime-script.js"></script>\n'
-    '<link href="https://cdn.jsdelivr.net/npm/sweetbean@0.0.5/dist/style/main.css" '
+    '<script src="https://cdn.jsdelivr.net/npm/sweetbean@0.0.6/dist/runtime-script.js"></script>\n'
+    '<link href="https://cdn.jsdelivr.net/npm/sweetbean@0.0.6/dist/style/main.css" '
     'rel="stylesheet" type="text/css"/>\n'
-    '<link href="./slots.css" rel="stylesheet" type="text/css"/>\n'
-    # "<style>"
-    # "body {"
-    # "background: #000; color: #fff;"
-    # "}\n"
-    # "div {"
-    # "font-size:36pt; line-height:40pt"
-    # "}"
-    # ".sweetbean-square {"
-    # "width:10vw; height:10vw"
-    # "}"
-    # ".sweetbean-circle {"
-    # "width:10vw; height:10vw; border-radius:50%"
-    # "}"
-    # ".sweetbean-triangle {"
-    # "width:10vw; height:10vw; clip-path:polygon(50% 0, 0 100%, 100% 100%)"
-    # "}"
-    # ".feedback-screen-red {"
-    # "position:absolute; left:0; top:0; width:100vw; height: 100vh; background: red"
-    # "}"
-    # ".feedback-screen-green {"
-    # "position:absolute; left:0; top: 0; width:100vw; height: 100vh; background: green"
-    # "}"
-    # "</style>\n"
+    '<link href="https://cdn.jsdelivr.net/npm/sweetbean@0.0.6/dist/style/bandit.css" '
+    'rel="stylesheet" type="text/css"/>\n'
     "</head>\n"
     "<body></body>\n"
     "<script>\n"
 )
-HTML_APPENDIX = "</script>\n" "</html>"
-
-HONEYCOMB_PREAMBLE = (
-    "import 'jspsych/css/jspsych.css'\n"
-    "const jsPsychOptions = {}\n"
-    "function buildTimeline(jsPsych) {\n"
-    "console.log(jsPsych.version())\n"
-)
-HONEYCOMB_APPENDIX = "export { jsPsychOptions, buildTimeline }"
+HTML_APPENDIX = "</script>\n</html>"
 
 JSPSYCH = {"jspsych": "7.3.1"}
 
