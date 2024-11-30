@@ -31,10 +31,13 @@ class HtmlChoice(_BaseStimulus):
 
     def _process_response(self):
         self.js_data += 'data["bean_value"] = data["value"];'
-        self.js_data += 'data["bean_choice"] = data["choice"];'
+        self.js_data += 'data["bean_response"] = data["choice"];'
 
     def _set_before(self):
         pass
+
+    def process_l(self, prompts, get_input, multi_turn):
+        raise NotImplementedError
 
 
 class Bandit(HtmlChoice):
@@ -104,6 +107,7 @@ class Bandit(HtmlChoice):
             time_after_response=time_after_response,
             side_effects=side_effects,
         )
+        self.arg.update({"bandits": bandits})
 
     def _set_before(self):
         res = "const root=document.documentElement;"
@@ -116,3 +120,30 @@ class Bandit(HtmlChoice):
             f'`${{({to_js(self.arg_js["time_after_response"])})/2}}ms`);'
         )
         self.js_before = f"on_load:()=>{{{res}}},"
+
+    def process_l(self, prompts, get_input, multi_turn):
+        current_prompt = f' You see {len(self.l_args["bandits"])} bandits.'
+        for idx, bandit in enumerate(self.l_args["bandits"]):
+            current_prompt += f' Bandit {idx + 1} is {bandit["color"]}.'
+        current_prompt += (
+            " Choose a bandit by naming the number of the bandit. You name "
+        )
+        if not multi_turn:
+            in_prompt = " ".join([p for p in prompts]) + current_prompt + "<<"
+        else:
+            in_prompt = current_prompt + "<<"
+        response = get_input(in_prompt)
+        if int(response) < 1 or int(response) > len(self.l_args["bandits"]):
+            prompts.append(
+                current_prompt + f"<<{response}>>. " f"The response was invalid."
+            )
+            value = 0
+        else:
+            prompts.append(
+                current_prompt + f"<<{response}>>. "
+                f"The value of the chosen bandit was {self.l_args['values'][int(response) - 1]}."
+            )
+            value = self.l_args["values"][int(response) - 1]
+        data = self.l_args.copy()
+        data.update({"response": int(response) - 1, "value": value})
+        return data, prompts

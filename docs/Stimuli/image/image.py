@@ -2,7 +2,7 @@ from sweetbean import Block, Experiment
 from sweetbean.stimulus import Image
 
 stim_1 = Image(
-    src="https://media.istockphoto.com/id/120492078/photo/"
+    stimulus="https://media.istockphoto.com/id/120492078/photo/"
     "banana.jpg?s=1024x1024&w=is&k=20&c=M9KLVNgqLft_btWgSu0iZAmdv2asI11Qel-6fsQK140=",
     choices=[" "],
 )

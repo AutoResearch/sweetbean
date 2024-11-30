@@ -1,10 +1,15 @@
 from abc import ABC, abstractmethod
-from typing import Any, List, Union
+from typing import List, Union
 
 from jinja2 import Template
 
 from sweetbean.util.parse import to_js
-from sweetbean.variable import DataVariable, FunctionVariable, TimelineVariable
+from sweetbean.variable import (
+    DataVariable,
+    FunctionVariable,
+    SharedVariable,
+    TimelineVariable,
+)
 
 
 class _BaseStimulus(ABC):
@@ -19,7 +24,8 @@ class _BaseStimulus(ABC):
     excludes: List[str] = []
     type = ""
     l_template: Union[str, None] = None
-    l_args: List[Any] = []
+    l_args: dict = {}
+    l_ses: dict = {}
 
     def __init__(self, args, side_effects=None):
         self.side_effects = side_effects
@@ -58,20 +64,49 @@ class _BaseStimulus(ABC):
         if self.side_effects:
             self._set_side_effects()
 
-    def prepare_l_args(self, timeline_element, data):
+    def _prepare_args_l(self, timeline_element, data, shared_variables):
         self.l_args = {}
+        self.l_ses = {}
         for key, value in self.arg.items():
             key_ = key
-            value_ = _parse_variable(value, timeline_element, data)
+            value_ = _parse_variable(value, timeline_element, data, shared_variables)
             self.l_args[key_] = value_
 
-    def get_prompt(self):
+    def _resolve_side_effects(self, timeline_element, data, shared_variables):
+        if self.side_effects:
+            for se in self.side_effects:
+                get_variable = _parse_variable(
+                    se.get_variable, timeline_element, data, shared_variables, se=True
+                )
+                self.l_ses[se.set_variable.name] = get_variable
+
+    def process_l(self, prompts, get_input, multi_turn):
+        prompts.append(self._get_prompt_l())
+        prompt_response = self._get_response_prompt_l()
+        s_data = {}
+        data = self.l_args.copy()
+        if prompt_response:
+            prompts[-1] += " " + prompt_response
+            if not multi_turn:
+                _in_prompt = prompts[-1]
+            else:
+                _in_prompt = " ".join([p for p in prompts])
+            response = get_input(_in_prompt).upper()
+            s_data = self._process_response_l(response)
+            prompts[-1] += f"{response}>>"
+        data.update(s_data)
+        return data, prompts
+
+    def _get_prompt_l(self):
         if self.l_template is None:
-            return self.l_args
+            raise Exception("No template or function set for getting prompt")
         return Template(self.l_template).render(self.l_args)
 
-    def get_response_prompt(self):
-        return ""
+    def _get_response_prompt_l(self):
+        raise Exception("No template or function set for getting response prompt")
+
+    def _process_response_l(self, response):
+        return {"response": response}
 
     def _param_to_js(self, key, param):
         body, data = _set_param_js(key, param)
@@ -114,14 +149,14 @@ class _KeyboardResponseStimulus(_BaseStimulus, ABC):
             f'data["bean_correct_key"]===data["{self.response_key}"];'
         )
 
-    def get_response_prompt(self):
+    def _get_response_prompt_l(self):
         if not self.l_args["choices"]:
             return None
         return Template(self.response_template).render(
             {"choices": [c.upper() for c in self.l_args["choices"]]}
         )
 
-    def process_response(self, response):
+    def _process_response_l(self, response):
         if not self.l_args["correct_key"]:
             return {"response": response.upper(), "correct": None}
         return {
@@ -158,22 +193,35 @@ def _set_data_text(key, param):
     return res
 
 
-def _parse_variable(variable, timeline_element, data):
+def _parse_variable(variable, timeline_element, data, shared_variables, se=False):
     if isinstance(variable, list):
-        return [_parse_variable(a, timeline_element, data) for a in variable]
+        return [
+            _parse_variable(a, timeline_element, data, shared_variables)
+            for a in variable
+        ]
     if isinstance(variable, dict):
         return {
-            k: _parse_variable(v, timeline_element, data) for k, v in variable.items()
+            k: _parse_variable(v, timeline_element, data, shared_variables)
+            for k, v in variable.items()
         }
     if isinstance(variable, tuple):
-        return tuple(_parse_variable(a, timeline_element, data) for a in variable)
+        return tuple(
+            _parse_variable(a, timeline_element, data, shared_variables)
+            for a in variable
+        )
     if isinstance(variable, TimelineVariable):
         return timeline_element[variable.name]
     if isinstance(variable, DataVariable):
-        if variable.window < 1:
-            raise Exception("Window cannot be bellow 1")
+        if se:
+            return data[-variable.window - 1][variable.raw_name]
         return data[-variable.window][variable.raw_name]
     if isinstance(variable, FunctionVariable):
-        _args = [_parse_variable(a, timeline_element, data) for a in variable.args]
+        _args = [
+            _parse_variable(a, timeline_element, data, shared_variables)
+            for a in variable.args
+        ]
         return variable.fct(*_args)
+    if isinstance(variable, SharedVariable):
+        return shared_variables[variable.name]
+
     return variable

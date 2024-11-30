@@ -42,7 +42,8 @@ rdp = RandomDotPatterns(
     correct_key=correct_key,
 )
 
-feedback = Feedback(500)
+
+feedback = Feedback(500, window=2)
 
 event_sequence = [fixation, blank_1, rdp, blank_2, feedback]
 

@@ -10,7 +10,7 @@ class RandomObjectKinematogram(_BaseStimulus):
 
     def __init__(
         self,
-        duration=0,
+        duration=None,
         number_of_oobs=300,
         number_of_apertures=1,
         coherent_movement_direction=180,
@@ -63,6 +63,9 @@ class RandomObjectKinematogram(_BaseStimulus):
     def _set_before(self):
         pass
 
+    def process_l(self, prompts, get_input, multi_turn):
+        raise NotImplementedError
+
 
 ROK = RandomObjectKinematogram
 
@@ -70,7 +73,7 @@ ROK = RandomObjectKinematogram
 class RandomDotPatterns(ROK):
     def __init__(
         self,
-        duration=0,
+        duration=None,
         number_of_oobs=300,
         number_of_apertures=2,
         coherent_orientation=0,

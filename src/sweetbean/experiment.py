@@ -62,31 +62,44 @@ class Experiment:
     def run_on_language(
         self,
         get_input=input,
+        multi_turn=False,
     ):
         data = []
         prompts = []
+        shared_variables = {}
+        for b in self.blocks:
+            for s in b.stimuli:
+                for key in s.arg:
+                    if isinstance(s.arg[key], SharedVariable) or isinstance(
+                        s.arg[key], CodeVariable
+                    ):
+                        shared_variables[s.arg[key].name] = s.arg[key].value
         for b in self.blocks:
             timeline = b.timeline
             stimuli = b.stimuli
             if not timeline:
                 timeline = [{}]
             for timeline_element in timeline:
-                data, prompts = run_stimuli(
-                    stimuli, timeline_element, data, prompts, get_input
+                data, prompts, shared_variables = run_stimuli(
+                    stimuli,
+                    timeline_element,
+                    data,
+                    shared_variables,
+                    prompts,
+                    get_input,
+                    multi_turn,
                 )
+        return data, prompts
 
 
-def run_stimuli(stimuli, timeline_element, data, prompts, get_input):
+def run_stimuli(
+    stimuli, timeline_element, data, shared_variables, prompts, get_input, multi_turn
+):
     for s in stimuli:
-        s_data = {}
-        s.prepare_l_args(timeline_element, data)
-        prompts.append(s.get_prompt())
-        prompt_response = s.get_response_prompt()
-        if prompt_response:
-            prompts[-1] += " " + prompt_response
-            response = get_input(" ".join([p for p in prompts])).upper()
-            s_data.update(s.process_response(response))
-            prompts[-1] += f"{response}>>"
+        s._prepare_args_l(timeline_element, data, shared_variables)
+        s_data, prompts = s.process_l(prompts, get_input, multi_turn)
         data.append(s_data)
-        print(data)
-    return data, prompts
+        if s.side_effects:
+            s._resolve_side_effects(timeline_element, data, shared_variables)
+            shared_variables.update(s.l_ses)
+    return data, prompts, shared_variables

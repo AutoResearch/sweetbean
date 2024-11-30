@@ -157,6 +157,8 @@ def _extract_arrow_function(js_code):
     match = re.search(r"function\((.*?)\)\{(.*?)\};", js_code, re.DOTALL)
     if not match:
         match = re.search(r"function\((.*?)\)\{(.*?)\},", js_code, re.DOTALL)
+    if not match:
+        match = re.search(r"function\((.*?)\)\{(.*?)\}", js_code, re.DOTALL)
 
     if match:
         # Convert to an arrow function

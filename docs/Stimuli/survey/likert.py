@@ -20,8 +20,8 @@ stim_1 = Text(
 
 stim_2 = LikertSurvey(
     questions=[
-        {"How are you feeling?": [-2, -1, 0, 1, 2]},
-        {"Do you like this tool?": [0, 1, 3]},
+        {"prompt": "How are you feeling?", "labels": [-2, -1, 0, 1, 2]},
+        {"prompt": "Do you like this tool?", "labels": [0, 1, 3]},
     ]
 )
 

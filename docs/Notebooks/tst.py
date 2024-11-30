@@ -57,4 +57,8 @@ show_score = Text(duration=1000, text=score)
 
 trial_sequence = Block([bandit_task, show_score], timeline=timeline)
 experiment = Experiment([trial_sequence])
-experiment.to_html("bandit.html")
+
+
+data, prompts = experiment.run_on_language()
+
+print(data, prompts)

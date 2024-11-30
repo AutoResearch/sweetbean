@@ -16,8 +16,11 @@ stim_1 = Text(
 
 stim_2 = MultiChoiceSurvey(
     questions=[
-        {"How are you?": ["bad", "good", "fine"]},
-        {"What is your handedness?": ["left", "right", "other", "prefer not to say"]},
+        {"prompt": "How are you?", "options": ["bad", "good", "fine"]},
+        {
+            "prompt": "What is your handedness?",
+            "options": ["left", "right", "other", "prefer not to say"],
+        },
     ]
 )
 

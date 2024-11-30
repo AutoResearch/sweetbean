@@ -32,6 +32,27 @@ class TextSurvey(_Survey):
         questions_ = FunctionVariable("questions", get_prompts, [questions])
         super().__init__(questions_, side_effects=side_effects)
 
+    def process_l(self, prompts, get_input, multi_turn):
+        current_prompt = []
+        responses = {}
+        data = self.l_args.copy()
+        for idx, question in enumerate(self.l_args["questions"]):
+            current_prompt.append(question["prompt"])
+            if not multi_turn:
+                _in_prompt = (
+                    " ".join([p for p in prompts])
+                    + " ".join([c for c in current_prompt])
+                    + "<<"
+                )
+            else:
+                _in_prompt = current_prompt[-1] + "<<"
+            response = get_input(_in_prompt)
+            current_prompt[-1] += f"<<{response}>>"
+            responses[f"Q_{str(idx + 1)}"] = response
+        data.update({"response": responses})
+        prompts += current_prompt
+        return data, prompts
+
 
 class MultiChoiceSurvey(_Survey):
     type = "jsPsychSurveyMultiChoice"
@@ -48,6 +69,30 @@ class MultiChoiceSurvey(_Survey):
 
         questions_ = FunctionVariable("questions", get_prompts, [questions])
         super().__init__(questions_, side_effects=side_effects)
+
+    def process_l(self, prompts, get_input, multi_turn):
+        current_prompt = []
+        responses = {}
+        data = self.l_args.copy()
+        for idx, question in enumerate(self.l_args["questions"]):
+            current_prompt.append(question["prompt"])
+            current_prompt[-1] += " Your options are: " + ", ".join(
+                [str(i) for i in question["options"]]
+            )
+            if not multi_turn:
+                _in_prompt = (
+                    " ".join([p for p in prompts])
+                    + " ".join([c for c in current_prompt])
+                    + "<<"
+                )
+            else:
+                _in_prompt = current_prompt[-1] + "<<"
+            response = get_input(_in_prompt)
+            current_prompt[-1] += f"<<{response}>>"
+            responses[f"Q_{str(idx + 1)}"] = response
+        data.update({"response": responses})
+        prompts += current_prompt
+        return data, prompts
 
 
 #
@@ -79,3 +124,27 @@ class LikertSurvey(_Survey):
         for p in prompts:
             prompts_.append({"prompt": p, "labels": scale})
         return cls(prompts_, side_effects=side_effects)
+
+    def process_l(self, prompts, get_input, multi_turn):
+        current_prompt = []
+        responses = {}
+        data = self.l_args.copy()
+        for idx, question in enumerate(self.l_args["questions"]):
+            current_prompt.append(question["prompt"])
+            current_prompt[-1] += " Your options are: " + ", ".join(
+                [str(i) for i in question["labels"]]
+            )
+            if not multi_turn:
+                _in_prompt = (
+                    " ".join([p for p in prompts])
+                    + " ".join([c for c in current_prompt])
+                    + "<<"
+                )
+            else:
+                _in_prompt = current_prompt[-1] + "<<"
+            response = get_input(_in_prompt)
+            current_prompt[-1] += f"<<{response}>>"
+            responses[f"Q_{str(idx + 1)}"] = response
+        data.update({"response": responses})
+        prompts += current_prompt
+        return data, prompts

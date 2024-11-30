@@ -6,12 +6,12 @@ class Image(_KeyboardResponseStimulus):
     shows an image
     """
 
-    type = "jsPsychVideoKeyboardResponse"
+    type = "jsPsychImageKeyboardResponse"
 
     def __init__(
         self,
-        duration=0,
-        src="",
+        duration=None,
+        stimulus="",
         choices=None,
         correct_key="",
         side_effects=None,
