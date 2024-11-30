@@ -43,8 +43,9 @@ f_key = DerivedLevel("f", is_correct_f, [color])
 correct_key = DerivedParameter("correct", [j_key, f_key])
 ```
 
-Now we can create a `DataVariable` that determines whether the participant pressed the correct key. The `1` in the
-declaration indicates from which stimulus to get the variable (1 = previous, 2 = second previous, etc.).
+Now we can create a `DataVariable` that determines whether the participant pressed the correct key, specified by the ``correct`` keyword. This keyword indicates a special data point which can be accessed in stimuli that have the correct_key parameter. A comprehensive list of data points that can be accessed will be made available in the documentation (It is mainly the data that gets stored via jsPsych.
+
+The `1` in the declaration below indicates from which stimulus to get the variable (1 = previous, 2 = second previous, etc.).
 
 ```python
 correct = DataVariable("correct", [True, False])
