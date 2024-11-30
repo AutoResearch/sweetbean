@@ -3,12 +3,8 @@ from typing import Any, List, Union
 
 from jinja2 import Template
 
-from sweetbean_v2.datatype.variables import (
-    DataVariable,
-    FunctionVariable,
-    TimelineVariable,
-    to_js,
-)
+from sweetbean.util.parse import to_js
+from sweetbean.variable import DataVariable, FunctionVariable, TimelineVariable
 
 
 class _BaseStimulus(ABC):

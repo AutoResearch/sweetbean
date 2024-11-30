@@ -25,19 +25,29 @@
 {% endblock %}
 
 {% block content %}
-{% if page.nb_url %}
-<a href="{{ page.canonical_url }}{{ page.file.src_uri | basename | quote }}"
-   title="Download {{ page.file.src_uri | basename | escape }}"
-   class="md-content__button md-icon"
-   download="{{ page.file.src_uri | basename }}">
-    {% include ".icons/material/download.svg" %}
-</a>
-{% if page.file.src_uri.endswith('.ipynb') %}
-<a href="{{ config.extra.colab_base_url }}{{ page.url }}{{ page.file.src_uri | basename | quote }}"
-   title="Open Notebook in Google Colab" class="md-content__button md-icon">
-    <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
-</a>
-{% endif %}
+<div style="position: relative;">
+    {% if page.nb_url %}
+    <a href="{{ page.canonical_url }}{{ page.file.src_uri | basename | quote }}"
+       title="Download {{ page.file.src_uri | basename | escape }}"
+       class="md-content__button md-icon"
+       style="position: absolute; right: 0; top: 0;"
+       download="{{ page.file.src_uri | basename }}">
+        {% include ".icons/material/download.svg" %}
+    </a>
+    {% if page.file.src_uri.endswith('.ipynb') %}
+    <a href="{{ config.extra.colab_base_url }}{{ page.url }}{{ page.file.src_uri | basename | quote }}"
+       title="Open Notebook in Google Colab" class="md-content__button md-icon"
+       style="position: absolute; right: 50px; top: 0;">
+        <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
+    </a>
+    {% endif %}
+</div>
+
 {% endif %}
 {{ super() }}
+{% if page.nb_url %}
+{% if page.file.src_uri.endswith('.py') %}
+<a href="{{ page.nb_url.rsplit('/', 1)[0] + '.html' }}">Test it here!</a>
+{% endif %}
+{% endif %}
 {% endblock content %}

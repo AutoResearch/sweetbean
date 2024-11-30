@@ -1,13 +1,14 @@
 from typing import List
 
-from sweetbean_v2._const import (
+from sweetbean._const import (
     FUNCTION_APPENDIX,
     FUNCTION_PREAMBLE,
     HTML_APPENDIX,
     HTML_PREAMBLE,
     TEXT_APPENDIX,
 )
-from sweetbean_v2.block import Block
+from sweetbean.block import Block
+from sweetbean.variable import CodeVariable, SharedVariable
 
 
 class Experiment:
@@ -19,7 +20,16 @@ class Experiment:
         self.to_js()
 
     def to_js(self):
-        self.js = "jsPsych = initJsPsych();\n"
+        self.js = ""
+        for b in self.blocks:
+            b.to_js()
+            for s in b.stimuli:
+                for key in s.arg:
+                    if isinstance(s.arg[key], SharedVariable) or isinstance(
+                        s.arg[key], CodeVariable
+                    ):
+                        self.js += f"{s.arg[key].set()}\n"
+        self.js += "jsPsych = initJsPsych();\n"
         self.js += "trials = [\n"
         for b in self.blocks:
             self.js += b.js
@@ -27,7 +37,7 @@ class Experiment:
         self.js = self.js[:-1] + "]\n"
         self.js += ";jsPsych.run(trials)"
 
-    def to_html(self, path):
+    def to_html(self, path, local_save=True):
         html = HTML_PREAMBLE
         blocks = 0
 

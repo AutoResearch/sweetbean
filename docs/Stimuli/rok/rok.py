@@ -2,13 +2,13 @@
 The rok 'press a or b or wait' is shown in pink for 2000ms. The allowed responses are 'a' and 'b'.
 """
 
-from sweetbean_v2 import Block, Experiment
-from sweetbean_v2.stimulus import ROK
+from sweetbean import Block, Experiment
+from sweetbean.stimulus import ROK
 
 # EVENT SEQUENCE
 
 rok = ROK(
-    duration=100000,
+    duration=3000,
     number_of_oobs=500,
     coherent_movement_direction=100,
     coherent_orientation=0,
@@ -24,4 +24,4 @@ event_sequence = [rok]
 block = Block(event_sequence)
 experiment = Experiment([block])
 
-experiment.to_html("basic.html")
+experiment.to_html("rok.html")

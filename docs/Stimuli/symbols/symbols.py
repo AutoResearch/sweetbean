@@ -6,25 +6,25 @@ presses the key f or j. The correct key for the purple square and the red triang
 the correct key for the green circle is j.
 """
 
-from sweetbean.sequence import Block, Experiment
-from sweetbean.stimulus import SymbolStimulus, TextStimulus
+from sweetbean import Block, Experiment
+from sweetbean.stimulus import Symbol, Text
 
 # EVENT SEQUENCE
 
-stim_1 = TextStimulus(
+stim_1 = Text(
     text="Welcome! We show some Symbols. Press SPACE to continue",
     choices=[" "],
 )
 
-stim_2 = SymbolStimulus(
+stim_2 = Symbol(
     duration=3000, symbol="square", color="#f0f", choices=["f", "j"], correct_key="f"
 )
 
-stim_3 = SymbolStimulus(
+stim_3 = Symbol(
     duration=3000, symbol="triangle", color="red", choices=["f", "j"], correct_key="f"
 )
 
-stim_4 = SymbolStimulus(
+stim_4 = Symbol(
     duration=3000, symbol="circle", color="green", choices=["f", "j"], correct_key="j"
 )
 
@@ -34,4 +34,4 @@ event_sequence = [stim_1, stim_2, stim_3, stim_4]
 
 trial_sequence = Block(event_sequence)
 experiment = Experiment([trial_sequence])
-experiment.to_html("basic.html")
+experiment.to_html("symbols.html")

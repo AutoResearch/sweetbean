@@ -6,9 +6,9 @@ experimental design. The correct response  to a red word is f, and the correct r
 green word is j.
 """
 
-from sweetbean_v2 import Block, Experiment
-from sweetbean_v2.datatype.variables import TimelineVariable
-from sweetbean_v2.stimulus import Text
+from sweetbean import Block, Experiment
+from sweetbean.stimulus import Text
+from sweetbean.variable import DataVariable, FunctionVariable, TimelineVariable
 
 timeline = [
     {"color": "red", "word": "RED", "so_s": 200, "so_f": 1000},
@@ -24,16 +24,34 @@ word = TimelineVariable("word")
 so_s_duration = TimelineVariable("so_s")
 so_f_duration = TimelineVariable("so_f")
 
+
+def correct_key_fct(color, word):
+    if color.lower() == word.lower():
+        return "f"
+    return "j"
+
+
+correct_key = FunctionVariable("correct_key", correct_key_fct, [color, word])
+
+last_correct = DataVariable("correct", 1)
+
+feedback_text = FunctionVariable(
+    "feedback_text",
+    lambda lc: "Correct!" if lc else "False!",
+    [last_correct],
+)
+
 fixation = Text(800, "+")
 so_s = Text(so_s_duration)
-stroop = Text(2000, word, color)
+stroop = Text(2000, word, color, choices=["f", "j"], correct_key=correct_key)
+feedback = Text(800, feedback_text)
 so_f = Text(so_f_duration)
-
-event_sequence = [fixation, so_s, stroop, so_f]
 
 # BLOCK DESIGN
 
-train_block = Block([fixation, so_s, stroop, so_f], timeline)
+train_block = Block([fixation, so_s, stroop, feedback, so_f], timeline)
 experiment = Experiment([train_block])
 
-experiment.to_html("timeline.html")
+# experiment.to_html("timeline.html")
+
+experiment.to_html("feedback_manual.html")

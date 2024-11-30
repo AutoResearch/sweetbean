@@ -41,7 +41,7 @@ hooks:
   - mkdocs/hooks.py
 
 watch:
-  - src/sweetbean/
+  - src/sweetbean
 
 plugins:
   - search
@@ -87,7 +87,7 @@ nav:
       - Home: 'User Guide/index.md'
       - Overview: 'User Guide/overview.md'
       - Timeline Variables: 'User Guide/timeline_variables.md'
-      - Derived Variables: 'User Guide/derived_variables.md'
+      - Derived Variables: 'User Guide/function_variables.md'
       - Data Variables: 'User Guide/data_variables.md'
       - LLM Synthetic Participant: 'User Guide/llm_synthetic_participant.md'
   - Stimuli: Stimuli/

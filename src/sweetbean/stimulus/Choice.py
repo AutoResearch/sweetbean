@@ -1,7 +1,8 @@
 import math
 
-from sweetbean_v2.datatype.variables import FunctionVariable, to_js
-from sweetbean_v2.stimulus.Stimulus import _BaseStimulus
+from sweetbean.stimulus.Stimulus import _BaseStimulus
+from sweetbean.util.parse import to_js
+from sweetbean.variable import FunctionVariable
 
 
 class HtmlChoice(_BaseStimulus):
@@ -16,7 +17,7 @@ class HtmlChoice(_BaseStimulus):
         duration=None,
         html_array=None,
         values=None,
-        time_after_response=0,
+        time_after_response=3000,
         side_effects=None,
     ):
         if values is None:

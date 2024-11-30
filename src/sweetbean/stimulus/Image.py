@@ -1,12 +1,12 @@
-from sweetbean_v2.stimulus.Stimulus import _KeyboardResponseStimulus
+from sweetbean.stimulus.Stimulus import _KeyboardResponseStimulus
 
 
-class Video(_KeyboardResponseStimulus):
+class Image(_KeyboardResponseStimulus):
     """
-    shows a video
+    shows an image
     """
 
-    type = "jsPsychImageKeyboardResponse"
+    type = "jsPsychVideoKeyboardResponse"
 
     def __init__(
         self,
@@ -23,7 +23,7 @@ class Video(_KeyboardResponseStimulus):
             choices: the keys that will be recorded if pressed
             correct_key: the correct key to press
         """
-        super().__init__(locals(), side_effects=side_effects)
+        super().__init__(locals(), side_effects)
 
     def _add_special_param(self):
         pass

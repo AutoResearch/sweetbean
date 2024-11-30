@@ -1,5 +1,5 @@
-from sweetbean_v2.datatype.variables import DataVariable, FunctionVariable
-from sweetbean_v2.stimulus.Stimulus import _KeyboardResponseStimulus
+from sweetbean.stimulus.Stimulus import _KeyboardResponseStimulus
+from sweetbean.variable import DataVariable, FunctionVariable
 
 
 class HtmlKeyboardResponse(_KeyboardResponseStimulus):

@@ -3,12 +3,8 @@ import random
 import subprocess
 import tempfile
 
-from sweetbean_v2.datatype.variables import (
-    DataVariable,
-    FunctionVariable,
-    TimelineVariable,
-)
-from sweetbean_v2.stimulus.Stimulus import _BaseStimulus
+from sweetbean.stimulus.Stimulus import _BaseStimulus
+from sweetbean.util.variables import DataVariable, FunctionVariable, TimelineVariable
 
 
 def test_stimulus():

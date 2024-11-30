@@ -1,10 +1,6 @@
 from abc import ABC, abstractmethod
 
-from sweetbean_v2.datatype.js_parser import _fct_args_to_js, _fct_to_js, _var_to_js
-
-
-def to_js(var):
-    return _var_to_js(var)
+from sweetbean.util.parse import _fct_args_to_js, _fct_to_js, _var_to_js
 
 
 class Variable(ABC):

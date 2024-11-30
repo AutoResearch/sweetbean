@@ -8,29 +8,29 @@ Then, the participant is supposed to rate five animals on their cuteness from 1 
 The animals are a bunny, a shark, a spider, a cat, and a dog.
 """
 
-from sweetbean.sequence import Block, Experiment
-from sweetbean.stimulus import LikertSurveyStimulus, TextStimulus
+from sweetbean import Block, Experiment
+from sweetbean.stimulus import LikertSurvey, Text
 
 # EVENT SEQUENCE
 
-stim_1 = TextStimulus(
+stim_1 = Text(
     text="Welcome! We show a survey. Press SPACE to continue",
     choices=[" "],
 )
 
-stim_2 = LikertSurveyStimulus(
-    prompts=[
+stim_2 = LikertSurvey(
+    questions=[
         {"How are you feeling?": [-2, -1, 0, 1, 2]},
         {"Do you like this tool?": [0, 1, 3]},
     ]
 )
 
-stim_3 = TextStimulus(
+stim_3 = Text(
     text="Rate the following animals on a scale from 1-5 on their cuteness.",
     choices=[" "],
 )
 
-stim_4 = LikertSurveyStimulus.from_scale(
+stim_4 = LikertSurvey.from_scale(
     prompts=["bunny", "shark", "spider", "cat", "dog"], scale=[1, 2, 3, 4, 5]
 )
 

@@ -5,9 +5,9 @@ SweetBean can be used to run experiments with Large Language Models (LLMs) as sy
 We specify the experiment as above:
 
 ```python
-from sweetbean.sequence import Block, Experiment
-from sweetbean.stimulus import TextStimulus
-from sweetbean.parameter import TimelineVariable, DataVariable, DerivedLevel, DerivedParameter
+from sweetbean import Block, Experiment
+from sweetbean.stimulus import Text
+from sweetbean.variable import TimelineVariable, DataVariable, FunctionVariable
 
 # TIMELINE
 timeline = [
@@ -19,50 +19,40 @@ timeline = [
 
 # EVENT SEQUENCE
 
-color = TimelineVariable("color", ["red", "green"])
-word = TimelineVariable("word", ["RED", "GREEN"])
+color = TimelineVariable("color")
+word = TimelineVariable("word")
 
 
-def is_correct_f(color):
-    return color == "red"
+def correct_key_fct(col):
+    if col == "red":
+        return "f"
+    elif col == "green":
+        return "j"
 
 
-def is_correct_j(color):
-    return not is_correct_f(color)
-
-
-j_key = DerivedLevel("j", is_correct_j, [color])
-f_key = DerivedLevel("f", is_correct_f, [color])
-
-correct_key = DerivedParameter("correct", [j_key, f_key])
+correct_key = FunctionVariable("correct", correct_key_fct, [color])
 
 # Creating a data variable
-correct = DataVariable("correct", [True, False])
+correct = DataVariable("correct", 2)
 
 
 # Predicates
-def is_correct(correct):
-    return correct
+def feedback_text_fct(was_correct):
+    if was_correct:
+        return "That was correct!"
+    else:
+        return "That was false!"
 
 
-def is_false(correct):
-    return not correct
-
-
-# Derived Levels
-correct_feedback = DerivedLevel("correct", is_correct, [correct], 2)
-false_feedback = DerivedLevel("false", is_false, [correct], 2)
-
-# Derived Parameter
-feedback_text = DerivedParameter("feedback_text", [correct_feedback, false_feedback])
+feedback_text = feedback_text_fct("feedback_text", feedback_txt_fct, [correct])
 
 # Using it in the stimulus
-fixation = TextStimulus(1000, "+")
+fixation = Text(1000, "+")
 
-so_s = TextStimulus(400)
-stroop = TextStimulus(2000, word, color, ["j", "f"], correct_key)
-so_f = TextStimulus(300)
-feedback = TextStimulus(800, feedback_text)
+so_s = Text(400)
+stroop = Text(2000, word, color, ["j", "f"], correct_key)
+so_f = Text(300)
+feedback = Text(800, feedback_text)
 
 event_sequence = [fixation, so_s, stroop, so_f, feedback]
 
@@ -72,15 +62,14 @@ train_block = Block(event_sequence, timeline)
 experiment = Experiment([train_block])
 ```
 
-To test what the LLM "sees", we can run the experiment as chat on ourselves. If we set multitude to true we will not see
-the full chat history but only the last generated prompt.
+To test what the LLM "sees", we can run the experiment as chat on ourselves.
 
 ```python
-data = experiment.run_on_language(get_input=input, multiturn=True)
+data = experiment.run_on_language(get_input=input)
 ```
 
 We can run the experiment on any function that takes a string and returns a string. For example, on the
-[centauer]() model:
+[centauer](https://marcelbinz.github.io/centaur) model:
 
 ```bash
 pip install unsloth "xformers==0.0.28.post2"
@@ -116,18 +105,10 @@ def generate(input):
     return pipe(input)[0]["generated_text"]
 ```
 
-To make the process more robust, we also add a function that parses the response and compares the output to the
-correct key:
-
-```python
-def parse_response(response, correct_key):
-    return correct_key in response
-```
-
 Now, we can run the experiment on the model:
 
 ```python
-data = experiment.run_on_language(get_input=generate, multiturn=False)
+data = experiment.run_on_language(get_input=generate)
 ```
 
 **Note**: The `run_on_language` function will return a dictionary with the data from the experiment. Any model

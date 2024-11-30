@@ -2,12 +2,12 @@
 The text 'press a or b or wait' is shown in pink for 2000ms. The allowed responses are 'a' and 'b'.
 """
 
-from sweetbean.sequence import Block, Experiment
-from sweetbean.stimulus import TextStimulus
+from sweetbean import Block, Experiment
+from sweetbean.stimulus import Text
 
 # EVENT SEQUENCE
 
-text = TextStimulus(
+text = Text(
     duration=2000, text="press a or b or wait", color="pink", choices=["a", "b"]
 )
 
@@ -19,4 +19,4 @@ event_sequence = [text]
 block = Block(event_sequence)
 experiment = Experiment([block])
 
-experiment.to_html("basic.html")
+experiment.to_html("text.html")

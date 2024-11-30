@@ -6,6 +6,11 @@ import subprocess
 import tempfile
 import textwrap
 
+
+def to_js(var):
+    return _var_to_js(var)
+
+
 NON_LOCAL_INCLUDES = [
     "math",
     "random",

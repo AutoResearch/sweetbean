@@ -1,5 +1,5 @@
-from sweetbean_v2.datatype.variables import FunctionVariable
-from sweetbean_v2.stimulus.Stimulus import _BaseStimulus
+from sweetbean.stimulus.Stimulus import _BaseStimulus
+from sweetbean.variable import FunctionVariable
 
 
 class _Survey(_BaseStimulus):

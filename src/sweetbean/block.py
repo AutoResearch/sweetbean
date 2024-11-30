@@ -1,6 +1,6 @@
 from typing import Any, List
 
-from sweetbean_v2.datatype.variables import CodeVariable
+from sweetbean.variable import CodeVariable
 
 
 class Block:
@@ -18,6 +18,7 @@ class Block:
     def to_js(self):
         self.js = "{timeline: ["
         for s in self.stimuli:
+            s.to_js()
             self.js += s.js + ","
         self.js = self.js[:-1]
         if isinstance(self.timeline, CodeVariable):

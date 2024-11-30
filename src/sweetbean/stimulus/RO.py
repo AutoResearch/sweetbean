@@ -1,4 +1,4 @@
-from sweetbean_v2.stimulus.Stimulus import _BaseStimulus
+from sweetbean.stimulus.Stimulus import _BaseStimulus
 
 
 class RandomObjectKinematogram(_BaseStimulus):

@@ -4,18 +4,18 @@ they press the spacebar, they are asked two multiple-choice questions. One is ab
 which they can rate as bad, good, or fine. The other is about their handedness.
 """
 
-from sweetbean.sequence import Block, Experiment
-from sweetbean.stimulus import MultiChoiceSurveyStimulus, TextStimulus
+from sweetbean import Block, Experiment
+from sweetbean.stimulus import MultiChoiceSurvey, Text
 
 # EVENT SEQUENCE
 
-stim_1 = TextStimulus(
+stim_1 = Text(
     text="Welcome! We show a survey. Press SPACE to continue",
     choices=[" "],
 )
 
-stim_2 = MultiChoiceSurveyStimulus(
-    prompts=[
+stim_2 = MultiChoiceSurvey(
+    questions=[
         {"How are you?": ["bad", "good", "fine"]},
         {"What is your handedness?": ["left", "right", "other", "prefer not to say"]},
     ]
