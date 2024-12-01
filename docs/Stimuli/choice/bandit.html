@@ -18,6 +18,7 @@
 <body></body>
 <script>
 let score=0;
+// Store data:
 jsPsych = initJsPsych();
 trials = [
 {timeline: [{type: jsPsychHtmlChoice,trial_duration:()=>{let trial_duration=null;return trial_duration},html_array:()=>{let html_array=((bdts) => {var n=len(bdts);var cols=Math.ceil(Math.sqrt(n));var rows=Math.ceil(__truediv__(n,cols));var square_width=__truediv__(__sub__(100,__mul__(__add__(cols,1),10)),cols);var square_height=__truediv__(__sub__(100,

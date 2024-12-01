@@ -17,9 +17,8 @@ class Experiment:
 
     def __init__(self, blocks: List[Block]):
         self.blocks = blocks
-        self.to_js()
 
-    def to_js(self):
+    def to_js(self, path_local_download=None):
         self.js = ""
         for b in self.blocks:
             b.to_js()
@@ -29,7 +28,14 @@ class Experiment:
                         s.arg[key], CodeVariable
                     ):
                         self.js += f"{s.arg[key].set()}\n"
-        self.js += "jsPsych = initJsPsych();\n"
+        if path_local_download:
+            self.js += (
+                "jsPsych = initJsPsych("
+                f"{{on_finish:()=>jsPsych.data.get().localSave('json',"
+                f"'{path_local_download}')}});\n"
+            )
+        else:
+            self.js += "jsPsych = initJsPsych();\n"
         self.js += "trials = [\n"
         for b in self.blocks:
             self.js += b.js
@@ -37,7 +43,8 @@ class Experiment:
         self.js = self.js[:-1] + "]\n"
         self.js += ";jsPsych.run(trials)"
 
-    def to_html(self, path, local_save=True):
+    def to_html(self, path, path_local_download=None):
+        self.to_js(path_local_download)
         html = HTML_PREAMBLE
         blocks = 0
 

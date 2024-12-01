@@ -13,7 +13,7 @@ class Block:
             timeline = []
         self.stimuli = stimuli
         self.timeline = timeline
-        self.to_js()
+        # self.to_js()
 
     def to_js(self):
         self.js = "{timeline: ["

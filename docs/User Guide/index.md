@@ -13,6 +13,6 @@ This guide provides an overview of SweetBean features.
     - **AutoRA**: SweetBean can be used to run automated Experiments
       with [AutoRA](https://autoresearch.github.io/autora/).
     - **LLM**: SweetBean can be used to run experiments with Large Language Models.
-    - **Vision Models**: SweetBean can be used to run experiments with Vision Models.
+    - Coming soon: **Vision Models**: SweetBean can be used to run experiments with Vision Models.
 
 

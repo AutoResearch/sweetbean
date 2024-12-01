@@ -44,7 +44,7 @@ def feedback_text_fct(was_correct):
         return "That was false!"
 
 
-feedback_text = feedback_text_fct("feedback_text", feedback_txt_fct, [correct])
+feedback_text = feedback_text_fct("feedback_text", feedback_text_fct, [correct])
 
 # Using it in the stimulus
 fixation = Text(1000, "+")

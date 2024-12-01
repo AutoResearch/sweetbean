@@ -89,7 +89,7 @@ class MultiChoiceSurvey(_Survey):
                 _in_prompt = current_prompt[-1] + "<<"
             response = get_input(_in_prompt)
             current_prompt[-1] += f"<<{response}>>"
-            responses[f"Q_{str(idx + 1)}"] = response
+            responses[f"Q{str(idx)}"] = response
         data.update({"response": responses})
         prompts += current_prompt
         return data, prompts

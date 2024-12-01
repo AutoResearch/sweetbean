@@ -48,7 +48,8 @@ def _var_to_js(var):
     if var is None:
         return "null"
     if isinstance(var, str):
-        return f"'{var}'"
+        _var = var.replace("'", "\\'")
+        return f"'{_var}'"
     # test if is sequence
     if isinstance(var, (list, tuple, set)):
         res = "["
