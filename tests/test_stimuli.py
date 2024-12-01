@@ -5,23 +5,21 @@ import pkgutil
 import sys
 
 import sweetbean
-from sweetbean.sequence import Block, Experiment
-from sweetbean.stimulus._Stimulus import Stimulus  # Base Stimulus class for comparison
+from sweetbean import Block, Experiment
+from sweetbean.stimulus.Stimulus import _BaseStimulus
 
 # Define the excluded stimuli
 excludes = [
-    "Stimulus",
     "SurveyStimulus",
+    "_BaseStimulus",
+    "_KeyboardResponseStimulus",
+    "_Template_",
 ]
 
 
 def test_compile():
     # Dynamically load all modules in the 'sweetbean.stimulus' package
     stimuli_package = sweetbean.stimulus
-    excludes = [
-        "Stimulus",
-        "SurveyStimulus",
-    ]  # Example: Add any exclusions if necessary
 
     # Dynamically load all modules in the 'sweetbean.stimulus' package
     for _, module_name, _ in pkgutil.iter_modules(stimuli_package.__path__):
@@ -32,7 +30,7 @@ def test_compile():
     for module in sys.modules.values():
         if module and module.__name__.startswith("sweetbean.stimulus"):
             for name, cls in inspect.getmembers(module, inspect.isclass):
-                if issubclass(cls, Stimulus) and cls.__name__ not in excludes:
+                if issubclass(cls, _BaseStimulus) and cls.__name__ not in excludes:
                     stimuli_list.append(cls)
 
     # Debugging: Print the found stimuli

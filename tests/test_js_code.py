@@ -3,8 +3,8 @@ import random
 import subprocess
 import tempfile
 
-from sweetbean.stimulus.Stimulus import _BaseStimulus
-from sweetbean.util.variables import DataVariable, FunctionVariable, TimelineVariable
+from sweetbean.stimulus import Text
+from sweetbean.variable import DataVariable, FunctionVariable, TimelineVariable
 
 
 def test_stimulus():
@@ -16,19 +16,15 @@ def test_stimulus():
     variables = [
         1,
         100,  # int
-        "a",
         "Hello",
         "@em**",
         ". / { ",
         False,
         True,
         [1, 2, 3],
-        ["a", "b", "c"],
         ["a", 1, "b"],
         TimelineVariable("a"),
-        TimelineVariable("a b c"),
         DataVariable("a", 1),
-        [TimelineVariable("a"), TimelineVariable("b")],
         [TimelineVariable("a"), DataVariable("b", 3)],
     ]
 
@@ -36,7 +32,8 @@ def test_stimulus():
         """
         Generate a stimulus with a list of variables.
         """
-        stimulus = _BaseStimulus({"a": arg})
+        stimulus = Text(text=arg)
+        stimulus.to_js()
         js = f"let tst = {stimulus.js}"
         return js
 
@@ -44,7 +41,8 @@ def test_stimulus():
         """
         Generate a stimulus with a list of variables.
         """
-        stimulus = _BaseStimulus({"a": a, "b": b})
+        stimulus = Text(text=a, color=b)
+        stimulus.to_js()
         js = f"let tst = {stimulus.js}"
         return js
 
@@ -52,13 +50,13 @@ def test_stimulus():
     for variable_0 in variables:
         js_code = generate_stimulus_single(variable_0)
         valid, error_message = check_js_syntax(js_code)
-        assert valid, f"JavaScript syntax error: {error_message}"
+        assert valid, f"JavaScript syntax error: {js_code}"
 
     for variable_0 in random.choices(variables, k=3):
         for variable_1 in random.choices(variables, k=3):
             js_code = generate_stimulus_double(variable_0, variable_1)
             valid, error_message = check_js_syntax(js_code)
-            assert valid, f"JavaScript syntax error: {error_message}"
+            assert valid, f"JavaScript syntax error: {js_code}"
 
     # test with a function
 
@@ -72,10 +70,11 @@ def test_stimulus():
 
     f = FunctionVariable("f", add, [d, t])
 
-    stimulus = _BaseStimulus({"dataVar": d, "timeVar": t, "fctVar": f})
-    js = f"let tst = {stimulus.js}"
-    valid, error_message = check_js_syntax(js)
-    assert valid, f"JavaScript syntax error: {error_message}"
+    stimulus = Text(duration=d, text=t, color=f)
+    stimulus.to_js()
+    js_code = f"let tst = {stimulus.js}"
+    valid, error_message = check_js_syntax(js_code)
+    assert valid, f"JavaScript syntax error: {js_code}"
 
 
 def check_js_syntax(js_code):

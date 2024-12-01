@@ -89,5 +89,5 @@ nav:
       - Data Variables: 'User Guide/data_variables.md'
       - LLM Synthetic Participant: 'User Guide/llm_synthetic_participant.md'
   - Stimuli: Stimuli/
-  - Contributor Guide:
+  - Contributor Guide: Contributor Guide/
   - Code Reference: reference/  #
