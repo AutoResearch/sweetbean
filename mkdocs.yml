@@ -79,15 +79,15 @@ extra_javascript:
 
 nav:
   - Introduction: 'index.md'
-  - Quickstart Guide: Quickstart Guide/
-  - Examples: Examples/
+  - Basic Tutorials: Basic Tutorials/
+  - Use Case Tutorials: Use Case Tutorials/
   - User Guide:
       - Home: 'User Guide/index.md'
       - Overview: 'User Guide/overview.md'
       - Timeline Variables: 'User Guide/timeline_variables.md'
-      - Derived Variables: 'User Guide/function_variables.md'
+      - Function Variables: 'User Guide/function_variables.md'
       - Data Variables: 'User Guide/data_variables.md'
       - LLM Synthetic Participant: 'User Guide/llm_synthetic_participant.md'
-  - Stimuli: Stimuli/
+      - Stimuli: Stimuli/
   - Contributor Guide: Contributor Guide/
   - Code Reference: reference/  #
