@@ -62,7 +62,8 @@ train_block = Block(event_sequence, timeline)
 experiment = Experiment([train_block])
 ```
 
-To test what the LLM "sees", we can run the experiment as chat on ourselves.
+To test what the LLM "sees", we can run the experiment as chat on ourselves. If we set ``multiturn`` to true we will not see
+the full chat history but only the last generated prompt.
 
 ```python
 data = experiment.run_on_language(get_input=input)
@@ -114,5 +115,5 @@ data = experiment.run_on_language(get_input=generate)
 **Note**: The `run_on_language` function will return a dictionary with the data from the experiment. Any model
 (for example,
 using [OpenAI](https://platform.openai.com/docs/overview), [HuggingFace](https://huggingface.co/), [LLama](https://www.llama-api.com/)
-or [Google](https://console.cloud.google.com/apis/library) Api) can be used as a synthetic participant.
+or [Google](https://console.cloud.google.com/apis/library) API) can be used as a synthetic participant.
 
