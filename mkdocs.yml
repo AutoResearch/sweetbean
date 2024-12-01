@@ -87,6 +87,7 @@ nav:
       - Timeline Variables: 'User Guide/timeline_variables.md'
       - Function Variables: 'User Guide/function_variables.md'
       - Data Variables: 'User Guide/data_variables.md'
+      - Shared Variables And Side Effects: 'User Guide/shared_variables_and_side_effects.md'
       - LLM Synthetic Participant: 'User Guide/llm_synthetic_participant.md'
       - Stimuli: Stimuli/
   - Contributor Guide: Contributor Guide/

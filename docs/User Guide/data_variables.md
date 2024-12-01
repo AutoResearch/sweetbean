@@ -72,3 +72,6 @@ experiment = Experiment([train_block])
 
 experiment.to_html("stroop.html")
 ```
+
+There is one additional variable type, that we can use: The shared variable. It is a special variable that can be shared across different trials and can be updated via side effects:
+[Shared Variables And Side Effects](data_variables.md)
