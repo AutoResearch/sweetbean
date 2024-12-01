@@ -57,6 +57,14 @@ class Experiment:
 
     def to_js_string(self, as_function=True, is_async=True):
         text = FUNCTION_PREAMBLE(is_async) if as_function else ""
+        for b in self.blocks:
+            b.to_js()
+            for s in b.stimuli:
+                for key in s.arg:
+                    if isinstance(s.arg[key], SharedVariable) or isinstance(
+                        s.arg[key], CodeVariable
+                    ):
+                        text += f"{s.arg[key].set()}\n"
         text += "const jsPsych = initJsPsych()\n"
         text += "const trials = [\n"
         for b in self.blocks:
