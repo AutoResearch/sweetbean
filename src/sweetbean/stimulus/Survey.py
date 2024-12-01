@@ -32,7 +32,7 @@ class TextSurvey(_Survey):
         questions_ = FunctionVariable("questions", get_prompts, [questions])
         super().__init__(questions_, side_effects=side_effects)
 
-    def process_l(self, prompts, get_input, multi_turn):
+    def process_l(self, prompts, get_input, multi_turn, datum=None):
         current_prompt = []
         responses = {}
         data = self.l_args.copy()
@@ -46,9 +46,12 @@ class TextSurvey(_Survey):
                 )
             else:
                 _in_prompt = current_prompt[-1] + "<<"
-            response = get_input(_in_prompt)
+            if not datum:
+                response = get_input(_in_prompt)
+            else:
+                response = datum["response"][f"Q{str(idx)}"]
             current_prompt[-1] += f"<<{response}>>"
-            responses[f"Q_{str(idx + 1)}"] = response
+            responses[f"Q{str(idx)}"] = response
         data.update({"response": responses})
         prompts += current_prompt
         return data, prompts
@@ -70,7 +73,7 @@ class MultiChoiceSurvey(_Survey):
         questions_ = FunctionVariable("questions", get_prompts, [questions])
         super().__init__(questions_, side_effects=side_effects)
 
-    def process_l(self, prompts, get_input, multi_turn):
+    def process_l(self, prompts, get_input, multi_turn, datum=None):
         current_prompt = []
         responses = {}
         data = self.l_args.copy()
@@ -87,7 +90,10 @@ class MultiChoiceSurvey(_Survey):
                 )
             else:
                 _in_prompt = current_prompt[-1] + "<<"
-            response = get_input(_in_prompt)
+            if not datum:
+                response = get_input(_in_prompt)
+            else:
+                response = datum["response"][f"Q{str(idx)}"]
             current_prompt[-1] += f"<<{response}>>"
             responses[f"Q{str(idx)}"] = response
         data.update({"response": responses})
@@ -125,7 +131,7 @@ class LikertSurvey(_Survey):
             prompts_.append({"prompt": p, "labels": scale})
         return cls(prompts_, side_effects=side_effects)
 
-    def process_l(self, prompts, get_input, multi_turn):
+    def process_l(self, prompts, get_input, multi_turn, datum=None):
         current_prompt = []
         responses = {}
         data = self.l_args.copy()
@@ -142,9 +148,12 @@ class LikertSurvey(_Survey):
                 )
             else:
                 _in_prompt = current_prompt[-1] + "<<"
-            response = get_input(_in_prompt)
+            if not datum:
+                response = get_input(_in_prompt)
+            else:
+                response = datum["response"][f"Q{str(idx)}"]
             current_prompt[-1] += f"<<{response}>>"
-            responses[f"Q_{str(idx + 1)}"] = response
+            responses[f"Q{str(idx)}"] = response
         data.update({"response": responses})
         prompts += current_prompt
         return data, prompts

@@ -63,7 +63,7 @@ class RandomObjectKinematogram(_BaseStimulus):
     def _set_before(self):
         pass
 
-    def process_l(self, prompts, get_input, multi_turn):
+    def process_l(self, prompts, get_input, multi_turn, datum=None):
         raise NotImplementedError
 
 
