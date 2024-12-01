@@ -1,3 +1,3 @@
-- Bandit task
-- Language Model support for surveys and questionnaires
+- More Use Case Tutorials
+- Language Model support for ROK
 - Support for Vision Models
