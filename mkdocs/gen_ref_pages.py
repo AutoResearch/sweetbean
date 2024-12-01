@@ -8,8 +8,8 @@ import mkdocs_gen_files
 nav = mkdocs_gen_files.Nav()
 
 ignore = [
-    Path("./src/sweetbean/const.py"),
-    Path("./src/sweetbean/update_package_honeycomb.py"),
+    Path("./src/sweetbean/_const.py"),
+    Path("./src/sweetbean/util/parse.py"),
 ]
 
 source_paths = sorted(Path("./").rglob("**/src"))

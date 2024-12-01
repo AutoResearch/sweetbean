@@ -12,6 +12,7 @@ requires-python = ">=3.7,<4"
 # ADD NEW DEPENDENCIES HERE
 dependencies = [
     "jinja2",
+    "Transcrypt==3.9.3",
 ]
 
 [project.optional-dependencies]

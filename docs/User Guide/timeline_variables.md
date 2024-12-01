@@ -16,14 +16,14 @@ timeline = [
 
 First, we declare SweetBean Timeline Variables:
 
-color: The name has to be color (it is the name in the timeline), and it has the levels red and green
-word: The name has to be word (it is the name in the timeline), and it has the levels RED and GREEN
+color: The name has to be color (it has to match the key in the timeline)
+word: The name has to be word (it has to match the key in the timeline)
 
 ```python
-from sweetbean.parameter import TimelineVariable
+from sweetbean.variable import TimelineVariable
 
-color = TimelineVariable(name="color", levels=["red", "green"])
-word = TimelineVariable(name="word", levels=["RED", "GREEN"])
+color = TimelineVariable(name="color")
+word = TimelineVariable(name="word")
 
 
 ```
@@ -31,7 +31,7 @@ word = TimelineVariable(name="word", levels=["RED", "GREEN"])
 Now, we can use these timeline variables when defining the stimuli:
 
 ```python
-from sweetbean.stimulus import TextStimulus, FixationStimulus
+from sweetbean.stimulus import Text, Fixation
 
 fixation = FixationStimulus(duration=500)
 stroop = TextStimulus(duration=1000, text=word, color=color)
@@ -41,7 +41,7 @@ Finally, we can create a block with the timeline. Here, we pass in the timeline 
 then be repeated as many times as there are entries in the timeline using the variables defined above.
 
 ```python
-from sweetbean.sequence import Block, Experiment
+from sweetbean import Block, Experiment
 
 event_sequence = [fixation, stroop]
 stroop_block = Block(event_sequence, timeline)
@@ -50,5 +50,5 @@ experiment.to_html("stroop.html")
 
 ```
 
-Additionally to timeline variables, we can also create derived variables. For example, we can create a variable that gives us the correct key press depending on the word of a StroopStimulus:
-[Derived Variable](./derived_variables.md)
+Additionally to timeline variables, we can also create function variables. For example, we can create a variable that gives us the correct key press depending on the word of a StroopStimulus:
+[Derived Variable](./function_variables.md)

@@ -7,14 +7,13 @@ use this data variable to create feedback for the participant.
 Assume the same timeline as before and the same derived parameter:
 
 ```python
-from sweetbean.parameter import (
+from sweetbean.variable import (
     DataVariable,
-    DerivedLevel,
-    DerivedParameter,
+    FunctionVariable,
     TimelineVariable,
 )
-from sweetbean.sequence import Block, Experiment
-from sweetbean.stimulus import TextStimulus
+from sweetbean import Block, Experiment
+from sweetbean.stimulus import Text
 
 timeline = [
     {"color": "red", "word": "RED"},
@@ -29,44 +28,37 @@ color = TimelineVariable("color", ["red", "green"])
 word = TimelineVariable("word", ["RED", "GREEN"])
 
 
-def is_correct_f(color):
-    return color == "red"
+def correct_key_fct(col):
+    if col == "red":
+        return "f"
+    elif col == "green":
+        return "j"
 
 
-def is_correct_j(color):
-    return not is_correct_f(color)
-
-
-j_key = DerivedLevel("j", is_correct_j, [color])
-f_key = DerivedLevel("f", is_correct_f, [color])
-
-correct_key = DerivedParameter("correct", [j_key, f_key])
+correct_key = FunctionVariable("correct", correct_key_fct, [color])
 ```
 
-Now we can create a `DataVariable` that determines whether the participant pressed the correct key, specified by the ``correct`` keyword. This keyword indicates a special data point which can be accessed in stimuli that have the correct_key parameter. A comprehensive list of data points that can be accessed will be made available in the documentation (It is mainly the data that gets stored via jsPsych.
-
-The `1` in the declaration below indicates from which stimulus to get the variable (1 = previous, 2 = second previous, etc.).
+Now we can create a `DataVariable` that determines whether the participant pressed the correct key. The `1` in the
+declaration indicates from which stimulus to get the variable (1 = previous, 2 = second previous, etc.).
+We can use the `DataVariable` directly as parameter in stimuli or we can us it as input for a `FunctionVariable` to create the feedback text:
 
 ```python
-correct = DataVariable("correct", [True, False])
+correct = DataVariable("correct", 1)
 
 # Predicates
-def is_correct(correct):
-    return correct
+def feedback_text_fct(was_correct):
+    if was_correct:
+        return "That was correct!"
+    else:
+        return "That was false!"
 
 
-def is_false(correct):
-    return not correct
-
-
-correct_feedback = DerivedLevel("correct", is_correct, [correct], 1)
-false_feedback = DerivedLevel("false", is_false, [correct], 1)
+feedback_text = feedback_text_fct("feedback_text", feedback_txt_fct, [correct])
 ```
 
-Again, we can use the Derived Levels to create a Derived Parameter and use it in a feedback stimulus.
+Again, we can use this in a feedback stimulus.
 
 ```python
-feedback_text = DerivedParameter("feedback_text", [correct_feedback, false_feedback])
 
 fixation = FixationStimulus(500)
 stroop = TextStimulus(2000, word, color, ["j", "f"], correct_key)

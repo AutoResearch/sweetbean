@@ -16,9 +16,9 @@ To create a SweetBean experiment, you define a sequence of stimuli.
 For example, the following code defines a simple text stimulus to welcome participants. `:
 
 ```python
-from sweetbean.stimulus import TextStimulus
+from sweetbean.stimulus import Text
 
-welcome = TextStimulus("Welcome to the experiment! Press >>Space<< to begin", choices=[" "])
+welcome = Text("Welcome to the experiment! Press >>Space<< to begin", choices=[" "])
 ```
 
 We then use stimuli to create a sequence of events:
@@ -30,7 +30,7 @@ event_sequence = [welcome]
 From sequences, we can create a block:
 
 ```python
-from sweetbean.sequence import Block
+from sweetbean import Block
 
 introduction_block = Block(event_sequence)
 ```
@@ -38,7 +38,7 @@ introduction_block = Block(event_sequence)
 Finally, we can create the experiment...
 
 ```python
-from sweetbean.sequence import Experiment
+from sweetbean import Experiment
 
 experiment = Experiment([indroduction_block])
 ```
@@ -54,13 +54,13 @@ experiment.to_html("basic.html")
 Let us create a stroop experiment. The trials should start with a fixation cross, followed by a colored word:
 
 ```python
-from sweetbean.stimulus import TextStimulus, FixationStimulus
+from sweetbean.stimulus import Text, Fixation
 
-fixation_1 = FixationStimulus(duration=500)
-stroop_1 = TextStimulus("RED", color="red", choices=["r", "g"])
-fixation_2 = FixationStimulus(duration=500)
-stroop_2 = TextStimulus("GREEN", color="green", choices=["r", "g"])
-fixation_3 = FixationStimulus(duration=500)
+fixation_1 = Fixation(duration=500)
+stroop_1 = Text("RED", color="red", choices=["r", "g"])
+fixation_2 = Fixation(duration=500)
+stroop_2 = Text("GREEN", color="green", choices=["r", "g"])
+fixation_3 = Fixation(duration=500)
 ...
 ```
 

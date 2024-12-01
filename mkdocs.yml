@@ -41,7 +41,7 @@ hooks:
   - mkdocs/hooks.py
 
 watch:
-  - src/sweetbean/
+  - src/sweetbean
 
 plugins:
   - search
@@ -80,15 +80,14 @@ extra_javascript:
 nav:
   - Introduction: 'index.md'
   - Quickstart Guide: Quickstart Guide/
-  - Examples:
-    - Home: 'Examples/index.md'
-    - Psychophysics: 'Examples/Psychophysics/psychophysics.ipynb'
+  - Examples: Examples/
   - User Guide:
       - Home: 'User Guide/index.md'
       - Overview: 'User Guide/overview.md'
       - Timeline Variables: 'User Guide/timeline_variables.md'
-      - Derived Variables: 'User Guide/derived_variables.md'
+      - Derived Variables: 'User Guide/function_variables.md'
       - Data Variables: 'User Guide/data_variables.md'
       - LLM Synthetic Participant: 'User Guide/llm_synthetic_participant.md'
   - Stimuli: Stimuli/
+  - Contributor Guide:
   - Code Reference: reference/  #
