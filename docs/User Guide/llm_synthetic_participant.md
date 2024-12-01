@@ -103,7 +103,7 @@ pipe = transformers.pipeline(
 
 
 def generate(input):
-    return pipe(input)[0]["generated_text"]
+    return pipe(input)[0]["generated_text"][len(input):]
 ```
 
 Now, we can run the experiment on the model:
@@ -113,7 +113,5 @@ data = experiment.run_on_language(get_input=generate)
 ```
 
 **Note**: The `run_on_language` function will return a dictionary with the data from the experiment. Any model
-(for example,
-using [OpenAI](https://platform.openai.com/docs/overview), [HuggingFace](https://huggingface.co/), [LLama](https://www.llama-api.com/)
-or [Google](https://console.cloud.google.com/apis/library) API) can be used as a synthetic participant.
+(for example, using [OpenAI](https://platform.openai.com/docs/overview), [HuggingFace](https://huggingface.co/), [LLama](https://www.llama-api.com/), or [Google](https://console.cloud.google.com/apis/library) API) can be used as a synthetic participant.
 
