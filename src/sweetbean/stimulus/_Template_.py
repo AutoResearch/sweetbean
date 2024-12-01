@@ -13,7 +13,7 @@ class _Template_(_BaseStimulus):
         """
         super().__init__(args, side_effects)
 
-    def process_l(self, prompts, get_input, multi_turn):
+    def process_l(self, prompts, get_input, multi_turn, datum):
         """
         This is used to process the arguments, generate a prompt and
         get a response from language input

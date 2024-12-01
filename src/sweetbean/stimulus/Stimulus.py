@@ -42,7 +42,26 @@ class _BaseStimulus(ABC):
             self.arg_js["trial_duration"] = self.arg["duration"]
         for key in self.arg:
             self.arg_js[key] = args[key]
-        # self.to_js()
+
+    def return_shared_variables(self):
+        shared_variables = {}
+        for key in self.arg:
+
+            def extract_shared_variables(value):
+                if isinstance(value, SharedVariable):
+                    shared_variables[value.name] = value
+                elif isinstance(value, dict):
+                    for v in value.values():
+                        extract_shared_variables(v)
+                elif isinstance(value, list):
+                    for item in value:
+                        extract_shared_variables(item)
+                elif isinstance(value, FunctionVariable):
+                    for arg in value.args:
+                        extract_shared_variables(arg)
+
+            extract_shared_variables(self.arg[key])
+        return shared_variables
 
     def to_js(self):
         self.js = ""
@@ -58,19 +77,28 @@ class _BaseStimulus(ABC):
         self.js_body += f'type: {self.arg["type"]},'
         for key in self.arg_js:
             self._param_to_js(key, self.arg_js[key])
+        for key in self.arg:
+            if key not in self.arg_js:
+                self._param_to_js_arg(key, self.arg[key])
         self._add_special_param()
         self._process_response()
         self._set_before()
         if self.side_effects:
             self._set_side_effects()
 
-    def _prepare_args_l(self, timeline_element, data, shared_variables):
-        self.l_args = {}
-        self.l_ses = {}
-        for key, value in self.arg.items():
-            key_ = key
-            value_ = _parse_variable(value, timeline_element, data, shared_variables)
-            self.l_args[key_] = value_
+    def _prepare_args_l(self, timeline_element, data, shared_variables, datum=None):
+        if not datum:
+            self.l_args = {}
+            self.l_ses = {}
+            for key, value in self.arg.items():
+                key_ = key
+                value_ = _parse_variable(
+                    value, timeline_element, data, shared_variables
+                )
+                self.l_args[key_] = value_
+        else:
+            for key, value in datum.items():
+                self.l_args[key] = value
 
     def _resolve_side_effects(self, timeline_element, data, shared_variables):
         if self.side_effects:
@@ -80,7 +108,7 @@ class _BaseStimulus(ABC):
                 )
                 self.l_ses[se.set_variable.name] = get_variable
 
-    def process_l(self, prompts, get_input, multi_turn):
+    def process_l(self, prompts, get_input, multi_turn, datum=None):
         prompts.append(self._get_prompt_l())
         prompt_response = self._get_response_prompt_l()
         s_data = {}
@@ -91,7 +119,10 @@ class _BaseStimulus(ABC):
                 _in_prompt = prompts[-1]
             else:
                 _in_prompt = " ".join([p for p in prompts])
-            response = get_input(_in_prompt).upper()
+            if not datum:
+                response = get_input(_in_prompt).upper()
+            else:
+                response = datum["response"].upper()
             s_data = self._process_response_l(response)
             prompts[-1] += f"{response}>>"
         data.update(s_data)
@@ -112,6 +143,10 @@ class _BaseStimulus(ABC):
         body, data = _set_param_js(key, param)
         if key not in self.excludes and key != "type" and key != "duration":
             self.js_body += body
+        self.js_data += data
+
+    def _param_to_js_arg(self, key, param):
+        _, data = _set_param_js(key, param)
         self.js_data += data
 
     def _set_side_effects(self):

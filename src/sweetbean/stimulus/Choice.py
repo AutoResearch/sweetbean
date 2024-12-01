@@ -121,7 +121,7 @@ class Bandit(HtmlChoice):
         )
         self.js_before = f"on_load:()=>{{{res}}},"
 
-    def process_l(self, prompts, get_input, multi_turn):
+    def process_l(self, prompts, get_input, multi_turn, datum=None):
         current_prompt = f' You see {len(self.l_args["bandits"])} bandits.'
         for idx, bandit in enumerate(self.l_args["bandits"]):
             current_prompt += f' Bandit {idx + 1} is {bandit["color"]}.'
@@ -132,7 +132,10 @@ class Bandit(HtmlChoice):
             in_prompt = " ".join([p for p in prompts]) + current_prompt + "<<"
         else:
             in_prompt = current_prompt + "<<"
-        response = get_input(in_prompt)
+        if not datum:
+            response = get_input(in_prompt)
+        else:
+            response = datum["response"] + 1
         if int(response) < 1 or int(response) > len(self.l_args["bandits"]):
             prompts.append(
                 current_prompt + f"<<{response}>>. " f"The response was invalid."

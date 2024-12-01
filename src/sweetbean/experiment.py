@@ -8,7 +8,6 @@ from sweetbean._const import (
     TEXT_APPENDIX,
 )
 from sweetbean.block import Block
-from sweetbean.variable import CodeVariable, SharedVariable
 
 
 class Experiment:
@@ -23,11 +22,9 @@ class Experiment:
         for b in self.blocks:
             b.to_js()
             for s in b.stimuli:
-                for key in s.arg:
-                    if isinstance(s.arg[key], SharedVariable) or isinstance(
-                        s.arg[key], CodeVariable
-                    ):
-                        self.js += f"{s.arg[key].set()}\n"
+                shared_variables = s.return_shared_variables()
+                for s_key in shared_variables:
+                    self.js += f"{shared_variables[s_key].set()}\n"
         if path_local_download:
             self.js += (
                 "jsPsych = initJsPsych("
@@ -60,11 +57,9 @@ class Experiment:
         for b in self.blocks:
             b.to_js()
             for s in b.stimuli:
-                for key in s.arg:
-                    if isinstance(s.arg[key], SharedVariable) or isinstance(
-                        s.arg[key], CodeVariable
-                    ):
-                        text += f"{s.arg[key].set()}\n"
+                shared_variables = s.return_shared_variables()
+                for s_key in shared_variables:
+                    text += f"{shared_variables[s_key].set()}\n"
         text += "const jsPsych = initJsPsych()\n"
         text += "const trials = [\n"
         for b in self.blocks:
@@ -78,43 +73,60 @@ class Experiment:
         self,
         get_input=input,
         multi_turn=False,
+        data=None,
     ):
-        data = []
+        out_data = []
         prompts = []
         shared_variables = {}
         for b in self.blocks:
             for s in b.stimuli:
-                for key in s.arg:
-                    if isinstance(s.arg[key], SharedVariable) or isinstance(
-                        s.arg[key], CodeVariable
-                    ):
-                        shared_variables[s.arg[key].name] = s.arg[key].value
+
+                _shared_variables = s.return_shared_variables()
+                for s_key in _shared_variables:
+                    shared_variables[s_key] = _shared_variables[s_key].value
+        datum_index = 0
         for b in self.blocks:
             timeline = b.timeline
             stimuli = b.stimuli
             if not timeline:
                 timeline = [{}]
             for timeline_element in timeline:
-                data, prompts, shared_variables = run_stimuli(
+                out_data, prompts, shared_variables, datum_index = run_stimuli(
                     stimuli,
                     timeline_element,
-                    data,
+                    out_data,
                     shared_variables,
                     prompts,
                     get_input,
                     multi_turn,
+                    datum_index,
+                    data,
                 )
-        return data, prompts
+        return out_data, prompts
 
 
 def run_stimuli(
-    stimuli, timeline_element, data, shared_variables, prompts, get_input, multi_turn
+    stimuli,
+    timeline_element,
+    out_data,
+    shared_variables,
+    prompts,
+    get_input,
+    multi_turn,
+    datum_index,
+    data,
 ):
     for s in stimuli:
-        s._prepare_args_l(timeline_element, data, shared_variables)
-        s_data, prompts = s.process_l(prompts, get_input, multi_turn)
-        data.append(s_data)
+        if datum_index < len(data):
+            datum = data[datum_index]
+        else:
+            datum = None
+
+        s._prepare_args_l(timeline_element, out_data, shared_variables, datum)
+        s_out_data, prompts = s.process_l(prompts, get_input, multi_turn, datum)
+        out_data.append(s_out_data)
         if s.side_effects:
-            s._resolve_side_effects(timeline_element, data, shared_variables)
+            s._resolve_side_effects(timeline_element, out_data, shared_variables)
             shared_variables.update(s.l_ses)
-    return data, prompts, shared_variables
+        datum_index += 1
+    return out_data, prompts, shared_variables, datum_index
