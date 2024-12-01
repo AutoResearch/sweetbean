@@ -24,9 +24,9 @@ process, but there's still a need for a more intuitive solution, in particular f
 
 ## Overview
 
-- [Quickstart Guide](Quickstart%20Guide/index.md) A quick start guide to get you started with SweetBean.
+- [Basic Tutorials](Basic%20Tutorials/index.md) This will get you started with SweetBean.
+- [Use Case Tutorials](Use%20Case%20Tutorials/index.md) Examples on how SweetBean can be used.
 - [User Guide](User%20Guide/index.md) An overview of SweetBean features.
-- [Stimuli](Stimuli/index.md) An overview of the different stimuli that can be used in SweetBean.
 - [Code References](reference/sweetbean/) A reference guide to the different classes and functions in SweetBean.
 
 ## SweetBean is Growing
