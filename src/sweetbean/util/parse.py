@@ -33,9 +33,9 @@ def _fct_args_to_js(args):
 
     """
     res = "("
-    for arg in args:
+    for idx, arg in enumerate(args):
         res += str(_var_to_js(arg))
-        if arg != args[-1]:
+        if idx != len(args) - 1:
             res += ", "
     res += ")"
     return res
@@ -53,9 +53,9 @@ def _var_to_js(var):
     # test if is sequence
     if isinstance(var, (list, tuple, set)):
         res = "["
-        for v in var:
+        for idx, v in enumerate(var):
             res += str(_var_to_js(v))
-            if v != var[-1]:
+            if idx != len(var) - 1:
                 res += ","
         return f"{res}]"
     if isinstance(var, dict):
