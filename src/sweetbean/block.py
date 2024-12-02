@@ -4,11 +4,20 @@ from sweetbean.variable import CodeVariable
 
 
 class Block:
+    """
+    A block of stimuli (for example, an instruction, training, or test block)
+    """
+
     stimuli: List[Any] = []
     js = ""
     timeline = None
 
     def __init__(self, stimuli, timeline=None):
+        """
+        Arguments:
+            stimuli: a list of stimuli
+            timeline: a list of dictionaries with the name of the timeline variables
+        """
         if timeline is None:
             timeline = []
         self.stimuli = stimuli

@@ -4,6 +4,10 @@ from sweetbean.util.parse import _fct_args_to_js, _fct_to_js, _var_to_js
 
 
 class Variable(ABC):
+    """
+    A base class for variables.
+    """
+
     def __init__(self, name):
         self.name = name
 
@@ -27,6 +31,11 @@ class DataVariable(Variable):
     """
 
     def __init__(self, name, window):
+        """
+        Arguments:
+            name: the name of the variable
+            window: the window of the data
+        """
         super().__init__(name)
         self.name = f'data["bean_{name}"]'
         self.raw_name = name
@@ -50,6 +59,12 @@ class FunctionVariable(Variable):
     """
 
     def __init__(self, name, fct, args):
+        """
+        Arguments:
+            name: the name of the variable
+            fct: the function
+            args: the arguments of the function
+        """
         super().__init__(name)
         self.fct = fct
         self.args = args
@@ -66,6 +81,11 @@ class CodeVariable(Variable):
     """
 
     def __init__(self, name, value):
+        """
+        Arguments:
+            name: the name of the variable
+            value: the initial value of the variable
+        """
         super().__init__(name)
         self.value = value
 
@@ -82,6 +102,11 @@ class SharedVariable:
     """
 
     def __init__(self, name, value):
+        """
+        Arguments:
+            name: the name of the variable
+            value: the initial value of the variable
+        """
         self.name = str(name)
         self.value = value
 
@@ -96,6 +121,10 @@ class SideEffect:
     def __init__(self, set_variable, get_variable):
         """
         A side effect that can set variables.
+
+        Arguments:
+            set_variable: the variable to set (often a SharedVariable)
+            get_variable: the variable to get (e.g, the variable the set variable should be set to)
         """
         self.set_variable = set_variable
         self.get_variable = get_variable

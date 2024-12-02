@@ -20,6 +20,15 @@ class HtmlChoice(_BaseStimulus):
         time_after_response=3000,
         side_effects=None,
     ):
+        """
+        Arguments:
+            duration (int): The duration of the stimulus
+            html_array (list): An array of html elements that can be clicked
+            values (list): An array of values corresponding to the html elements
+            time_after_response (int): The time after a response is made
+                (for example, for animations)
+            side_effects (dict): A dictionary of side effects
+        """
         if values is None:
             values = []
         if html_array is None:
@@ -54,6 +63,15 @@ class Bandit(HtmlChoice):
         time_after_response=2000,
         side_effects=None,
     ):
+        """
+        Arguments:
+            duration (int): The duration of the stimulus
+            bandits (list): A list of bandits
+                (in the form of dictionaries with entries for color and value)
+            time_after_response (int): The time after a response is made
+                (for example, for animations)
+            side_effects (dict): A dictionary of side effects
+        """
         if bandits is None:
             bandits = []
 

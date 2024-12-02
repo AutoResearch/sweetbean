@@ -48,6 +48,7 @@ class RandomObjectKinematogram(_BaseStimulus):
             background_color: the background color
             choices: the valid keys that the subject can press to indicate a response
             correct_key: the correct key to press
+            side_effects: a dictionary of side effects
         """
         if choices is None:
             choices = []
@@ -104,6 +105,7 @@ class RandomDotPatterns(ROK):
             background_color: the background color
             choices: the valid keys that the subject can press to indicate a response
             correct_key: the correct key to press
+            side_effects: a dictionary of side effects
         """
         if choices is None:
             choices = []

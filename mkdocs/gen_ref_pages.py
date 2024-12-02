@@ -10,6 +10,8 @@ nav = mkdocs_gen_files.Nav()
 ignore = [
     Path("./src/sweetbean/_const.py"),
     Path("./src/sweetbean/util/parse.py"),
+    Path("./src/sweetbean/stimulus/_Template_.py"),
+    Path("./src/sweetbean/stimulus/Stimulus.py"),
 ]
 
 source_paths = sorted(Path("./").rglob("**/src"))
