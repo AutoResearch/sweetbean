@@ -1,22 +1,33 @@
-# sweetBean
+# SweetBean
 
-A declarative language in python for creating jsPsych experiments.
+A declarative programming language built in Python, designed for the synthesis of behavioral experiments. It allows researchers to specify experiments once and seamlessly compile them into a [jsPsych](https://www.jspsych.org/) experiment for conducting studies with human participants or text-based simulations with synthetic participants using large-language models. 
 
-This is a partner product intended to use alongside sweetPea (https://github.com/sweetpea-org/sweetpea-py) but can also
-be used as standalone product.
+## Features
 
-This project is in active development by the <a href="https://musslick.github.io/AER_website/Research.html">Autonomous
-Empirical Research Group</a>
-(package developer: Younes Strittmatter, PI: <a href="https://smusslick.com/">Sebastian Musslick</a>). This
-research program was supported by Schmidt Science Fellows, in partnership with the Rhodes Trust, as well as the Carney
-BRAINSTORM program at Brown University.
+- **Declarative language**: Specify experiments once and compile them into a jsPsych experiment for conducting studies with **human participants** or text-based simulations with **synthetic participants** using large-language models.
+- **Python-based**: SweetBean is built in Python, making it accessible and easy to use for researchers and educators.
 
-# install
+## Integrate with other packages
 
-```
+This package seamlessly integrates with other packages aimed at running online behavioral experiments:
+
+- [AutoRA](https://autoresearch.github.io/autora/): For closed loop research, automatic experiment deployment, participant recruitment, and data collection.
+- [SweetPea](http://sweetpea.ai/): For experimental design.
+
+But it can also be used as a standalone product.
+
+The project is in active development by the [Autonomous Empirical Research Group](https://musslick.github.io/AER_website/About.html), Lead Designer: [Younes Strittmatter](https://github.com/younesStrittmatter), led by [Sebastian Musslick]("https://smusslick.com).
+
+This research program was supported by Schmidt Science Fellows, in partnership with the Rhodes Trust, as well as the Carney BRAINSTORM program at Brown University.
+
+## Installation
+
+The package is available on PyPI and can be installed via pip:
+
+```bash
 pip install sweetbean
 ```
 
-# usage:
+## Documentation
 
-This is a very early version. You can find examples and documentation here: https://autoresearch.github.io/sweetbean/
+You can find examples and documentation here: https://autoresearch.github.io/sweetbean/
