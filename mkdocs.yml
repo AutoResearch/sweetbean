@@ -90,5 +90,5 @@ nav:
       - Shared Variables And Side Effects: 'User Guide/shared_variables_and_side_effects.md'
       - LLM Synthetic Participant: 'User Guide/llm_synthetic_participant.md'
       - Stimuli: Stimuli/
-  - Contributor Guide: Contributor Guide/
+  - Contributor Guide: 'CONTRIBUTING.md'
   - Code Reference: reference/  #
