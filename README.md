@@ -1,3 +1,9 @@
+![PyPI](https://img.shields.io/pypi/v/sweetbean)
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/autoresearch/sweetbean/test-pytest.yml)
+![PyPI - Downloads](https://img.shields.io/pypi/dm/sweetbean)
+![Link to docs](https://img.shields.io/badge/Docs-autoresearch.github.io/sweetbean-purple)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 # SweetBean
 
 A declarative programming language built in Python, designed for the synthesis of behavioral experiments. It allows researchers to specify experiments once and seamlessly compile them into a [jsPsych](https://www.jspsych.org/) experiment for conducting studies with human participants or text-based simulations with synthetic participants using large-language models. 
