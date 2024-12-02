@@ -56,6 +56,7 @@ class Text(HtmlKeyboardResponse):
             color: the color of the text
             choices: the keys that will be recorded if pressed
             correct_key: the correct key to press
+            side_effects: a dictionary of side effects
         """
         if choices is None:
             choices = []
@@ -89,6 +90,7 @@ class Blank(HtmlKeyboardResponse):
             duration: time in ms the stimulus is presented
             choices: the keys that will be recorded if pressed
             correct_key: the correct key to press
+            side_effects: a dictionary of side effects
         """
         super().__init__(
             duration=duration,
@@ -108,6 +110,7 @@ class Fixation(Text):
         """
         Arguments:
             duration: time in ms the stimulus is presented
+            side_effects: a dictionary of side effects
         """
         super().__init__(
             duration=duration,
@@ -137,8 +140,13 @@ class Feedback(Text):
         """
         Arguments:
             duration: time in ms the stimulus is presented
+            correct_message: the message to show if the response was correct
+            false_message: the message to show if the response was false
+            correct_color: the color of the message if the response was correct
+            false_color: the color of the message if the response was false
             window: how far back is the stimulus to check
                     (that stimulus needs to have a choice and a correct_key parameter)
+            side_effects: a dictionary of side effects
         """
         correct = DataVariable("correct", window)
 
@@ -187,6 +195,9 @@ class Flanker(Text):
             distractor: the direction of the distractor (allowed: left, right, l, r, L, R)
             choices: the keys that will be recorded if pressed
             correct_key: the correct key to press
+            color: the color of the text
+            n_flankers: the number of distractors
+            side_effects: a dictionary of side effects
         """
 
         def _txt(dr, dst, n):
@@ -238,6 +249,7 @@ class Symbol(HtmlKeyboardResponse):
             color: the color of the symbol
             choices: the keys that will be recorded if pressed
             correct_key: the correct key to press
+            side_effects: a dictionary of side effects
         """
 
         def stim(symbl, clr):

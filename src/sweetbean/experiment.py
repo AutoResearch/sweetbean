@@ -11,10 +11,18 @@ from sweetbean.block import Block
 
 
 class Experiment:
+    """
+    An experiment consisting of blocks
+    """
+
     blocks: List[Block] = []
     js = ""
 
     def __init__(self, blocks: List[Block]):
+        """
+        Arguments:
+            blocks: a list of blocks
+        """
         self.blocks = blocks
 
     def to_js(self, path_local_download=None):
@@ -41,6 +49,9 @@ class Experiment:
         self.js += ";jsPsych.run(trials)"
 
     def to_html(self, path, path_local_download=None):
+        """
+        Save the experiment to an HTML file
+        """
         self.to_js(path_local_download)
         html = HTML_PREAMBLE
         blocks = 0
@@ -53,6 +64,9 @@ class Experiment:
             f.write(html)
 
     def to_js_string(self, as_function=True, is_async=True):
+        """
+        Return the experiment as a JavaScript string
+        """
         text = FUNCTION_PREAMBLE(is_async) if as_function else ""
         for b in self.blocks:
             b.to_js()
@@ -75,6 +89,19 @@ class Experiment:
         multi_turn=False,
         data=None,
     ):
+        """
+        Run the experiment in a language
+
+        Arguments:
+            get_input: a function to get input from the response
+                (for example, a function that prompts language model and returns the response)
+            multi_turn: a boolean to allow multi-turn input.
+                If True, the prompts are not concatenated.
+            data: a list of dictionaries with the data.
+                This will rerun the experiment with the data as input.
+                If the data is not provided for the full experiment,
+                the rest of it will be simulated with the get_input function.
+        """
         out_data = []
         prompts = []
         shared_variables = {}

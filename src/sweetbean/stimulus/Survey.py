@@ -3,6 +3,10 @@ from sweetbean.variable import FunctionVariable
 
 
 class _Survey(_BaseStimulus):
+    """
+    A base class for surveys
+    """
+
     def __init__(self, questions=None, side_effects=None):
         super().__init__(locals(), side_effects=side_effects)
 
@@ -17,9 +21,18 @@ class _Survey(_BaseStimulus):
 
 
 class TextSurvey(_Survey):
+    """
+    A survey that asks for text input
+    """
+
     type = "jsPsychSurveyText"
 
     def __init__(self, questions=None, side_effects=None):
+        """
+        Arguments:
+            questions: a list of strings representing the questions
+            side_effects: a dictionary of side effects
+        """
         if not questions:
             questions = []
 
@@ -58,9 +71,18 @@ class TextSurvey(_Survey):
 
 
 class MultiChoiceSurvey(_Survey):
+    """
+    A survey that asks for multiple choice input
+    """
+
     type = "jsPsychSurveyMultiChoice"
 
     def __init__(self, questions=None, side_effects=None):
+        """
+        Arguments:
+            questions: a list of dictionaries with the keys "prompt" and "options"
+            side_effects: a dictionary of side effects
+        """
         if not questions:
             questions = []
 
@@ -104,9 +126,18 @@ class MultiChoiceSurvey(_Survey):
 #
 #
 class LikertSurvey(_Survey):
+    """
+    A survey that asks for Likert scale input
+    """
+
     type = "jsPsychSurveyLikert"
 
     def __init__(self, questions=None, side_effects=None):
+        """
+        Arguments:
+            questions: a list of dictionaries with the keys "prompt" and "labels"
+            side_effects: a dictionary of side effects
+        """
         if not questions:
             questions = []
 
@@ -122,6 +153,14 @@ class LikertSurvey(_Survey):
     #
     @classmethod
     def from_scale(cls, prompts=None, scale=None, side_effects=None):
+        """
+        Create a LikertSurvey from a scale
+
+        Arguments:
+            prompts: a list of strings representing the prompts
+            scale: a list of strings representing the scale
+            side_effects: a dictionary of side effects
+        """
         if not prompts:
             prompts = []
         if not scale:
