@@ -19,7 +19,7 @@ affiliations:
     index: 1
   - name: Osnabrück University, Germany
     index: 2
-  - name: University of Chicago, USA
+  - name: Brown University, USA
     index: 3
 date: 13 August 2017
 bibliography: paper.bib
