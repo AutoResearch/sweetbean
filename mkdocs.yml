@@ -88,7 +88,8 @@ nav:
       - Function Variables: 'User Guide/function_variables.md'
       - Data Variables: 'User Guide/data_variables.md'
       - Shared Variables And Side Effects: 'User Guide/shared_variables_and_side_effects.md'
-      - LLM Synthetic Participant: 'User Guide/llm_synthetic_participant.md'
+      - LLM - Synthetic Participant: 'User Guide/llm_synthetic_participant.md'
+      - Stimulus Sequence - Automated Documentation: 'User Guide/documentation_stimulus_sequence.md'
       - Stimuli: Stimuli/
   - Contributor Guide: 'CONTRIBUTING.md'
-  - Code Reference: reference/  #
+  - Code Reference: reference/
