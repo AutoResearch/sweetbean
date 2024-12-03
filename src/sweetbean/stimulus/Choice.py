@@ -150,8 +150,21 @@ class Bandit(HtmlChoice):
             in_prompt = " ".join([p for p in prompts]) + current_prompt + "<<"
         else:
             in_prompt = current_prompt + "<<"
+        rest_data = None
         if not datum:
-            response = get_input(in_prompt)
+            _r = get_input(in_prompt)
+            if isinstance(_r, str):
+                response = _r
+            elif isinstance(_r, dict):
+                if "response" not in _r:
+                    raise Exception(f"{_r} has an invalid response format")
+                response = _r["response"]
+                _r.pop("response")
+                rest_data = _r
+
+            else:
+                raise Exception(f"{_r} has an invalid response format")
+            # response = get_input(in_prompt)
         else:
             response = datum["response"] + 1
         if int(response) < 1 or int(response) > len(self.l_args["bandits"]):
@@ -166,5 +179,12 @@ class Bandit(HtmlChoice):
             )
             value = self.l_args["values"][int(response) - 1]
         data = self.l_args.copy()
-        data.update({"response": int(response) - 1, "value": value})
+        data.update(
+            {
+                "response": int(response) - 1,
+                "value": value,
+            }
+        )
+        if rest_data:
+            data.update(rest_data)
         return data, prompts

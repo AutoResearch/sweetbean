@@ -113,5 +113,5 @@ data = experiment.run_on_language(get_input=generate)
 ```
 
 **Note**: The `run_on_language` function will return a dictionary with the data from the experiment. Any model
-(for example, using [OpenAI](https://platform.openai.com/docs/overview), [HuggingFace](https://huggingface.co/), [LLama](https://www.llama-api.com/), or [Google](https://console.cloud.google.com/apis/library) API) can be used as a synthetic participant.
+(for example, using [OpenAI](https://platform.openai.com/docs/overview), [HuggingFace](https://huggingface.co/), [LLama](https://www.llama-api.com/), or [Google](https://console.cloud.google.com/apis/library) API) can be used as a synthetic participant. Additionally to responses from the language model, [here](https://autoresearch.github.io/sweetbean/Use%20Case%20Tutorials/AI%20Alignment/Reinforcement%20Learning%with%Certainty/), you can find how to assess other metrics like certainty of the language model.
 
