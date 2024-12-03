@@ -73,6 +73,16 @@ class _BaseStimulus(ABC):
             f"{{{self.js_body}{self.js_before}on_finish:(data)=>{{{self.js_data}}}}}"
         )
 
+    def to_js_for_image(self):
+        self.js = ""
+        self.js_data = ""
+        self.js_before = ""
+        self.js_body = ""
+        self._params_to_js_from_prepared()
+        self.js = (
+            f"{{{self.js_body}{self.js_before}on_finish:(data)=>{{{self.js_data}}}}}"
+        )
+
     def _params_to_js(self):
         self.js_body += f'type: {self.arg["type"]},'
         for key in self.arg_js:
@@ -80,6 +90,16 @@ class _BaseStimulus(ABC):
         for key in self.arg:
             if key not in self.arg_js:
                 self._param_to_js_arg(key, self.arg[key])
+        self._add_special_param()
+        self._process_response()
+        self._set_before()
+        if self.side_effects:
+            self._set_side_effects()
+
+    def _params_to_js_from_prepared(self):
+        self.js_body += f'type: {self.arg["type"]},'
+        for key in self.l_args:
+            self._param_to_js(key, self.l_args[key])
         self._add_special_param()
         self._process_response()
         self._set_before()

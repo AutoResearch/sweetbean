@@ -39,6 +39,10 @@ e-mail ([ystrittmatter@princeton.edu](mailto: ystrittmatter@princeton.edu)) or c
 ([https://github.com/AutoResearch/sweetbean/issues](https://github.com/AutoResearch/sweetbean/issues)). We are
 constantly seeking feedback and looking for ways to improve the language.
 
+## Automated Documentation
+
+SweetBean is designed with automated documentation in mind. The declarative nature of the language is specifically designed to facilitate natural language processing. Additionally, SweetBean can automatically generate an image of the stimulus sequence often used in the method section of a paper.
+
 ### Coming Soon
 
 {{ include_file('docs/Announcement.md') }}
