@@ -19,7 +19,16 @@ flanker = Flanker(2000, direction, distractor, ["j", "f"], correct_key)
 so_f = Blank(300)
 feedback = Feedback(800, window=2)
 
-train_block = Block([fixation, so_s, flanker, so_f, feedback], timeline)
-experiment = Experiment([train_block])
+block = Block([fixation, so_s, flanker, so_f, feedback], timeline)
 
+# Create an image of the stimuli sequence of the block
+block.to_image(
+    "flanker.png",
+    data=[None, None, {"correct": True}, None, None],
+    zoom_factor=[3, 3, 1, 3, 3],
+    sequence=True,
+)
+
+# Create an HTML file of the experiment
+experiment = Experiment([block])
 experiment.to_html("flanker.html")

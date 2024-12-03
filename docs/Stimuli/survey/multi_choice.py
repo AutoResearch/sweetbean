@@ -28,6 +28,6 @@ event_sequence = [stim_1, stim_2]
 
 # BLOCK DESIGN
 
-trial_sequence = Block(event_sequence)
-experiment = Experiment([trial_sequence])
+block = Block(event_sequence)
+experiment = Experiment([block])
 experiment.to_html("multi_choice.html")

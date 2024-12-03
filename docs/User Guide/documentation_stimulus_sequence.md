@@ -1,6 +1,6 @@
 # Stimulus Sequence - Automated Documentation
 
-![stimulus_sequence](../img/stimulus_sequence.png)
+![stimulus_sequence](../img/stimuli/flanker.png)
 
 SweetBea allows you to automatically generate an image of the stimulus sequence often used in the method section of a paper with a single line of code. This feature is designed to streamline the process of creating the method section of a paper.
 

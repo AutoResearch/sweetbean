@@ -7,6 +7,11 @@ stim_1 = Image(
     choices=[" "],
 )
 
-trial_sequence = Block([stim_1])
-experiment = Experiment([trial_sequence])
+block = Block([stim_1])
+
+# Create an image of the stimulus
+block.to_image("./", data=None, sequence=False, timeline_idx="random", zoom_factor=1)
+
+# Create an HTML file of the experiment
+experiment = Experiment([block])
 experiment.to_html("image.html")

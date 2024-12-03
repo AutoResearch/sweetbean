@@ -55,6 +55,11 @@ bandit_task = Bandit(
 )
 show_score = Text(duration=1000, text=score)
 
-trial_sequence = Block([bandit_task, show_score], timeline=timeline)
-experiment = Experiment([trial_sequence])
+block = Block([bandit_task, show_score], timeline=timeline)
+
+# Create an image of the stimuli sequence of the block
+block.to_image("bandit.png", [{"value": 5}, None], zoom_factor=[1, 3])
+
+# Create HTML file of the experiment
+experiment = Experiment([block])
 experiment.to_html("bandit.html")

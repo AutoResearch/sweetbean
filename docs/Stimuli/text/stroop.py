@@ -49,9 +49,16 @@ so_f = Text(so_f_duration)
 
 # BLOCK DESIGN
 
-train_block = Block([fixation, so_s, stroop, feedback, so_f], timeline)
-experiment = Experiment([train_block])
+block = Block([fixation, so_s, stroop, feedback, so_f], timeline)
 
-# experiment.to_html("timeline.html")
+# Create an image of the stimuli sequence of the block
+block.to_image(
+    "stroop.png",
+    data=[None, None, {"correct": True}, None, None],
+    zoom_factor=3,
+    sequence=True,
+)
 
+# Create an HTML file of the experiment
+experiment = Experiment([block])
 experiment.to_html("feedback_manual.html")
