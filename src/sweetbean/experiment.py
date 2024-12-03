@@ -107,7 +107,6 @@ class Experiment:
         shared_variables = {}
         for b in self.blocks:
             for s in b.stimuli:
-
                 _shared_variables = s.return_shared_variables()
                 for s_key in _shared_variables:
                     shared_variables[s_key] = _shared_variables[s_key].value
@@ -148,7 +147,6 @@ def run_stimuli(
             datum = data[datum_index]
         else:
             datum = None
-
         s._prepare_args_l(timeline_element, out_data, shared_variables, datum)
         s_out_data, prompts = s.process_l(prompts, get_input, multi_turn, datum)
         out_data.append(s_out_data)

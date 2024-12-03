@@ -140,10 +140,20 @@ class _BaseStimulus(ABC):
             else:
                 _in_prompt = " ".join([p for p in prompts])
             if not datum:
-                response = get_input(_in_prompt).upper()
+                _r = get_input(_in_prompt)
+                if isinstance(_r, str):
+                    response = _r.upper()
+                elif isinstance(_r, dict):
+                    if "response" not in _r:
+                        raise Exception(f"{_r} has an invalid response format")
+                    response = _r["response"].upper()
+                else:
+                    raise Exception(f"{_r} has an invalid response format")
+                # response = get_input(_in_prompt).upper()
             else:
-                response = datum["response"].upper()
-            s_data = self._process_response_l(response)
+                _r = datum["response"].upper()
+                response = _r
+            s_data = self._process_response_l(_r)
             prompts[-1] += f"{response}>>"
         data.update(s_data)
         return data, prompts
@@ -157,7 +167,9 @@ class _BaseStimulus(ABC):
         raise Exception("No template or function set for getting response prompt")
 
     def _process_response_l(self, response):
-        return {"response": response}
+        if isinstance(response, dict):
+            return response
+        return {"response": response.upper()}
 
     def _param_to_js(self, key, param):
         body, data = _set_param_js(key, param)
