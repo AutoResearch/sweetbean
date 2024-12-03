@@ -1,5 +1,7 @@
 """
-The rok 'press a or b or wait' is shown in pink for 2000ms. The allowed responses are 'a' and 'b'.
+The rok presents orientated objects (triangles).
+50% of them move in an angle of 100deg and 50% randomly.
+90% of them are orientated to the right and 10% randomly.
 """
 
 from sweetbean import Block, Experiment
@@ -22,6 +24,10 @@ event_sequence = [rok]
 # BLOCK DESIGN
 
 block = Block(event_sequence)
-experiment = Experiment([block])
 
+# Create an image of the stimuli
+block.to_image("./", data=None, sequence=False, timeline_idx="random", zoom_factor=1)
+
+# Create an HTML file of the experiment
+experiment = Experiment([block])
 experiment.to_html("rok.html")

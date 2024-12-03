@@ -32,6 +32,11 @@ event_sequence = [stim_1, stim_2, stim_3, stim_4]
 
 # BLOCK DESIGN
 
-trial_sequence = Block(event_sequence)
-experiment = Experiment([trial_sequence])
+block = Block(event_sequence)
+
+# Create an image of the stimuli sequence of the block
+block.to_image(path="symbols.png", data=None, zoom_factor=[1, 3, 3, 3])
+
+# Create an HTML file of the experiment
+experiment = Experiment([block])
 experiment.to_html("symbols.html")

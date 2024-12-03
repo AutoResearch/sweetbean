@@ -91,17 +91,17 @@ class Block:
                 html += "jsPsych.run(trials);"
                 html += HTML_APPENDIX
                 image = asyncio.run(render_html_to_image(html))
-                duration = s.arg["duration"] if "duration" in s.arg else 0
+                duration = s.l_args["duration"] if "duration" in s.l_args else 0
                 images.append(image)
                 durations.append(duration)
-                if k < len(data):
+                if data and k < len(data):
                     data_in.append(data[k])
                 k += 1
 
         if not sequence:
             if path:
-                for i in images:
-                    i.save(f"{path}/stimulus_{i}.png")
+                for idx, i in enumerate(images):
+                    i.save(f"{path}/stimulus_{idx}.png")
                 return
             return images, durations
         result_image = create_stimulus_sequence(
@@ -120,6 +120,8 @@ async def render_html_to_image(html_content):
     )
     page = await browser.newPage()
 
+    await page.setViewport({"width": 1920, "height": 1080})
+
     # Set the HTML content directly
     await page.setContent(html_content)
 
@@ -127,7 +129,7 @@ async def render_html_to_image(html_content):
     await asyncio.sleep(5)
 
     # Take a screenshot and store it in memory
-    screenshot_bytes = await page.screenshot({"fullPage": True})
+    screenshot_bytes = await page.screenshot({"fullPage": False})
 
     # Close the browser
     await browser.close()
@@ -249,11 +251,21 @@ def create_stimulus_sequence(
         text_y = (
             arrow_start[1] + frac * (arrow_end[1] - arrow_start[1]) + font_size
         )  # Slightly below the arrow
-        text = f"{timing} ms"
-        bbox = draw.textbbox((0, 0), text, font=font)  # Top-left corner for measurement
+        text = f"{timing} ms" if timing is not None else "Until\nresponse"
+        align = "left" if timing is not None else "center"
+        print(align)
+        bbox = draw.textbbox(
+            (0, 0), text, font=font, align=align
+        )  # Top-left corner for measurement
         text_width = bbox[2] - bbox[0]
 
         # Use the width and height for centering
-        draw.text((text_x - text_width / 2, text_y), text, fill="black", font=font)
+        draw.text(
+            (text_x - text_width / 2, text_y),
+            text,
+            fill="black",
+            font=font,
+            align=align,
+        )
 
     return canvas

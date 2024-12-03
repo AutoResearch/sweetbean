@@ -49,6 +49,14 @@ event_sequence = [fixation, blank_1, rdp, blank_2, feedback]
 
 block = Block(event_sequence, timeline)
 
-experiment = Experiment([block])
+# Create an image of the stimuli sequence of the block
+block.to_image(
+    "weber_fechner.png",
+    data=[None, None, {"correct": True}, None, None],
+    zoom_factor=[3, 3, 1, 3, 3],
+    sequence=True,
+)
 
+# Create an HTML file of the experiment
+experiment = Experiment([block])
 experiment.to_html("weber_fechner.html")

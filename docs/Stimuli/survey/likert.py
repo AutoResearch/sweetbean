@@ -38,6 +38,6 @@ event_sequence = [stim_1, stim_2, stim_3, stim_4]
 
 # BLOCK DESIGN
 
-trial_sequence = Block(event_sequence)
-experiment = Experiment([trial_sequence])
+block = Block(event_sequence)
+experiment = Experiment([block])
 experiment.to_html("likert.html")
