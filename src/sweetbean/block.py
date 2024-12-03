@@ -124,7 +124,7 @@ async def render_html_to_image(html_content):
     await page.setContent(html_content)
 
     # Wait for JavaScript to execute
-    await asyncio.sleep(2)
+    await asyncio.sleep(5)
 
     # Take a screenshot and store it in memory
     screenshot_bytes = await page.screenshot({"fullPage": True})
