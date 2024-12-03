@@ -42,7 +42,21 @@ class Block:
         else:
             self.js += f"], timeline_variables: {self.timeline}" + "}"
 
-    def to_image(self, path, data, sequence=True, timeline_idx="random"):
+    def to_image(self, path, data, sequence=True, timeline_idx="random", zoom_factor=3):
+        """
+        Create an image of the stimuli sequence of the block
+        Arguments:
+            path: the path to save the image
+            data: if needed data can be passed in for the stimuli
+                (for example, correct if the sequence contains a feedback stimulus)
+            sequence: if True, the images are combined into one image else they are
+                stored separately
+            timeline_idx: the index of the timeline element to use, if "random" a random
+                timeline element is chosen, if none, the whole timeline is shown
+            zoom_factor: the factor by which the images are zoomed (can be a list if
+                different zoom factors for each stimulus are needed)
+
+        """
 
         data_in = []
         shared_variables = {}
@@ -80,6 +94,8 @@ class Block:
                 duration = s.arg["duration"] if "duration" in s.arg else 0
                 images.append(image)
                 durations.append(duration)
+                if k < len(data):
+                    data_in.append(data[k])
                 k += 1
 
         if not sequence:
@@ -88,7 +104,9 @@ class Block:
                     i.save(f"{path}/stimulus_{i}.png")
                 return
             return images, durations
-        result_image = create_stimulus_sequence(images, durations)
+        result_image = create_stimulus_sequence(
+            images, durations, zoom_factor=zoom_factor
+        )
         if path:
             result_image.save(path)
             return
@@ -125,9 +143,12 @@ def create_stimulus_sequence(
     timings,
     overlap_x=0.05,
     overlap_y=0.5,
+    zoom_factor=2.5,
     arrow_color=(0, 0, 0),
     font_path=None,
 ):
+    if not hasattr(zoom_factor, "__iter__"):
+        zoom_factor = [zoom_factor] * len(images)
     if len(images) != len(timings):
         raise ValueError("The number of images and timings must be the same.")
 
@@ -171,9 +192,28 @@ def create_stimulus_sequence(
     else:
         font = ImageFont.load_default(size=font_size)
 
+    zoom_idx = 0
     # Paste images onto the canvas
     for img, (x, y) in zip(images, positions):
-        canvas.paste(img, (x, y), img if img.mode == "RGBA" else None)
+        # Calculate new dimensions for zooming
+        width, height = img.size
+        crop_width = int(width / zoom_factor[zoom_idx])
+        crop_height = int(height / zoom_factor[zoom_idx])
+        zoom_idx += 1
+
+        # Define the cropping box around the center
+        left = (width - crop_width) // 2
+        upper = (height - crop_height) // 2
+        right = left + crop_width
+        lower = upper + crop_height
+
+        # Crop and resize the image back to its original size
+        cropped_img = img.crop((left, upper, right, lower)).resize(
+            (width, height), Image.LANCZOS
+        )
+
+        # Paste the zoomed image onto the canvas
+        canvas.paste(cropped_img, (x, y), cropped_img if img.mode == "RGBA" else None)
 
     # Draw a diagonal arrow below the images
     arrow_start = (positions[0][0], positions[0][1] + img_height)
