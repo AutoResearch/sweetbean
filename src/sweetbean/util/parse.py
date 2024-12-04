@@ -65,6 +65,8 @@ def _var_to_js(var):
             if k != list(var.keys())[-1]:
                 res += ","
         return f"{res}}}"
+    if isinstance(var, bool):
+        return str(var).lower()
     if hasattr(var, "to_js"):
         return var.to_js()
     return var

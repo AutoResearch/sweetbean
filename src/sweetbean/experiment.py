@@ -143,7 +143,7 @@ def run_stimuli(
     data,
 ):
     for s in stimuli:
-        if datum_index < len(data):
+        if data and datum_index < len(data):
             datum = data[datum_index]
         else:
             datum = None
@@ -153,5 +153,12 @@ def run_stimuli(
         if s.side_effects:
             s._resolve_side_effects(timeline_element, out_data, shared_variables)
             shared_variables.update(s.l_ses)
+            _d = {}
+            for key in s.l_ses:
+                if key.startswith('data["bean_') or key.startswith("data['bean_"):
+                    _d[key[11:-2]] = s.l_ses[key]
+                else:
+                    _d[key] = s.l_ses[key]
+            out_data[-1].update(_d)
         datum_index += 1
     return out_data, prompts, shared_variables, datum_index

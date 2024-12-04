@@ -184,9 +184,10 @@ class _BaseStimulus(ABC):
     def _set_side_effects(self):
         for se in self.side_effects:
             self.js_data += se.to_js()
-            self.js_data += (
-                f'data["bean_{se.set_variable.name}"]={se.set_variable.name};'
-            )
+            if not isinstance(se.set_variable, DataVariable):
+                self.js_data += (
+                    f'data["bean_{se.set_variable.name}"]={se.set_variable.name};'
+                )
 
     @abstractmethod
     def _add_special_param(self):

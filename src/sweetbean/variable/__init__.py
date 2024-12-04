@@ -130,4 +130,4 @@ class SideEffect:
         self.get_variable = get_variable
 
     def to_js(self):
-        return f"{self.set_variable.name}={self.get_variable.to_js()};"
+        return f"{self.set_variable.name}={_var_to_js(self.get_variable)};"
