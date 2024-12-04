@@ -156,7 +156,7 @@ def run_stimuli(
             _d = {}
             for key in s.l_ses:
                 if key.startswith('data["bean_') or key.startswith("data['bean_"):
-                    _d[key[11:]] = s.l_ses[key]
+                    _d[key[11:-2]] = s.l_ses[key]
                 else:
                     _d[key] = s.l_ses[key]
             out_data[-1].update(_d)
