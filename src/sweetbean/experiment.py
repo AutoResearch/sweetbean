@@ -143,7 +143,7 @@ def run_stimuli(
     data,
 ):
     for s in stimuli:
-        if data and datum_index < len(data):
+        if data is not None and datum_index < len(data):
             datum = data[datum_index]
         else:
             datum = None
