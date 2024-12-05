@@ -6,13 +6,15 @@ The SweetBean project is a living project that is always looking for contributor
 
 If you find a bug or have a feature request, please don't hesitate to open an issue on the [GitHub Issues](https://github.com/AutoResearch/sweetbean/issues").
 
-## Contributing Code
+## Contributing Code or Documentation
 
 If you want to contribute code, please follow the steps below:
 
 1. Fork the repository.
 2. Make your changes.
 3. Create a pull request.
+
+## Code
 
 Every part of the codebase is open for contributions. But there are some areas where contributions are especially welcome and easy to make:
 
@@ -26,9 +28,13 @@ The most straight forward stimuli to implement are [jsPsych](https://github.com/
 
 In some of the stimuli not all features are implemented. For example, some stimuli don't provide support for running them as language experiments. You can add this feature to the existing stimuli.
 
-### Documentation
+## Documentation
 
 Some parts of the documentation are incomplete. You can help by adding more examples or by adding docstrings to the codebase.
+
+### Examples and Use Cases
+
+You can add simple examples that showcase a single stimulus in the `docs\Stimuli` folder. If you want to showcase a more complex use case, you can add a new folder in the `docs\Use Case Tutorials` directory.
 
 ## Providing Data and Experiment Examples
 
