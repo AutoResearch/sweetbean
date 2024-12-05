@@ -28,9 +28,9 @@ bibliography: paper.bib
 
 # Summary
 
-`SweetBean` is an open-source, domain-specific declarative programming language built in Python, designed for the synthesis of behavioral experiments. It allows researchers to specify experiments once and seamlessly compile them into a `jsPsych` experiment [@de2015jspsych] for conducting studies with human participants or text-based simulations with synthetic participants using large-language models. 
+`sweetbean` is an open-source, domain-specific declarative programming language built in Python, designed to simplify the synthesis of web-based behavioral experiments. It allows researchers to specify a behavioral experiment in declarative form as a sequence events. Once specified, `sweetbean` can compile the experiment into a `jsPsych` experiment [@de2015jspsych] for web-based behavioral study with human participants. In addition, `sweetbean` can generate prompts for conducting the same experiment with a large-language model (LLM), enabling automated alignment of LLMs with human behavior.
 
-The `SweetBean` package seamlessly integrates with packages aimed at running online behavioral experiments, such as `AutoRA` [@AUTORA-MISSING] for automated research, participant recruitment, and data collection, and `SweetPea` [@musslick2020sweetpea] for experimental design. 
+The `sweetbean` package integrates with other tools that automate aspects of behavioral research, such as `sweetpea` [@musslick2020sweetpea] for automating experimental design, or `autora` [@autora2024] for running closed-loop behavioral research studies. Together, these tools form an ecosystem for advancing behavioral research through automation.
 
 # Statement of need
 
