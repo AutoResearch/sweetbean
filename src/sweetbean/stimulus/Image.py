@@ -1,3 +1,5 @@
+import json
+
 from sweetbean.stimulus.Stimulus import _KeyboardResponseStimulus
 
 
@@ -31,3 +33,34 @@ class Image(_KeyboardResponseStimulus):
 
     def _set_before(self):
         pass
+
+    def _get_prompt_l(self):
+        try:
+            with open("image_prompts.json") as f:
+                image_prompts = json.load(f)
+        except FileNotFoundError:
+            raise FileNotFoundError(
+                "The file 'image_prompts.json' was not found. "
+                "If you are using the Image stimulus, you need to provide a file "
+                "'image_prompts.json' in the same directory as your experiment script. "
+                "It should contain a dictionary with image paths as keys and prompts "
+                "as values."
+            )
+        except json.JSONDecodeError:
+            raise ValueError(
+                "The file 'image_prompts.json' contains invalid JSON."
+                "If you are using the Image stimulus, you need to provide a file "
+                "'image_prompts.json' in the same directory as your experiment script. "
+                "It should contain a dictionary with image paths as keys and prompts "
+                "as values."
+            )
+        if not self.l_args["stimulus"] in image_prompts:
+            raise ValueError(
+                f"The image {self.l_args['stimulus']} is not in the image_prompts.json file."
+                "If you are using the Image stimulus, you need to provide a file "
+                "'image_prompts.json' in the same directory as your experiment script. "
+                "It should contain a dictionary with image paths as keys and prompts "
+                "as values."
+            )
+
+        return image_prompts[self.l_args["stimulus"]]
