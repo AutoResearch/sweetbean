@@ -49,11 +49,11 @@ SweetBean is designed with automated documentation in mind. The declarative natu
 
 ## Discover More from Our Suite of Tools
 
-SweetBean is just one part of a powerful set of tools designed to streamline and enhance your research process. It can be used as a standalone product but is most powerful when used in conjunction with our other tools:
+SweetBean is just one part of a powerful set of tools designed to streamline and enhance the behavioral research process. It can be used as a standalone product but is most powerful when used in conjunction with our other tools:
 
-- [SweetPea](https://sweetpea.ai/): A Python toolbox for the automated generation of **counterbalanced experimental design** similar syntax to SweetBean. Create complex counterbalanced sequences with SweetPea and then use SweetBean to implement them in online experiments.
+- [SweetPea](https://sweetpea.ai/): A Python toolbox for the automated generation of **counterbalanced experimental designs** with similar syntax as SweetBean. Create complex counterbalanced trial sequences with SweetPea and then use SweetBean to implement them in online experiments.
 
-- [AutoRA](https://autoresearch.github.io/autora/): A Python platform for **automated behavioral research**, helping you design, execute and analyze behavioral experiments in a closed loop. Experiments created with SweetBean can be implemented via AutoRA to collect data from real participants. Even if you are not planning to automate your research in a closed loop, AutoRA can help you to set up and run experiments without the need of a server and collect data from real participants via [Prolific](https://www.prolific.com/).
+- [AutoRA](https://autoresearch.github.io/autora/): A Python platform for **automated behavioral research**, helping you design, execute and analyze behavioral experiments in a closed loop. Experiments created with SweetBean can be implemented via AutoRA to collect data from human participants. Even if you are not planning to automate your research in a closed loop, AutoRA can help you set up and run experiments without the need of your own server and collect data from real participants via [Prolific](https://www.prolific.com/).
 
 ## About
 
