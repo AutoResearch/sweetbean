@@ -9,6 +9,4 @@ A percentage of the triangles are rotated randomly and move randomly.
 The more triangles are rotated and moved randomly, 
 the harder it is to detect the direction of the majority of the triangles.
 
-```python
-
 ![rok](../../img/stimuli/rok.png)
