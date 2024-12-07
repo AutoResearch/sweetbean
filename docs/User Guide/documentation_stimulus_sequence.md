@@ -1,4 +1,4 @@
-# Stimulus Sequence - Automated Documentation
+# Automated Generation of Stimulus Sequence Figures
 
 ![stimulus_sequence](../img/stimuli/flanker.png)
 
