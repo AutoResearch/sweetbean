@@ -16,7 +16,7 @@ cognitive psychology, social psychology, and behavioral economics. These experim
 
 Despite these benefits, the process of designing and implementing online experiments remains time-consuming and
 error-prone. Existing tools like [jsPsych](https://www.jspsych.org/latest/) have made strides in simplifying this
-process, but there's still a need for a more intuitive solution, in particular for researchers who don't have a background in programming in Java Script. We address this need with SweetBean.
+process, but there's still a need for a more intuitive solution, in particular for researchers who don't have a background in programming in JavaScript. We address this need with SweetBean.
 
 - Declarative language in Python: easily specify the structure and flow of experiments, even with minimal programming experience.
 - Synthetic participant support: Integrate [large-language models as synthetic participants](https://www.sciencedirect.com/science/article/pii/S1364661323000980) for pilot studies, generating synthetic data
@@ -41,7 +41,7 @@ constantly seeking feedback and looking for ways to improve the language.
 
 ## Automated Documentation
 
-SweetBean is designed with automated documentation in mind. The declarative nature of the language is specifically designed to facilitate natural language processing. Additionally, SweetBean can automatically generate an image of the stimulus sequence often used in the method section of a paper.
+SweetBean is designed with automated documentation in mind. The declarative nature of the language is specifically designed to enable automated translations between code and natural language. Additionally, SweetBean can generate images of stimulus sequences, which may serve as figures in the method section of a paper.
 
 ### Coming Soon
 
