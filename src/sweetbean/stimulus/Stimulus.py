@@ -135,7 +135,7 @@ class _BaseStimulus(ABC):
         data = self.l_args.copy()
         if prompt_response:
             prompts[-1] += " " + prompt_response
-            if not multi_turn:
+            if multi_turn:
                 _in_prompt = prompts[-1]
             else:
                 _in_prompt = " ".join([p for p in prompts])
