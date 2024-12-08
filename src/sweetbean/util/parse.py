@@ -84,7 +84,10 @@ def _fct_to_js(func):
 
     >>> a = lambda color: "f" if color == "red" else "j"
     >>> _fct_to_js(a)
-    '(color) => {return color=="red"?"f":"j"}'
+    '(color) => {return __eq__(color,"red")?"f":"j"}'
+
+    >>> b = lambda score, n: f"Score: {score/n}"
+    >>> _fct_to_js(b)
 
     """
     global_vars = func.__globals__
@@ -185,11 +188,16 @@ def _postprocess_format(js_code):
     """
     Replace `.format(...)` calls in the generated JavaScript
     with equivalent JavaScript template literals.
+
+    Examples:
+        >>> function = '(score,n) => {return"Score: {}".format(__truediv__(score,n))}'
+        >>> _postprocess_format(function)
+        '(score,n) => {return`Score: ${__truediv__(score,n)}`}'
     """
     import re
 
     # Match any string with `.format(...)`
-    pattern = r'(["\'].*?\{.*?\}.*?["\'])\.format\((.*?)\)'
+    pattern = r'(["\'].*?\{.*?\}.*?["\'])\.format\((.*)\)'
 
     def replacer(match):
         """
@@ -197,10 +205,11 @@ def _postprocess_format(js_code):
         """
         # Extract the string template and the arguments
         template = match.group(1).strip()  # The string with placeholders (quoted)
-        arguments = [
-            arg.strip() for arg in match.group(2).split(",")
-        ]  # The replacement arguments
-
+        _inpt = match.group(2)
+        # arguments = [
+        #     arg.strip() for arg in match.group(2).split(",")
+        # ]  # The replacement arguments
+        arguments = _split_outer_commas(_inpt)
         # Remove the surrounding quotes and replace `{}` with `${...}`
         lst = template[-1]
         for i, arg in enumerate(template):
@@ -224,6 +233,29 @@ def _postprocess_format(js_code):
     js_code = re.sub(pattern, replacer, js_code)
     js_code = js_code.replace(".format()", "")
     return js_code
+
+
+def _split_outer_commas(input_str):
+    result = []
+    current = []
+    depth = 0  # Track depth of parentheses
+
+    for char in input_str:
+        if char == "," and depth == 0:  # Split only when at depth 0
+            result.append("".join(current).strip())
+            current = []
+        else:
+            if char == "(":
+                depth += 1
+            elif char == ")":
+                depth -= 1
+            current.append(char)
+
+    # Append the last group
+    if current:
+        result.append("".join(current).strip())
+
+    return result
 
 
 def _postprocess_functions(js_code):
