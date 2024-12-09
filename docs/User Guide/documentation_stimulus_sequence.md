@@ -6,7 +6,7 @@ SweetBea allows you to automatically generate an image of the stimulus sequence 
 
 Assume you have the following block of code representing a Flanker task:
 ```python
-from sweetbean import Block, Experiment
+from sweetbean import Block
 from sweetbean.stimulus import Blank, Feedback, Fixation, Flanker
 from sweetbean.variable import TimelineVariable
 
