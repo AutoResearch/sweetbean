@@ -74,7 +74,7 @@ Finally, we can show the score after each choice with a text stimulus. We pass t
 show_score = Text(duration=1000, text=score)
 ```
 
-Then we create the experiment as before and export it as an html file.
+Then we create the experiment as before and export it as a html file.
 
 ```python
 

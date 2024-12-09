@@ -50,5 +50,5 @@ experiment.to_html("stroop.html")
 
 ```
 
-Additionally to timeline variables, we can also create function variables. For example, we can create a variable that gives us the correct key press depending on the word of a StroopStimulus:
+Additionally, to timeline variables, we can also create function variables. For example, we can create a variable that gives us the correct key press depending on the word of a StroopStimulus:
 [Derived Variable](./function_variables.md)

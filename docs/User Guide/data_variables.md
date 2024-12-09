@@ -40,7 +40,7 @@ correct_key = FunctionVariable("correct", correct_key_fct, [color])
 
 Now we can create a `DataVariable` that determines whether the participant pressed the correct key. The `1` in the
 declaration indicates from which stimulus to get the variable (1 = previous, 2 = second previous, etc.).
-We can use the `DataVariable` directly as parameter in stimuli or we can us it as input for a `FunctionVariable` to create the feedback text:
+We can use the `DataVariable` directly as parameter in stimuli, or we can us it as input for a `FunctionVariable` to create the feedback text:
 
 ```python
 correct = DataVariable("correct", 1)

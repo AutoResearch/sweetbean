@@ -49,7 +49,7 @@ experiment = Experiment([indroduction_block])
 experiment.to_html("basic.html")
 ```
 
-### Mutiple Trials
+### Multiple Trials
 
 Let us create a stroop experiment. The trials should start with a fixation cross, followed by a colored word:
 

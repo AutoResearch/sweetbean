@@ -8,7 +8,7 @@ participants** (e.g., large-language models).
 
 ## Why SweetBean?
 
-In recent years, crowd-sourced online experiments have gained immense popularity across behavioral sciences like
+In recent years, crowdsourced online experiments have gained immense popularity across behavioral sciences like
 cognitive psychology, social psychology, and behavioral economics. These experiments offer several advantages, such as:
 
 - Faster data collection: gather large datasets in a fraction of the time required for in-person studies at the lab.
