@@ -47,6 +47,14 @@ SweetBean is designed with automated documentation in mind. The declarative natu
 
 {{ include_file('docs/Announcement.md') }}
 
+## When Things Go Wrong
+
+SweetBean is a work in progress, and we are constantly working to improve the language and its documentation. 
+
+However, sometimes the resulting JavaScript code from a SweetBean experiment might not work as expected. The first step to troubleshoot such issues is to check the generated JavaScript code itself. In most cases, a syntax error in the JavaScript code is the root cause of the problem. If you identify such an issue, we encourage you to open an issue on our GitHub repository and include both the SweetBean code causing the issue and the translation.
+
+If there is no syntax error, but the code is still not running as expected, you might want to try to debug your code. You can use the browser's developer tools to identify the issue. If you are not familiar with debugging JavaScript code, we recommend checking out the [Mozilla Developer Network](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/First_steps/What_is_JavaScript) for a comprehensive guide on JavaScript debugging. If you think there is a bug in SweetBean, please open an issue on our GitHub repository.
+
 ## Discover More from Our Suite of Tools
 
 SweetBean is just one part of a powerful set of tools designed to streamline and enhance the behavioral research process. It can be used as a standalone product but is most powerful when used in conjunction with our other tools:
