@@ -43,7 +43,7 @@ constantly seeking feedback and looking for ways to improve the language.
 
 SweetBean is designed with automated documentation in mind. The declarative nature of the language is specifically designed to enable automated translations between code and natural language. Additionally, SweetBean can generate images of stimulus sequences, which may serve as figures in the method section of a paper.
 
-### Coming Soon
+## Coming Soon
 
 {{ include_file('docs/Announcement.md') }}
 
