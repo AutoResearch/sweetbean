@@ -34,11 +34,23 @@ class Experiment:
                 for s_key in shared_variables:
                     self.js += f"{shared_variables[s_key].set()}\n"
         if path_local_download:
-            self.js += (
-                "jsPsych = initJsPsych("
-                f"{{on_finish:()=>jsPsych.data.get().localSave('json',"
-                f"'{path_local_download}')}});\n"
-            )
+            if path_local_download.endswith(".json"):
+                self.js += (
+                    "jsPsych = initJsPsych("
+                    f"{{on_finish:()=>jsPsych.data.get().localSave('json',"
+                    f"'{path_local_download}')}});\n"
+                )
+            elif path_local_download.endswith(".csv"):
+                self.js += (
+                    "jsPsych = initJsPsych("
+                    f"{{on_finish:()=>jsPsych.data.get().localSave('csv',"
+                    f"'{path_local_download}')}});\n"
+                )
+            else:
+                raise Exception(
+                    "Unknown file format for local download. "
+                    "Only .json or .csv are supported."
+                )
         else:
             self.js += "jsPsych = initJsPsych();\n"
         self.js += "trials = [\n"
