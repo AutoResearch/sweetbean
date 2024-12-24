@@ -22,10 +22,6 @@ This package seamlessly integrates with other packages aimed at running online b
 
 But it can also be used as a standalone product.
 
-The project is in active development by the [Autonomous Empirical Research Group](https://musslick.github.io/AER_website/About.html), Lead Designer: [Younes Strittmatter](https://github.com/younesStrittmatter), led by [Sebastian Musslick]("https://smusslick.com).
-
-This research program was supported by Schmidt Science Fellows, in partnership with the Rhodes Trust, as well as the Carney BRAINSTORM program at Brown University.
-
 ## Installation
 
 The package is available on PyPI and can be installed via pip:
@@ -37,3 +33,25 @@ pip install sweetbean
 ## Documentation
 
 You can find examples and documentation here: https://autoresearch.github.io/sweetbean/
+
+## Issues
+
+Please report any issues with this software or its documentation [here](https://github.com/AutoResearch/sweetbean/issues/new/choose).
+
+## Contributing
+
+We are open to contributions to SweetBean. More information can be found [here](https://autoresearch.github.io/sweetbean/CONTRIBUTING/).
+
+## Collaborating
+
+We are always interested in collaborating! If you like our work but need some tailoring for your specific use case, please contact [ystrittmatter@princeton.edu](mailto:ystrittmatter@princeton.edu).
+
+## About
+
+This project is in active development by
+the [Autonomous Empirical Research Group](https://musslick.github.io/AER_website/Research.html), Lead
+Designer [Younes Strittmatter](https://younesstrittmatter.github.io/), led
+by [Sebastian Musslick](https://smusslick.com).
+
+This research program was supported by Schmidt Science Fellows, in partnership with the Rhodes Trust, as well as the
+Carney BRAINSTORM program at Brown University.
