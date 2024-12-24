@@ -2,3 +2,4 @@
 - Additional synthetic participants: Support for vision models as synthetic participants
 - Automated Documentation: Automatically generate a method section from code via large language models
 - Additional stimuli: Support for new stimuli types based on the [cognitive paradigm ontology](https://bioportal.bioontology.org/ontologies/COGPO/?p=classes&conceptid=http%3A%2F%2Fwww.cogpo.org%2Fontologies%2FCogPOver2010.owl%23COGPO_00177&lang=en).
+  - Next: [Trolley Problem](https://younesstrittmatter.github.io/sweet-jsPsych/trolley-problem/)
