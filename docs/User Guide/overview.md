@@ -49,6 +49,22 @@ experiment = Experiment([indroduction_block])
 experiment.to_html("basic.html")
 ```
 
+### Download Data
+
+You can run the created file `basic.html` in any browser to test the experiment. If you want to create an experiment
+that automatically downloads the created data locally (for example, to look at the data during development), use the 
+following code:
+
+```python
+experiment.to_html("basic.html", path_local_download='example.csv') # for csv
+```
+
+```python
+experiment.to_html("basic.html", path_local_download='example.json') # for json
+```
+
+At the end of an experiment created this way, the data will be automatically stored to your machines `download` folder.
+
 ### Multiple Trials
 
 Let us create a stroop experiment. The trials should start with a fixation cross, followed by a colored word:
