@@ -88,6 +88,7 @@ def _fct_to_js(func):
 
     >>> b = lambda score, n: f"Score: {score/n}"
     >>> _fct_to_js(b)
+    '(score,n) => {return"Score: {}".format(__truediv__(score,n))}'
 
     """
     global_vars = func.__globals__
@@ -126,12 +127,6 @@ def _fct_to_js(func):
                 raise FileNotFoundError(f"Temporary file not found at: {temp_path}")
 
             # Run Transcrypt to transpile the temporary file
-            # subprocess.run(
-            #     ["transcrypt", "-c", temp_path],
-            #     check=True,
-            #     stdout=subprocess.PIPE,
-            #     stderr=subprocess.PIPE
-            # )
             subprocess.run(
                 ["transcrypt", "-b", temp_path],
                 check=True,
@@ -171,7 +166,7 @@ def _extract_arrow_function(js_code):
         params = match.group(1)
         body = match.group(2).strip()
         arrow_function = f"({params}) => {{{body}}}"
-        arrow_function = _postprocess_format(arrow_function)
+        # arrow_function = _postprocess_format(arrow_function)
         arrow_function = _postprocess_functions(arrow_function)
         return arrow_function
 
@@ -206,8 +201,6 @@ def _postprocess_format(js_code):
         # Extract the string template and the arguments
         template = match.group(1).strip()  # The string with placeholders (quoted)
         _inpt = match.group(2)
-        # arguments = [
-        #     arg.strip() for arg in match.group(2).split(",")
         # ]  # The replacement arguments
         arguments = _split_outer_commas(_inpt)
         # Remove the surrounding quotes and replace `{}` with `${...}`
