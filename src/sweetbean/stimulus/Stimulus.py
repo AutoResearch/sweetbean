@@ -45,22 +45,27 @@ class _BaseStimulus(ABC):
 
     def return_shared_variables(self):
         shared_variables = {}
-        for key in self.arg:
 
-            def extract_shared_variables(value):
-                if isinstance(value, SharedVariable):
-                    shared_variables[value.name] = value
-                elif isinstance(value, dict):
-                    for v in value.values():
-                        extract_shared_variables(v)
-                elif isinstance(value, list):
-                    for item in value:
-                        extract_shared_variables(item)
-                elif isinstance(value, FunctionVariable):
-                    for arg in value.args:
-                        extract_shared_variables(arg)
+        def extract_shared_variables(value):
+            if isinstance(value, SharedVariable):
+                shared_variables[value.name] = value
+            elif isinstance(value, dict):
+                for v in value.values():
+                    extract_shared_variables(v)
+            elif isinstance(value, list):
+                for item in value:
+                    extract_shared_variables(item)
+            elif isinstance(value, FunctionVariable):
+                for arg in value.args:
+                    extract_shared_variables(arg)
 
-            extract_shared_variables(self.arg[key])
+        if self.l_args:
+            for key in self.arg:
+                extract_shared_variables(self.arg[key])
+        if self.side_effects:
+            for se in self.side_effects:
+                extract_shared_variables(se.get_variable)
+                extract_shared_variables(se.set_variable)
         return shared_variables
 
     def to_js(self):
