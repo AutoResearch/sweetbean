@@ -27,12 +27,13 @@ class Experiment:
 
     def to_js(self, path_local_download=None):
         self.js = ""
+        shared_variables = {}
         for b in self.blocks:
             b.to_js()
             for s in b.stimuli:
-                shared_variables = s.return_shared_variables()
-                for s_key in shared_variables:
-                    self.js += f"{shared_variables[s_key].set()}\n"
+                shared_variables.update(s.return_shared_variables())
+        for s_key in shared_variables:
+            self.js += f"{shared_variables[s_key].set()}\n"
         if path_local_download:
             if path_local_download.endswith(".json"):
                 self.js += (
