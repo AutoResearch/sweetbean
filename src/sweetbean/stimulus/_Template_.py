@@ -11,7 +11,7 @@ class _Template_(_BaseStimulus):
         """
         Change this to match the arguments of the class
         """
-        super().__init__(args, side_effects)
+        super().__init__(locals(), side_effects)
 
     def process_l(self, prompts, get_input, multi_turn, datum):
         """
