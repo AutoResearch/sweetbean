@@ -1,5 +1,6 @@
 from sweetbean import Block, Experiment
 from sweetbean.stimulus import Bandit, Text
+from sweetbean.util.prompts import demographic
 from sweetbean.variable import (
     DataVariable,
     FunctionVariable,
@@ -59,6 +60,6 @@ trial_sequence = Block([bandit_task, show_score], timeline=timeline)
 experiment = Experiment([trial_sequence])
 
 
-data, prompts = experiment.run_on_language()
+data, prompts = experiment.run_on_language(preamble=demographic(37, "man"))
 
 print(data, prompts)
