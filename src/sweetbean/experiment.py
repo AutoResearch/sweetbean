@@ -100,6 +100,7 @@ class Experiment:
         self,
         get_input=input,
         multi_turn=False,
+        preamble="",
         data=None,
     ):
         """
@@ -110,6 +111,7 @@ class Experiment:
                 (for example, a function that prompts language model and returns the response)
             multi_turn: a boolean to allow multi-turn input.
                 If True, the prompts are not concatenated.
+            preamble: a string to be added before the prompts
             data: a list of dictionaries with the data.
                 This will rerun the experiment with the data as input.
                 If the data is not provided for the full experiment,
@@ -140,6 +142,7 @@ class Experiment:
                     multi_turn,
                     datum_index,
                     data,
+                    preamble,
                 )
         return out_data, prompts
 
@@ -154,6 +157,7 @@ def run_stimuli(
     multi_turn,
     datum_index,
     data,
+    preamble,
 ):
     for s in stimuli:
         if data and datum_index < len(data):
@@ -161,7 +165,14 @@ def run_stimuli(
         else:
             datum = None
         s._prepare_args_l(timeline_element, out_data, shared_variables, datum)
-        s_out_data, prompts = s.process_l(prompts, get_input, multi_turn, datum)
+
+        def _get_input(_prompt):
+            if not multi_turn or not preamble:
+                return get_input(_prompt)
+            else:
+                return get_input(f"{preamble} {_prompt}")
+
+        s_out_data, prompts = s.process_l(prompts, _get_input, multi_turn, datum)
         out_data.append(s_out_data)
         if s.side_effects:
             s._resolve_side_effects(timeline_element, out_data, shared_variables)
