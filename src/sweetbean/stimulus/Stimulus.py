@@ -269,17 +269,17 @@ def _set_data_text(key, param):
 def _parse_variable(variable, timeline_element, data, shared_variables, se=False):
     if isinstance(variable, list):
         return [
-            _parse_variable(a, timeline_element, data, shared_variables)
+            _parse_variable(a, timeline_element, data, shared_variables, se)
             for a in variable
         ]
     if isinstance(variable, dict):
         return {
-            k: _parse_variable(v, timeline_element, data, shared_variables)
+            k: _parse_variable(v, timeline_element, data, shared_variables, se)
             for k, v in variable.items()
         }
     if isinstance(variable, tuple):
         return tuple(
-            _parse_variable(a, timeline_element, data, shared_variables)
+            _parse_variable(a, timeline_element, data, shared_variables, se)
             for a in variable
         )
     if isinstance(variable, TimelineVariable):
@@ -290,7 +290,7 @@ def _parse_variable(variable, timeline_element, data, shared_variables, se=False
         return data[-variable.window][variable.raw_name]
     if isinstance(variable, FunctionVariable):
         _args = [
-            _parse_variable(a, timeline_element, data, shared_variables)
+            _parse_variable(a, timeline_element, data, shared_variables, se)
             for a in variable.args
         ]
         return variable.fct(*_args)
