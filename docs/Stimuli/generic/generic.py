@@ -16,15 +16,6 @@ instructions = Generic(
     show_clickable_nav=True,
 )
 
-instructions_2 = Generic(
-    type="jsPsychInstructions",
-    pages=[
-        "Welcome to the experiment",
-        "This is the second page of instructions",
-        "This is the final page",
-    ],
-    show_clickable_nav=True,
-)
 block = Block([instructions])
 
 experiment = Experiment([block])
