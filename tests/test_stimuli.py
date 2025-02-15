@@ -14,6 +14,7 @@ excludes = [
     "_BaseStimulus",
     "_KeyboardResponseStimulus",
     "_Template_",
+    "Generic",
 ]
 
 
