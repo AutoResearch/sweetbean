@@ -11,7 +11,7 @@ class Generic(_BaseStimulus):
         used to run experiments on language
     """
 
-    _not_tested: bool = True
+    _not_tested: bool = False
     _js_plugins: list = []
 
     def __init__(
