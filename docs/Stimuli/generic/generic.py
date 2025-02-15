@@ -1,4 +1,5 @@
 """
+(only in pr-release)
 An instructions screen welcoming the participant to the experiment,
 followed by a second page of instructions, and a final page of instructions.
 """
