@@ -27,6 +27,14 @@ jobs:
         python-version: ${{ matrix.python-version }}
         cache: "pip"
 
+    # ✅ Explicitly install dependencies before running tests
+    - name: Install Python dependencies
+      run: |
+          python -m pip install --upgrade pip
+          pip install -e .[dev]
+          pip install pytest  # ✅ Ensures pytest is installed
+      shell: bash
+
     # ✅ Install Chromium based on OS
     - name: Install Chromium (Ubuntu)
       if: runner.os == 'Linux'
@@ -51,8 +59,12 @@ jobs:
           ln -sf $(which chromium-browser || which chromium || which chromium.app/Contents/MacOS/Chromium || echo "C:\Program Files\Chromium\Application\chrome.exe") ~/.local/share/pyppeteer/local-chromium/1181205
       shell: bash
 
+    # ✅ Ensure pytest is available before running tests
+    - name: Check pytest installation
+      run: python -m pytest --version
+
     # ✅ Run tests
     - name: Run tests
       env:
         PYPPETEER_EXECUTABLE_PATH: ${{ env.PYPPETEER_EXECUTABLE_PATH || '/usr/bin/chromium-browser' }}
-      run: pytest tests/
+      run: python -m pytest tests/
