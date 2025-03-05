@@ -14,9 +14,14 @@ from sweetbean.stimulus.Stimulus import _BaseStimulus
 EXCLUDES = {
     "SurveyStimulus",
     "_BaseStimulus",
+    "_Survey",
     "_KeyboardResponseStimulus",
     "_Template_",
     "Generic",
+}
+
+SKIP = {
+    "Video": "Requires a video file",
 }
 
 
@@ -38,8 +43,8 @@ def get_stimuli_list():
                 ):
                     found.append(cls)
 
-    print("Collected stimuli:", [cls.__name__ for cls in found])
-    return found
+    print("Collected stimuli:", [set(cls.__name__ for cls in found)])
+    return list(set(found))
 
 
 # Collect the stimuli classes once
@@ -89,7 +94,6 @@ def test_compile_stimulus(stimulus_class):
     # (Optional) skip known heavy stimulus in CI
     # if os.getenv("CI") and stimulus_class.__name__ == "Bandit":
     #     pytest.skip("Skipping Bandit on CI to avoid crashes.")
-
     # 1) Compile the experiment
     stimulus_instance = stimulus_class()
     experiment = Experiment([Block([stimulus_instance])])
@@ -99,7 +103,18 @@ def test_compile_stimulus(stimulus_class):
     assert os.path.exists(html_path), f"{stimulus_class.__name__} didn't create HTML!"
 
     # 2) Run the HTML in browser
-    asyncio.run(run_experiment_in_browser(html_path))
+    if stimulus_class.__name__ not in SKIP:
+        asyncio.run(run_experiment_in_browser(html_path))
+    else:
+        print(
+            f"Skipping {stimulus_class.__name__} due to: {SKIP[stimulus_class.__name__]}"
+        )
 
     # 3) Cleanup
     os.remove(html_path)
+
+
+if __name__ == "__main__":
+    print([s.__name__ for s in ALL_STIMULI])
+    for s in ALL_STIMULI:
+        test_compile_stimulus(s)
