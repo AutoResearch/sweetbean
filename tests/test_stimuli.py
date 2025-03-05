@@ -28,7 +28,7 @@ async def run_experiment_in_browser(html_path):
     browser = await launch(
         headless=True,
         executablePath=executable_path,
-        args=["--no-sandbox", "--disable-setuid-sandbox"],
+        args=["--no-sandbox", "--disable-setuid-sandbox", "--disable-gpu"],
     )
     page = await browser.newPage()
 
@@ -40,7 +40,7 @@ async def run_experiment_in_browser(html_path):
             console_errors.append(msg.text)
 
     page.on("console", capture_console)
-    await page.goto(file_url)
+    await page.goto(file_url, options={"timeout": 60000, "waitUntil": "networkidle2"})
     await page.waitForSelector("body")
 
     # Check title
