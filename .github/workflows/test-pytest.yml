@@ -25,5 +25,15 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
         cache: "pip"
-    - run: pip install ".[test]"
-    - run: pytest tests/
+    - name: Install system dependencies for Chromium
+      run: sudo apt-get update && sudo apt-get install -y chromium-browser
+
+    - name: Set up Pyppeteer to use system Chromium
+      run: |
+          mkdir -p ~/.local/share/pyppeteer/local-chromium
+          ln -s /usr/bin/chromium-browser ~/.local/share/pyppeteer/local-chromium/1181205
+
+    - name: Run tests
+      env:
+        PYPPETEER_EXECUTABLE_PATH: "/usr/bin/chromium-browser"  # ✅ Force Pyppeteer to use system Chromium
+      run: pytest tests/
