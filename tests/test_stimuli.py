@@ -32,7 +32,9 @@ EXCLUDES = {
 
 async def test_experiment_in_browser(html_path):
     """Ensure that generated experiments run correctly in a headless browser."""
-    browser = await launch(headless=True)
+    browser = await launch(
+        headless=True, args=["--no-sandbox", "--disable-setuid-sandbox"]
+    )
     page = await browser.newPage()
 
     # Convert the file path to an absolute file:// URL
