@@ -71,7 +71,7 @@ jobs:
 
     # ✅ Ensure Pyppeteer uses the correct Chromium path
     - name: Set up Pyppeteer
-      if: runner.os != 'Linux'
+      if: runner.os != 'Windows'
       run: |
           mkdir -p ~/.local/share/pyppeteer/local-chromium
           ln -sf $(which chromium-browser || which chromium || which chromium.app/Contents/MacOS/Chromium) ~/.local/share/pyppeteer/local-chromium/1181205
