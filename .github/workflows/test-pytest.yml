@@ -51,10 +51,17 @@ jobs:
 
     - name: Install Chromium (Windows)
       if: runner.os == 'Windows'
+      shell: powershell
       run: |
-          choco install chromium -y
-          echo "PYPPETEER_EXECUTABLE_PATH=$(where.exe chrome | head -n 1)" >> $GITHUB_ENV
-      shell: bash
+        choco install chromium -y
+        $chromePath = (Get-Command chrome -ErrorAction SilentlyContinue).Source
+        if ($chromePath) {
+            echo "PYPPETEER_EXECUTABLE_PATH=$chromePath" >> $env:GITHUB_ENV
+        } else {
+            echo "Chromium installation failed or not found!" 
+            exit 1
+        }
+      
 
     # ✅ Remove Pyppeteer's auto-downloaded Chromium (forces use of system Chromium)
     - name: Remove Pyppeteer Chromium Cache
@@ -64,7 +71,7 @@ jobs:
 
     # ✅ Ensure Pyppeteer uses the correct Chromium path
     - name: Set up Pyppeteer
-      if: runner.os != 'Windows'
+      if: runner.os != 'Linux'
       run: |
           mkdir -p ~/.local/share/pyppeteer/local-chromium
           ln -sf $(which chromium-browser || which chromium || which chromium.app/Contents/MacOS/Chromium) ~/.local/share/pyppeteer/local-chromium/1181205
@@ -72,10 +79,16 @@ jobs:
 
     - name: Set up Pyppeteer (Windows)
       if: runner.os == 'Windows'
+      shell: powershell
       run: |
-          mkdir -p $HOME/.local/share/pyppeteer/local-chromium
-          cp "$(where.exe chrome | head -n 1)" "$HOME/.local/share/pyppeteer/local-chromium/1181205"
-      shell: bash
+        $chromePath = (Get-Command chrome -ErrorAction SilentlyContinue).Source
+        if ($chromePath) {
+            New-Item -ItemType Directory -Force "$HOME/.local/share/pyppeteer/local-chromium" | Out-Null
+            Copy-Item $chromePath "$HOME/.local/share/pyppeteer/local-chromium/1181205"
+        } else {
+            echo "Chromium path not found!" 
+            exit 1
+        }
 
     # ✅ Check pytest installation
     - name: Check pytest installation
