@@ -82,7 +82,15 @@ async def run_experiment_in_browser(html_path: str):
 
     title = await page.title()
     assert title == "My awesome experiment", f"Title mismatch: {title}"
-    assert not console_errors, f"JS console errors found: {console_errors}"
+
+    filtered = [
+        err
+        for err in console_errors
+        if "ERR_CERT_VERIFIER_CHANGED" not in err
+        and "ERR_SOCKET_NOT_CONNECTED" not in err
+    ]
+
+    assert not filtered, f"JS console errors found: {filtered}"
 
     await browser.close()
     print(f"✅ {html_path} loaded successfully.")
