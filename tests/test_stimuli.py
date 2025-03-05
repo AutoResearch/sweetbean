@@ -2,6 +2,7 @@ import asyncio
 import importlib
 import os
 import pkgutil
+import platform
 import sys
 
 import pytest
@@ -111,12 +112,15 @@ def test_compile_stimulus(stimulus_class):
     assert os.path.exists(html_path), f"{stimulus_class.__name__} didn't create HTML!"
 
     # 2) Run the HTML in browser
-    if stimulus_class.__name__ not in SKIP:
-        asyncio.run(run_experiment_in_browser(html_path))
+    if os.getenv("CI") and platform.system() == "Linux":
+        print("Skipping browser test on CI Ubuntu do to limited resources on GitHub.")
     else:
-        print(
-            f"Skipping {stimulus_class.__name__} due to: {SKIP[stimulus_class.__name__]}"
-        )
+        if stimulus_class.__name__ not in SKIP:
+            asyncio.run(run_experiment_in_browser(html_path))
+        else:
+            print(
+                f"Skipping {stimulus_class.__name__} due to: {SKIP[stimulus_class.__name__]}"
+            )
 
     # 3) Cleanup
     os.remove(html_path)
