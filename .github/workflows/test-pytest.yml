@@ -56,6 +56,12 @@ jobs:
           echo "PYPPETEER_EXECUTABLE_PATH=$(where.exe chrome | head -n 1)" >> $GITHUB_ENV
       shell: bash
 
+    # ✅ Remove Pyppeteer's auto-downloaded Chromium (forces use of system Chromium)
+    - name: Remove Pyppeteer Chromium Cache
+      run: rm -rf ~/Library/Application\ Support/pyppeteer/local-chromium
+      if: runner.os == 'macOS'
+      shell: bash
+
     # ✅ Ensure Pyppeteer uses the correct Chromium path
     - name: Set up Pyppeteer
       if: runner.os != 'Windows'

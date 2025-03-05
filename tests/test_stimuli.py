@@ -32,8 +32,14 @@ EXCLUDES = {
 
 async def test_experiment_in_browser(html_path):
     """Ensure that generated experiments run correctly in a headless browser."""
+
+    # Force Pyppeteer to use the system-installed Chromium
+    executable_path = os.getenv("PYPPETEER_EXECUTABLE_PATH", None)
+
     browser = await launch(
-        headless=True, args=["--no-sandbox", "--disable-setuid-sandbox"]
+        headless=True,
+        executablePath=executable_path,  # ✅ Explicitly set the Chromium path
+        args=["--no-sandbox", "--disable-setuid-sandbox"],
     )
     page = await browser.newPage()
 
