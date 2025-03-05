@@ -112,7 +112,9 @@ def test_compile_stimulus(stimulus_class):
     assert os.path.exists(html_path), f"{stimulus_class.__name__} didn't create HTML!"
 
     # 2) Run the HTML in browser
-    if os.getenv("CI") and platform.system() == "Linux":
+    if os.getenv("CI") and (
+        platform.system() == "Linux" or platform.system() == "Windows"
+    ):
         print("Skipping browser test on CI Ubuntu do to limited resources on GitHub.")
     else:
         if stimulus_class.__name__ not in SKIP:
