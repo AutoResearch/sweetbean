@@ -113,6 +113,11 @@ jobs:
     - name: Check pytest installation
       run: python -m pytest --version
 
+    - name: Check Chromium version
+      run: |
+        which chromium-browser
+        chromium-browser --version
+
     # 9) Run tests
     - name: Run tests
       env:

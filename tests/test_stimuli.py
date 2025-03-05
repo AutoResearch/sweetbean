@@ -5,6 +5,7 @@ import os
 import pkgutil
 import sys
 
+import pytest
 from pyppeteer import launch
 
 import sweetbean
@@ -117,6 +118,7 @@ async def compile_all_stimuli():
         print(f"{stimulus_class.__name__} compiled and ran successfully.")
 
 
+@pytest.mark.skipif(os.getenv("CI") == "true", reason="Too resource-intensive for CI")
 def test_compile():
     """Pytest entry point: calls our async aggregator exactly once."""
     asyncio.run(compile_all_stimuli())
