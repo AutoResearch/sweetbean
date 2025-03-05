@@ -62,7 +62,7 @@ async def run_experiment_in_browser(html_path: str):
 
     # Wait a moment if needed to stabilize heavy stimuli
     await page.waitForSelector("body")
-    await page.waitForTimeout(1000)  # 1-second extra wait for reliability
+    # await page.waitForTimeout(1000)  # 1-second extra wait for reliability
 
     # Basic checks
     title = await page.title()
