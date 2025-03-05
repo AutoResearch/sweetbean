@@ -3,6 +3,7 @@ import inspect
 import os
 import re
 import subprocess
+import sys
 import tempfile
 import textwrap
 
@@ -128,7 +129,7 @@ def _fct_to_js(func):
 
             # Run Transcrypt to transpile the temporary file
             subprocess.run(
-                ["transcrypt", "-b", temp_path],
+                [sys.executable, "-m", "transcrypt", "-b", temp_path],
                 check=True,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
