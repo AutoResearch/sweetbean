@@ -79,6 +79,7 @@ extra_javascript:
 
 nav:
   - Introduction: 'index.md'
+  - Installation & Compatibility: 'installation.md'
   - Basic Tutorials: Basic Tutorials/
   - Use Case Tutorials: Use Case Tutorials/
   - User Guide:
