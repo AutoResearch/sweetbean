@@ -30,7 +30,7 @@ EXCLUDES = {
 }
 
 
-async def test_experiment_in_browser(html_path):
+async def run_experiment_in_browser(html_path):
     """Ensure that generated experiments run correctly in a headless browser."""
 
     # Force Pyppeteer to use the system-installed Chromium
@@ -105,7 +105,7 @@ def test_compile():
         assert os.path.exists(
             "basic.html"
         ), f"{stimulus.__name__} failed to generate HTML."
-        asyncio.run(test_experiment_in_browser("basic.html"))
+        asyncio.run(run_experiment_in_browser("basic.html"))
         os.remove("basic.html")
         print(f"{stimulus.__name__} compiled successfully.")
 
