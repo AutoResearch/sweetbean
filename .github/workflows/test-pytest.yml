@@ -44,7 +44,10 @@ jobs:
 
     - name: Install Chromium (macOS)
       if: runner.os == 'macOS'
-      run: brew install chromium
+      run: |
+          brew install chromium
+          echo "PYPPETEER_EXECUTABLE_PATH=$(which chromium)" >> $GITHUB_ENV
+      shell: bash
 
     - name: Install Chromium (Windows)
       if: runner.os == 'Windows'
