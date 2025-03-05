@@ -27,12 +27,12 @@ jobs:
         python-version: ${{ matrix.python-version }}
         cache: "pip"
 
-    # ✅ Explicitly install dependencies before running tests
+    # ✅ Explicitly install dependencies
     - name: Install Python dependencies
       run: |
           python -m pip install --upgrade pip
           pip install -e .[dev]
-          pip install pytest  # ✅ Ensures pytest is installed
+          pip install pytest
       shell: bash
 
     # ✅ Install Chromium based on OS
@@ -49,17 +49,26 @@ jobs:
     - name: Install Chromium (Windows)
       if: runner.os == 'Windows'
       run: |
-          choco install chromium
-          echo "PYPPETEER_EXECUTABLE_PATH=C:\Program Files\Chromium\Application\chrome.exe" >> $GITHUB_ENV
-
-    # ✅ Set up Pyppeteer to use system Chromium
-    - name: Set up Pyppeteer
-      run: |
-          mkdir -p ~/.local/share/pyppeteer/local-chromium
-          ln -sf $(which chromium-browser || which chromium || which chromium.app/Contents/MacOS/Chromium || echo "C:\Program Files\Chromium\Application\chrome.exe") ~/.local/share/pyppeteer/local-chromium/1181205
+          choco install chromium -y
+          echo "PYPPETEER_EXECUTABLE_PATH=$(where.exe chrome | head -n 1)" >> $GITHUB_ENV
       shell: bash
 
-    # ✅ Ensure pytest is available before running tests
+    # ✅ Ensure Pyppeteer uses the correct Chromium path
+    - name: Set up Pyppeteer
+      if: runner.os != 'Windows'
+      run: |
+          mkdir -p ~/.local/share/pyppeteer/local-chromium
+          ln -sf $(which chromium-browser || which chromium || which chromium.app/Contents/MacOS/Chromium) ~/.local/share/pyppeteer/local-chromium/1181205
+      shell: bash
+
+    - name: Set up Pyppeteer (Windows)
+      if: runner.os == 'Windows'
+      run: |
+          mkdir -p $HOME/.local/share/pyppeteer/local-chromium
+          cp "$(where.exe chrome | head -n 1)" "$HOME/.local/share/pyppeteer/local-chromium/1181205"
+      shell: bash
+
+    # ✅ Check pytest installation
     - name: Check pytest installation
       run: python -m pytest --version
 
