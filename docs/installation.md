@@ -12,7 +12,7 @@ pip install sweetbean
 
 SweetBean is compatible with:
 
-- **Python**: `>=3.7, <4.0`  
+- **Python**: `>=3.9, <4.0`  
 - **jsPsych**: `7.x`  
 
 Other versions may work but are not officially supported. If you experience issues, please report them!
