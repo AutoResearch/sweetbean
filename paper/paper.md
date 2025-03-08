@@ -40,6 +40,18 @@ Another challenge in behavioral research is the integration of LLMs into the exp
 
 Beyond reducing technical barriers and facilitating alignment between machines and humans, `sweetbean` enhances reproducibility and collaboration by standardizing experiment specifications within a flexible and intuitive framework. This standardization not only saves time but also provides more robust and scalable experimental workflows for the behavioral research community.
 
+# When to Use SweetBean, jsPsych, or PsychoPy?
+
+Several tools exist for designing and running behavioral experiments, each with different strengths depending on the research context. Here, we focus on `sweetbean`, `jsPsych`, and `PsychoPy` due to their prominence in web-based and Python-based experiment design.
+
+The choice between `sweetbean`, `jsPsych`, and `PsychoPy` depends on the researcher’s needs, technical expertise, and experimental requirements:
+
+- Use `sweetbean` if you are comfortable with Python and want a declarative workflow that integrates with Python-based tools for experimental design, analysis, and automation. `Sweetbean` is particularly useful for comparing LLM-based experiments with human participants or embedding experiment generation within an automated research pipeline using `sweetpea` and `autora`. It is designed to be accessible and simple, but it is not as feature-rich or general-purpose as `jsPsych` or `PsychoPy`. While existing `jsPsych` plugins may not be directly supported, new plugins can be added based on community demand.
+
+- Use `jsPsych` if you require full flexibility in JavaScript and access to its extensive ecosystem of extensions. If deep customization of experiment logic or fine-tuned control over the execution environment is necessary, `jsPsych` is the better choice. Maintained by a large community, it offers a broader range of plugins and features compared to `sweetbean`. Use `jsPsych` if you need a general-purpose tool for online experiments and are comfortable working with JavaScript.
+
+- Use `PsychoPy` if you prefer a GUI-based approach or need to run experiments offline. While `PsychoPy` supports Python scripting, it is primarily designed for local (rather than web-based) experiments. It is a powerful tool for designing and running a wide range of studies, particularly those requiring precise timing and control over stimulus presentation. Use `PsychoPy` if you want a GUI-based experience, need to run experiments offline, or require high-precision timing control.
+
 # Acknowledgements
 Y. S. and S.M. were supported by the Carney BRAINSTORM program at Brown University, as well as the National Science Foundation (2318549). S. M. also received support from Schmidt Science Fellows, in partnership with the Rhodes Trust.
 
