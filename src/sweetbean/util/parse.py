@@ -1,11 +1,13 @@
 import ast
 import inspect
+import io
 import os
 import re
-import subprocess
 import sys
 import tempfile
 import textwrap
+
+from transcrypt.__main__ import main as transcrypt_main
 
 
 def to_js(var):
@@ -75,7 +77,7 @@ def _var_to_js(var):
 
 def _fct_to_js(func):
     """
-    Convert a Python function to JavaScript using Transcrypt.
+    Convert a Python function to JavaScript using Transcrypt, without using subprocess.
 
     Examples:
     # >>> def add(a, b):
@@ -110,15 +112,15 @@ def _fct_to_js(func):
             f"the FunctionVariable instead."
         )
 
+    # Extract and pre-process the function's source
     try:
-        # Extract the source code of the function
         source_code = inspect.getsource(func)
         source_code = textwrap.dedent(source_code)
         source_code = replace_operators_with_functions(source_code)
     except Exception as e:
-        raise Exception(f"Error during conversion: {e}")
+        raise Exception(f"Error during conversion: {e}") from e
 
-        # Use a temporary directory to store the necessary files
+    # Use a temporary directory to store the necessary files
     with tempfile.TemporaryDirectory() as temp_dir:
         temp_path = os.path.join(temp_dir, "temp_script.py")
 
@@ -129,30 +131,41 @@ def _fct_to_js(func):
         if not os.path.exists(temp_path):
             raise FileNotFoundError(f"Temporary file not found at: {temp_path}")
 
-        # Run Transcrypt to transpile the temporary file
+        # Call Transcrypt directly, avoiding subprocess
+        old_cwd = os.getcwd()
+        old_argv = sys.argv[:]
+        output_buffer = io.StringIO()
         try:
-            subprocess.run(
-                [sys.executable, "-m", "transcrypt", "-b", temp_path],
-                check=True,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-            )
-        except subprocess.CalledProcessError as e:
-            error_output = (
-                e.stderr.decode("utf-8") if e.stderr else "No detailed error provided."
-            )
+            os.chdir(temp_dir)
+            # Replace sys.argv so Transcrypt reads the same flags as subprocess
+            sys.argv = [sys.argv[0], "-b", "temp_script.py"]
+
+            # Capture Transcrypt's console output
+            saved_stdout = sys.stdout
+            sys.stdout = output_buffer
+
+            exit_code = transcrypt_main()
+
+        finally:
+            # Restore environment
+            sys.argv = old_argv
+            os.chdir(old_cwd)
+            sys.stdout = saved_stdout
+
+        # Check if Transcrypt failed
+        if exit_code != 0:
+            error_output = output_buffer.getvalue()
+            if not error_output:
+                error_output = "No detailed error provided."
             raise RuntimeError(
-                f"Error occurred during execution. Return code: {e.returncode}.\n"
+                f"Error occurred during execution. Return code: {exit_code}.\n"
                 f"Output: {error_output}."
             )
-        except Exception as e:
-            raise RuntimeError(f"Unexpected error occurred during execution: {str(e)}.")
 
-        # Locate the JavaScript output in the `__javascript__` folder
+        # Locate the JavaScript output in the __target__ folder
         js_output_dir = os.path.join(temp_dir, "__target__")
         js_output_path = os.path.join(js_output_dir, "temp_script.js")
 
-        # Check if the JavaScript file exists
         if not os.path.exists(js_output_path):
             raise FileNotFoundError(f"JavaScript file not found: {js_output_path}")
 
@@ -160,6 +173,7 @@ def _fct_to_js(func):
         with open(js_output_path, "r") as js_file:
             full_js_code = js_file.read()
 
+    # Finally, parse out the final arrow function from the compiled JS
     return _extract_arrow_function(full_js_code)
 
 
