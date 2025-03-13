@@ -115,42 +115,52 @@ def _fct_to_js(func):
         source_code = inspect.getsource(func)
         source_code = textwrap.dedent(source_code)
         source_code = replace_operators_with_functions(source_code)
+    except Exception as e:
+        raise Exception(f"Error during conversion: {e}")
 
         # Use a temporary directory to store the necessary files
-        with tempfile.TemporaryDirectory() as temp_dir:
-            temp_path = os.path.join(temp_dir, "temp_script.py")
+    with tempfile.TemporaryDirectory() as temp_dir:
+        temp_path = os.path.join(temp_dir, "temp_script.py")
 
-            # Write the function's source code to a temporary Python file
-            with open(temp_path, "w") as temp_file:
-                temp_file.write(source_code)
+        # Write the function's source code to a temporary Python file
+        with open(temp_path, "w") as temp_file:
+            temp_file.write(source_code)
 
-            if not os.path.exists(temp_path):
-                raise FileNotFoundError(f"Temporary file not found at: {temp_path}")
+        if not os.path.exists(temp_path):
+            raise FileNotFoundError(f"Temporary file not found at: {temp_path}")
 
-            # Run Transcrypt to transpile the temporary file
+        # Run Transcrypt to transpile the temporary file
+        try:
             subprocess.run(
                 [sys.executable, "-m", "transcrypt", "-b", temp_path],
                 check=True,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
             )
+        except subprocess.CalledProcessError as e:
+            error_output = (
+                e.stderr.decode("utf-8") if e.stderr else "No detailed error provided."
+            )
+            raise RuntimeError(
+                f"Error occurred during execution. Return code: {e.returncode}.\n"
+                f"Output: {error_output}."
+            )
+        except Exception as e:
+            raise RuntimeError(f"Unexpected error occurred during execution: {str(e)}.")
 
-            # Locate the JavaScript output in the `__javascript__` folder
-            js_output_dir = os.path.join(temp_dir, "__target__")
-            js_output_path = os.path.join(js_output_dir, "temp_script.js")
+        # Locate the JavaScript output in the `__javascript__` folder
+        js_output_dir = os.path.join(temp_dir, "__target__")
+        js_output_path = os.path.join(js_output_dir, "temp_script.js")
 
-            # Check if the JavaScript file exists
-            if not os.path.exists(js_output_path):
-                raise FileNotFoundError(f"JavaScript file not found: {js_output_path}")
+        # Check if the JavaScript file exists
+        if not os.path.exists(js_output_path):
+            raise FileNotFoundError(f"JavaScript file not found: {js_output_path}")
 
-            # Read the full JavaScript code
-            with open(js_output_path, "r") as js_file:
-                full_js_code = js_file.read()
+        # Read the full JavaScript code
+        with open(js_output_path, "r") as js_file:
+            full_js_code = js_file.read()
 
-        return _extract_arrow_function(full_js_code)
-
-    except Exception as e:
-        return f"Error during conversion: {e}"
+    return _extract_arrow_function(full_js_code)
 
 
 def _extract_arrow_function(js_code):
