@@ -253,7 +253,6 @@ def create_stimulus_sequence(
         )  # Slightly below the arrow
         text = f"{timing} ms" if timing is not None else "Until\nresponse"
         align = "left" if timing is not None else "center"
-        print(align)
         bbox = draw.textbbox(
             (0, 0), text, font=font, align=align
         )  # Top-left corner for measurement
