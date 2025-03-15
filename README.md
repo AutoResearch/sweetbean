@@ -32,10 +32,16 @@ pip install sweetbean
 
 ## Compatibility
 
-SweetBean is compatible with:
+SweetBean is compatible with the following version of jsPsych:
+
+- **jsPsych**: `7.x`  
+
+### Dependencies
+
+Sweetbean has the following dependencies that need to be installed on your system:
 
 - **Python**: `>=3.9, <4.0`  
-- **jsPsych**: `7.x`  
+- **java**: `>=19`
 
 Other versions may work but are not officially supported. If you experience issues, please report them!
 
@@ -46,6 +52,7 @@ The following Python packages are required and will be installed automatically v
 - `transcrypt`
 - `pyppeteer`
 - `pillow`
+
 
 ### jsPsych Plugins
 SweetBean **does not support all jsPsych plugins**, but new plugins are added regularly.  
