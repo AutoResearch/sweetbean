@@ -10,10 +10,16 @@ pip install sweetbean
 
 ## Compatibility
 
-SweetBean is compatible with:
+SweetBean is compatible with the following version of jsPsych:
+
+- **jsPsych**: `7.x`  
+
+### Dependencies
+
+Sweetbean has the following dependencies that need to be installed on your system:
 
 - **Python**: `>=3.9, <4.0`  
-- **jsPsych**: `7.x`  
+- **java**
 
 Other versions may work but are not officially supported. If you experience issues, please report them!
 
