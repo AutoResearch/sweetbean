@@ -41,7 +41,7 @@ SweetBean is compatible with the following version of jsPsych:
 Sweetbean has the following dependencies that need to be installed on your system:
 
 - **Python**: `>=3.9, <4.0`  
-- **java**: `>=17.0`
+- **java**
 
 Other versions may work but are not officially supported. If you experience issues, please report them!
 

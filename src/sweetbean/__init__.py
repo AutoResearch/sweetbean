@@ -7,39 +7,13 @@ from sweetbean.experiment import Experiment
 
 
 def check_java():
-    """Ensure that Java 17+ is installed."""
+    """Ensure that Java is installed."""
     java_path = shutil.which("java")
     if java_path is None:
         sys.stderr.write(
-            "\n❌ Error: Java is required but not found.\n"
-            "   Please install Java 17+ using one of the following:\n"
-            "   - macOS: brew install openjdk@17\n"
-            "   - Ubuntu/Debian: sudo apt install openjdk-17-jdk\n"
-            "   - Windows: Download Java from https://jdk.java.net/archive/\n"
+            "\nError: Java is required but not found.\n"
+            "   Please install Java using one of the following.\n"
         )
-        sys.exit(1)
-
-    try:
-        output = subprocess.run(
-            ["java", "-version"],
-            stdout=subprocess.PIPE,  # Use PIPE explicitly
-            stderr=subprocess.PIPE,  # Redirect stderr explicitly
-            text=True,
-        )
-        version_line = output.stderr.splitlines()[
-            0
-        ]  # Java prints version info to stderr
-        version = version_line.split('"')[1]
-        major_version = int(version.split(".")[0])
-
-        if major_version < 17:
-            sys.stderr.write(
-                f"\n❌ Error: Java 17+ is required. Found Java {major_version}.\n"
-            )
-            sys.exit(1)
-
-    except Exception as e:
-        sys.stderr.write(f"\n❌ Error: Java is required but could not be checked: {e}\n")
         sys.exit(1)
 
 
