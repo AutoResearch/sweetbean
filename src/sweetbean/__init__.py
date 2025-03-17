@@ -18,21 +18,26 @@ def check_java():
             "   - Windows: Download Java from https://jdk.java.net/archive/\n"
         )
         sys.exit(1)
+
     try:
         output = subprocess.run(
             ["java", "-version"],
-            capture_output=True,
+            stdout=subprocess.PIPE,  # Use PIPE explicitly
+            stderr=subprocess.PIPE,  # Redirect stderr explicitly
             text=True,
-            stderr=subprocess.STDOUT,
         )
-        version_line = output.stdout.splitlines()[0]
+        version_line = output.stderr.splitlines()[
+            0
+        ]  # Java prints version info to stderr
         version = version_line.split('"')[1]
         major_version = int(version.split(".")[0])
+
         if major_version < 19:
             sys.stderr.write(
                 f"\n❌ Error: Java 19+ is required. Found Java {major_version}.\n"
             )
             sys.exit(1)
+
     except Exception as e:
         sys.stderr.write(f"\n❌ Error: Java is required but could not be checked: {e}\n")
         sys.exit(1)
