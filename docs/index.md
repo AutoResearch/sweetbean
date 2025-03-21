@@ -65,7 +65,26 @@ SweetBean is just one part of a powerful set of tools designed to streamline and
 
 ## Citation
 
-If you would like to reference SweetBean in a publication, you can use the following BibTeX entry referencing the associated [publication in the Journal of Open Source Software](https://joss.theoj.org/papers/10.21105/joss.07703:
+If you would like to reference SweetBean in a publication, you can use the following BibTeX entry referencing the associated [publication in the Journal of Open Source Software](https://joss.theoj.org/papers/10.21105/joss.07703):
+
+```bibtex
+@article{Strittmatter2025, doi = {10.21105/joss.07703},
+author = {Younes Strittmatter and Sebastian Musslick},
+title = {SweetBean: A declarative language for behavioral experiments with human and artificial participants},
+url = {https://doi.org/10.21105/joss.07703}, 
+year = {2025}, 
+publisher = {The Open Journal}, 
+volume = {10}, 
+number = {107}, 
+pages = {7703}, 
+journal = {Journal of Open Source Software},
+doi = {10.21105/joss.07703}
+}
+```
+
+## Citation
+
+If you would like to reference SweetBean in a publication, you can use the following BibTeX entry referencing the associated [publication in the Journal of Open Source Software](https://joss.theoj.org/papers/10.21105/joss.07703):
 
 ```bibtex
 @article{Strittmatter2025, doi = {10.21105/joss.07703},

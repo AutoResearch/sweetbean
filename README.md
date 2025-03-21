@@ -55,7 +55,6 @@ The following Python packages are required and will be installed automatically v
 - `pyppeteer`
 - `pillow`
 
-
 ### jsPsych Plugins
 SweetBean **does not support all jsPsych plugins**, but new plugins are added regularly.  
 If you need support for a specific jsPsych plugin, please open an issue **[here](https://github.com/AutoResearch/sweetbean/issues).**
@@ -78,7 +77,7 @@ We are always interested in collaborating! If you like our work but need some ta
 
 ## Citation
 
-If you would like to reference SweetBean in a publication, you can use the following BibTeX entry referencing the associated [publication in the Journal of Open Source Software](https://joss.theoj.org/papers/10.21105/joss.07703:
+If you would like to reference SweetBean in a publication, you can use the following BibTeX entry referencing the associated [publication in the Journal of Open Source Software](https://joss.theoj.org/papers/10.21105/joss.07703):
 
 ```bibtex
 @article{Strittmatter2025, doi = {10.21105/joss.07703},
