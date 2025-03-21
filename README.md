@@ -3,6 +3,8 @@
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/sweetbean)
 ![Link to docs](https://img.shields.io/badge/Docs-autoresearch.github.io/sweetbean-purple)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![DOI](https://joss.theoj.org/papers/10.21105/joss.07703/status.svg)](https://doi.org/10.21105/joss.07703)
+
 
 # SweetBean
 
@@ -73,6 +75,25 @@ We are open to contributions to SweetBean. More information can be found [here](
 ## Collaborating
 
 We are always interested in collaborating! If you like our work but need some tailoring for your specific use case, please contact [ystrittmatter@princeton.edu](mailto:ystrittmatter@princeton.edu).
+
+## Citation
+
+If you would like to reference SweetBean in a publication, you can use the following BibTeX entry referencing the associated [publication in the Journal of Open Source Software](https://joss.theoj.org/papers/10.21105/joss.07703:
+
+```bibtex
+@article{Strittmatter2025, doi = {10.21105/joss.07703},
+author = {Younes Strittmatter and Sebastian Musslick},
+title = {SweetBean: A declarative language for behavioral experiments with human and artificial participants},
+url = {https://doi.org/10.21105/joss.07703}, 
+year = {2025}, 
+publisher = {The Open Journal}, 
+volume = {10}, 
+number = {107}, 
+pages = {7703}, 
+journal = {Journal of Open Source Software},
+doi = {10.21105/joss.07703}
+}
+```
 
 ## About
 

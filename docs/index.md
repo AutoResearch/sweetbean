@@ -63,6 +63,25 @@ SweetBean is just one part of a powerful set of tools designed to streamline and
 
 - [AutoRA](https://autoresearch.github.io/autora/): A Python platform for **automated behavioral research**, helping you design, execute and analyze behavioral experiments in a closed loop. Experiments created with SweetBean can be implemented via AutoRA to collect data from human participants. Even if you are not planning to automate your research in a closed loop, AutoRA can help you set up and run experiments without the need of your own server and collect data from real participants via [Prolific](https://www.prolific.com/).
 
+## Citation
+
+If you would like to reference SweetBean in a publication, you can use the following BibTeX entry referencing the associated [publication in the Journal of Open Source Software](https://joss.theoj.org/papers/10.21105/joss.07703:
+
+```bibtex
+@article{Strittmatter2025, doi = {10.21105/joss.07703},
+author = {Younes Strittmatter and Sebastian Musslick},
+title = {SweetBean: A declarative language for behavioral experiments with human and artificial participants},
+url = {https://doi.org/10.21105/joss.07703}, 
+year = {2025}, 
+publisher = {The Open Journal}, 
+volume = {10}, 
+number = {107}, 
+pages = {7703}, 
+journal = {Journal of Open Source Software},
+doi = {10.21105/joss.07703}
+}
+```
+
 ## About
 
 This project is in active development by
