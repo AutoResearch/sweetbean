@@ -83,13 +83,16 @@ class Experiment:
         Return the experiment as a JavaScript string
         """
         text = FUNCTION_PREAMBLE(is_async) if as_function else ""
+        extensions = ""
         for b in self.blocks:
             b.to_js()
+            extensions += _initialize_extensions(b.extensions)
             for s in b.stimuli:
+
                 shared_variables = s.return_shared_variables()
                 for s_key in shared_variables:
                     text += f"{shared_variables[s_key].set()}\n"
-        text += "const jsPsych = initJsPsych()\n"
+        text += f"const jsPsych = initJsPsych({extensions})\n"
         text += "const trials = [\n"
         for b in self.blocks:
             text += b.js
