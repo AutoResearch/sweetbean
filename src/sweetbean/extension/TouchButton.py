@@ -4,9 +4,17 @@ import textwrap
 
 
 class TouchButton:
-    """ """
+    """
+    A class to create touch buttons as input instead of key presses
+    (https://github.com/jspsych/jspsych-contrib/tree/main/packages/extension-touchscreen-buttons)
+    """
 
     def __init__(self, key, layout):
+        """
+        Arguments:
+            key: the key that is emulated by the touch button
+            layout: the layout of the touch button
+        """
         self.key = key
         self.layout = layout
 
@@ -20,20 +28,62 @@ class TouchButton:
         return hash(self.key)
 
     @classmethod
-    def left(cls):
+    def left(cls, color=None):
+        """
+        Convenience Function to create a touch button on the left side of the screen
+        """
+        if color is None:
+            color = "#fff"
+        return cls(key="l", layout={"key": "l", "color": color, "preset": "left"})
+
+    @classmethod
+    def right(cls, color=None):
+        """
+        Convenience Function to create a touch button on the right side of the screen
+        """
+        if color is None:
+            color = "#fff"
+        return cls(key="r", layout={"key": "r", "color": color, "preset": "right"})
+
+    @classmethod
+    def bottom_left(cls, color=None):
+        """
+        Convenience Function to create a touch button on the bottom left side of the screen
+        """
+        if color is None:
+            color = "#fff"
         return cls(
-            key="l", layout={"key": "l", "color": "#fff", "preset": "bottom_left"}
+            key="l", layout={"key": "l", "color": color, "preset": "bottom_left"}
         )
 
     @classmethod
-    def right(cls):
+    def bottom_right(cls, color=None):
+        """
+        Convenience Function to create a touch button on the bottom right side of the screen
+        """
+        if color is None:
+            color = "#fff"
         return cls(
-            key="r", layout={"key": "r", "color": "#fff", "preset": "bottom_right"}
+            key="r", layout={"key": "r", "color": color, "preset": "bottom_right"}
         )
 
+    @classmethod
+    def top_left(cls, color=None):
+        """
+        Convenience Function to create a touch button on the top left side of the screen
+        """
+        if color is None:
+            color = "#fff"
+        return cls(key="l", layout={"key": "l", "color": color, "preset": "top_left"})
 
-# TouchButton.Left = TouchButton.left()
-# TouchButton.Right = TouchButton.right()
+    @classmethod
+    def top_right(cls, color=None):
+        """
+        Convenience Function to create a touch button on the top right side of the screen
+        """
+        if color is None:
+            color = "#fff"
+        return cls(key="r", layout={"key": "r", "color": color, "preset": "top_right"})
 
 
 class _TouchButtonReplacer(ast.NodeTransformer):
