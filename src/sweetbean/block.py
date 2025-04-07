@@ -2,7 +2,7 @@ import asyncio
 import io
 import math
 import random
-from typing import Any, List
+from typing import Any, Dict, List
 
 from PIL import Image, ImageDraw, ImageFont
 from pyppeteer import launch
@@ -19,6 +19,7 @@ class Block:
     stimuli: List[Any] = []
     js = ""
     timeline = None
+    extensions: Dict = {}
 
     def __init__(self, stimuli, timeline=None):
         """
@@ -30,10 +31,12 @@ class Block:
             timeline = []
         self.stimuli = stimuli
         self.timeline = timeline
+        self.extensions["touch_layouts"] = []
 
     def to_js(self):
         self.js = "{timeline: ["
         for s in self.stimuli:
+            self.extensions["touch_layouts"].append(s.create_touch_layout())
             s.to_js()
             self.js += s.js + ","
         self.js = self.js[:-1]

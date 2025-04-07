@@ -92,5 +92,6 @@ nav:
       - LLM - Synthetic Participant: 'User Guide/llm_synthetic_participant.md'
       - Automated Generation of Stimulus Sequence Figures: 'User Guide/documentation_stimulus_sequence.md'
       - Stimuli: Stimuli/
+      - Extensions: Extensions/
   - Contributor Guide: 'CONTRIBUTING.md'
   - Code Reference: reference/

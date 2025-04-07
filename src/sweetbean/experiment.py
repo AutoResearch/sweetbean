@@ -28,8 +28,10 @@ class Experiment:
     def to_js(self, path_local_download=None):
         self.js = ""
         shared_variables = {}
+        extensions = ""
         for b in self.blocks:
             b.to_js()
+            extensions += _initialize_extensions(b.extensions)
             for s in b.stimuli:
                 shared_variables.update(s.return_shared_variables())
         for s_key in shared_variables:
@@ -37,13 +39,13 @@ class Experiment:
         if path_local_download:
             if path_local_download.endswith(".json"):
                 self.js += (
-                    "jsPsych = initJsPsych("
+                    f"jsPsych = initJsPsych({extensions},"
                     f"{{on_finish:()=>jsPsych.data.get().localSave('json',"
                     f"'{path_local_download}')}});\n"
                 )
             elif path_local_download.endswith(".csv"):
                 self.js += (
-                    "jsPsych = initJsPsych("
+                    f"jsPsych = initJsPsych({extensions},\n"
                     f"{{on_finish:()=>jsPsych.data.get().localSave('csv',"
                     f"'{path_local_download}')}});\n"
                 )
@@ -53,7 +55,7 @@ class Experiment:
                     "Only .json or .csv are supported."
                 )
         else:
-            self.js += "jsPsych = initJsPsych();\n"
+            self.js += f"jsPsych = initJsPsych({extensions});\n"
         self.js += "trials = [\n"
         for b in self.blocks:
             self.js += b.js
@@ -186,3 +188,41 @@ def run_stimuli(
             out_data[-1].update(_d)
         datum_index += 1
     return out_data, prompts, shared_variables, datum_index
+
+
+def _initialize_extensions(extensions):
+    all = ""
+    t_l = ""
+    if (
+        "touch_layouts" in extensions
+        and len(extensions["touch_layouts"]) > 0
+        and any(extensions["touch_layouts"])
+    ):
+        t_l += "{type: jsPsychExtensionTouchscreenButtons, params: {"
+        for touch_layout in extensions["touch_layouts"]:
+            if not touch_layout:
+                continue
+            for key, item in touch_layout.items():
+                t_l += f"{key}"
+                t_l += ":["
+                _v = ""
+                if item:
+                    for _k in item:
+                        _v += "{key:"
+                        _v += f'"{_k["key"]}"'
+                        if "color" in _k:
+                            _v += f',color: "{_k["color"]}"'
+                        if "preset" in _k:
+                            _v += f',preset: "{_k["preset"]}"'
+                        _v += "},"
+                if _v:
+                    _v = _v[:-1]
+                t_l += _v
+                t_l += "],"
+            t_l = t_l[:-1]
+            if t_l:
+                t_l += "}"
+    if t_l:
+        all = "{extensions: [" + t_l + "}]},"
+
+    return all
