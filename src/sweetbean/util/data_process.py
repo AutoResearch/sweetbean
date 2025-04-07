@@ -11,9 +11,11 @@ def process(stimulus_data, n_stims, idx=None):
         stimulus_data: the list of stimulus data
         n_stims: the number of stimuli in a sequence (3 in the above example)
     """
-    assert stimulus_data % n_stims == 0
+    if len(stimulus_data) % n_stims != 0:
+        print("Stimulus data could not be processed.")
+        return []
 
-    len_timeline = len(stimulus_data) / n_stims
+    len_timeline = len(stimulus_data) // n_stims
 
     if idx is not None:
         res = [{"exp_id": idx} for _ in range(len_timeline)]
@@ -45,12 +47,20 @@ def process_autora(data, n_stims, as_dict=True):
     """
     res = []
     for idx, subj_d in enumerate(data):
-        _subj_d = subj_d.copy()
-        if type(subj_d) == str:
-            _subj_d = json.loads(subj_d)
-        d = _subj_d["trials"]
-        processed = process(d, n_stims, idx)
-        res += processed
+        try:
+            _subj_d = subj_d
+            if type(subj_d) == str:
+                _subj_d = json.loads(subj_d)
+            d = _subj_d["trials"]
+            processed = process(d, n_stims, idx)
+            res += processed
+        except Exception as e:
+            print(f"ERROR with: {subj_d}, {e}")
     if as_dict:
-        return _list_of_dicts_to_dataframe(res)
+        _as_dict = {}
+        try:
+            _as_dict = _list_of_dicts_to_dataframe(res)
+        except Exception as e:
+            print(f"ERROR with: {res}, {e}")
+        return _as_dict
     return res
