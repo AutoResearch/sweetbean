@@ -1,8 +1,13 @@
+import uuid
 from abc import ABC, abstractmethod
 from typing import List, Union
 
 from jinja2 import Template
 
+from sweetbean.extension.TouchButton import (
+    TouchButton,
+    collect_touch_buttons_from_function,
+)
 from sweetbean.util.parse import to_js
 from sweetbean.variable import (
     DataVariable,
@@ -26,6 +31,7 @@ class _BaseStimulus(ABC):
     l_template: Union[str, None] = None
     l_args: dict = {}
     l_ses: dict = {}
+    extensions = None
 
     def __init__(self, args, side_effects=None):
         self.side_effects = side_effects
@@ -95,6 +101,7 @@ class _BaseStimulus(ABC):
         for key in self.arg:
             if key not in self.arg_js:
                 self._param_to_js_arg(key, self.arg[key])
+        self._add_extensions()
         self._add_special_param()
         self._process_response()
         self._set_before()
@@ -132,6 +139,23 @@ class _BaseStimulus(ABC):
                     se.get_variable, timeline_element, data, shared_variables, se=True
                 )
                 self.l_ses[se.set_variable.name] = get_variable
+
+    def _add_extensions(self):
+        if not self.extensions:
+            return
+        res = "["
+
+        for extension in self.extensions:
+            res += "{"
+            if "type" in extension:
+                res += f'type: {extension["type"]},'
+            if "params" in extension:
+                res += "params: "
+            for param in extension["params"]:
+                res += "{" + param + ':"' + f'{extension["params"][param]}' + '"}'
+            res += "}"
+        res += "],"
+        self.js_body += "extensions:" + res
 
     def process_l(self, prompts, get_input, multi_turn, datum=None):
         prompts.append(self._get_prompt_l())
@@ -193,6 +217,67 @@ class _BaseStimulus(ABC):
                 self.js_data += (
                     f'data["bean_{se.set_variable.name}"]={se.set_variable.name};'
                 )
+
+    def create_touch_layout(self):
+        def get_touch_buttons(arg):
+            buttons = set()
+
+            def _collect(val):
+                if isinstance(val, list):
+                    for item in val:
+                        _collect(item)
+
+                elif isinstance(val, FunctionVariable):
+                    for b in val.args:
+                        _collect(b)
+
+                    func = val.fct
+                    code = func.__code__
+                    global_vars = func.__globals__
+
+                    # Check globals
+                    for name in code.co_names:
+                        if name in global_vars:
+                            value = global_vars[name]
+                            if isinstance(value, TouchButton):
+                                buttons.add(value)
+
+                    # Check closures
+                    if func.__closure__ and code.co_freevars:
+                        for name, cell in zip(code.co_freevars, func.__closure__):
+                            value = cell.cell_contents
+                            if isinstance(value, TouchButton):
+                                buttons.add(value)
+
+                    # NEW: Check for constructors inside the function body
+                    buttons.update(collect_touch_buttons_from_function(func))
+
+                elif isinstance(val, TouchButton):
+                    buttons.add(val)
+
+            _collect(arg)
+            return list(buttons)
+
+        if "choices" not in self.arg_js:
+            return None
+        else:
+            maybe_list = get_touch_buttons(self.arg_js["choices"])
+        layouts = []
+        for key in maybe_list:
+            if isinstance(key, TouchButton):
+                layouts.append(key.layout)
+        if not layouts:
+            return None
+        else:
+            layout_name = f"layout_{uuid.uuid4().hex[:6]}"
+            self.extensions = [
+                {
+                    "type": "jsPsychExtensionTouchscreenButtons",
+                    "params": {"layout": layout_name},
+                }
+            ]
+
+        return {layout_name: layouts}
 
     @abstractmethod
     def _add_special_param(self):

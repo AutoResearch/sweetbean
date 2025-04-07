@@ -9,6 +9,8 @@ import textwrap
 
 from transcrypt.__main__ import main as transcrypt_main
 
+from sweetbean.extension.TouchButton import TouchButton, _TouchButtonReplacer
+
 
 def to_js(var):
     return _var_to_js(var)
@@ -26,6 +28,7 @@ NON_LOCAL_INCLUDES = [
     "sys",
     "json",
     "csv",
+    "TouchButton",
 ]
 
 
@@ -99,9 +102,15 @@ def _fct_to_js(func):
 
     # Find variables used in the function but not defined locally
     non_locals = []
+    replacements = {}
     for varname in code.co_names:
         if varname in global_vars and varname not in NON_LOCAL_INCLUDES:
-            non_locals.append(varname)
+            value = global_vars[varname]
+            if isinstance(value, TouchButton):
+                continue
+            else:
+                non_locals.append(varname)
+
     if non_locals:
         raise ValueError(
             f"Function:\n"
@@ -117,6 +126,12 @@ def _fct_to_js(func):
         source_code = inspect.getsource(func)
         source_code = textwrap.dedent(source_code)
         source_code = replace_operators_with_functions(source_code)
+
+        tree = ast.parse(source_code)
+        tree = _TouchButtonReplacer(replacements).visit(tree)
+        ast.fix_missing_locations(tree)
+        source_code = ast.unparse(tree)
+
     except Exception as e:
         raise Exception(f"Error during conversion: {e}") from e
 
