@@ -57,7 +57,11 @@ def _var_to_js(var):
         _var = var.replace("'", "\\'")
         return f"'{_var}'"
     # test if is sequence
-    if isinstance(var, (list, tuple, set)):
+    if (
+        isinstance(var, (list, tuple, set))
+        or type(var) is {}.keys().__class__
+        or type(var) is {}.values().__class__
+    ):
         res = "["
         for idx, v in enumerate(var):
             res += str(_var_to_js(v))
