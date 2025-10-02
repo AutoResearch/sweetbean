@@ -38,8 +38,8 @@ class Experiment:
             self.js += f"{shared_variables[s_key].set()}\n"
         if path_local_download:
             if path_local_download.endswith(".json"):
-                if extensions != "":
-                    self.js += "sPsych = initJsPsych("
+                if extensions == "":
+                    self.js += "jsPsych = initJsPsych("
                 else:
                     self.js += f"jsPsych = initJsPsych({extensions},"
                 self.js += (
@@ -47,8 +47,8 @@ class Experiment:
                     f"'{path_local_download}')}});\n"
                 )
             elif path_local_download.endswith(".csv"):
-                if extensions != "":
-                    self.js += "sPsych = initJsPsych("
+                if extensions == "":
+                    self.js += "jsPsych = initJsPsych("
                 else:
                     self.js += f"jsPsych = initJsPsych({extensions},"
                 self.js += (
