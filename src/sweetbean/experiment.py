@@ -178,7 +178,7 @@ def run_stimuli(
         s._prepare_args_l(timeline_element, out_data, shared_variables, datum)
 
         def _get_input(_prompt):
-            if not multi_turn or not preamble:
+            if not preamble:
                 return get_input(_prompt)
             else:
                 return get_input(f"{preamble} {_prompt}")
