@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<head>
+<title>My awesome experiment</title><script src="https://unpkg.com/jspsych@7.3.1"></script>
+<script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.2"></script>
+<script src="https://unpkg.com/@jspsych/plugin-survey-text@1.1.2"></script>
+<script src="https://unpkg.com/@jspsych/plugin-survey-multi-choice@1.1.2"></script>
+<script src="https://unpkg.com/@jspsych/plugin-survey-likert@1.1.2"></script>
+<script src="https://unpkg.com/@jspsych/plugin-survey-likert@1.1.2"></script>
+<link href="https://unpkg.com/jspsych@7.3.1/css/jspsych.css" rel="stylesheet" type="text/css"/>
+<script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.1.2"></script>
+<script src="https://unpkg.com/@jspsych/plugin-video-keyboard-response@1.1.2"></script>
+<script src="https://unpkg.com/@jspsych-contrib/plugin-rok@1.1.1"></script>
+<script src="https://unpkg.com/@jspsych-contrib/plugin-html-choice@1.0.0"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetbean@0.0.6/dist/runtime-script.js"></script>
+<script src="https://unpkg.com/@sweet-jspsych/plugin-rsvp@0.2.2/dist/index.browser.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/sweetbean@0.0.6/dist/style/main.css" rel="stylesheet" type="text/css"/>
+<link href="https://cdn.jsdelivr.net/npm/sweetbean@0.0.6/dist/style/bandit.css" rel="stylesheet" type="text/css"/>
+</head>
+<body></body>
+<script>
+jsPsych = initJsPsych();
+trials = [
+{timeline: [{type: jsPsychRsvp,trial_duration:()=>{let trial_duration=null;return trial_duration},background:()=>{let background='#000000';return background},color:()=>{let color='#ffffff';return color},direction:()=>{let direction='row';return direction},stream_order:()=>{let stream_order=null;return stream_order},gap:()=>{let gap='6rem';return gap},token_box_size:()=>{let token_box_size='18vmin';return token_box_size},token_font_size:()=>{let token_font_size='10vmin';return token_font_size},token_padding:()=>{let token_padding='0.25em 0.45em';return token_padding},streams:()=>{let streams=[{'id': 'left','items': ['O','O','Q','O','O','O']},{'id': 'right','items': ['O','O','O','O','Q','O']}];return streams},stimulus_duration:()=>{let stimulus_duration=200;return stimulus_duration},isi:()=>{let isi=40;return isi},mask_html:()=>{let mask_html=null;return mask_html},choices:()=>{let choices='ALL';return choices},end_on_response:()=>{let end_on_response=false;return end_on_response},response_window:()=>{let response_window=null;return response_window},correct_keys:()=>{let correct_keys=null;return correct_keys},decorate_targets:()=>{let decorate_targets=false;return decorate_targets},target_shape:()=>{let target_shape='none';return target_shape},target_stroke:()=>{let target_stroke='3px';return target_stroke},targets:()=>{let targets=[{'stream_id': 'left','index': 2,'correct_keys': ['f'],'shape': 'circle'},{'stream_id': 'right','index': 4,'correct_keys': ['j'],'shape': 'square'}];return targets},record_timestamps:()=>{let record_timestamps=true;return record_timestamps},on_finish:(data)=>{let trial_duration=null;data["bean_trial_duration"]=trial_duration;let background='#000000';data["bean_background"]=background;let color='#ffffff';data["bean_color"]=color;let direction='row';data["bean_direction"]=direction;let stream_order=null;data["bean_stream_order"]=stream_order;let gap='6rem';data["bean_gap"]=gap;let token_box_size='18vmin';data["bean_token_box_size"]=token_box_size;let token_font_size='10vmin';data["bean_token_font_size"]=token_font_size;let token_padding='0.25em 0.45em';data["bean_token_padding"]=token_padding;let streams=[{'id': 'left','items': ['O','O','Q','O','O','O']},{'id': 'right','items': ['O','O','O','O','Q','O']}];data["bean_streams"]=streams;let stimulus_duration=200;data["bean_stimulus_duration"]=stimulus_duration;let isi=40;data["bean_isi"]=isi;let mask_html=null;data["bean_mask_html"]=mask_html;let choices='ALL';data["bean_choices"]=choices;let end_on_response=false;data["bean_end_on_response"]=end_on_response;let response_window=null;data["bean_response_window"]=response_window;let correct_keys=null;data["bean_correct_keys"]=correct_keys;let decorate_targets=false;data["bean_decorate_targets"]=decorate_targets;let target_shape='none';data["bean_target_shape"]=target_shape;let target_stroke='3px';data["bean_target_stroke"]=target_stroke;let targets=[{'stream_id': 'left','index': 2,'correct_keys': ['f'],'shape': 'circle'},{'stream_id': 'right','index': 4,'correct_keys': ['j'],'shape': 'square'}];data["bean_targets"]=targets;let record_timestamps=true;data["bean_record_timestamps"]=record_timestamps;let duration=null;data["bean_duration"]=duration;let type='jsPsychRsvp';data["bean_type"]=type;data["bean_key"] = data["key_press"];data["bean_rt"] = data["rt"];data["bean_any_hit"] = (Array.isArray(data["targets"]) && data["targets"].some(t => t.hit));}}], timeline_variables: []}]
+;jsPsych.run(trials)</script>
+</html>

@@ -17,4 +17,4 @@ trial = RSVP(
 
 block = Block([trial])
 exp = Experiment([block])
-exp.to_html("rsvp_demo.html")
+exp.to_html("rsvp.html")
