@@ -41,7 +41,7 @@ class RSVP(_BaseStimulus):
         #   correct_keys?: ["f","j"]|"ALL"|null, shape?: "none"|"circle"|"square"|"underline",
         #   color?: str, stroke?: str, padding?: str
         # }
-        decorate_targets: bool = False,  # OFF by default
+        decorate_targets: bool = True,  # OFF by default
         target_shape: str = "none",  # default decoration
         target_stroke: str = "3px",
         targets: Optional[List[Dict[str, Any]]] = None,
