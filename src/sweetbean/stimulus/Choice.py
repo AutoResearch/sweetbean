@@ -7,7 +7,12 @@ from sweetbean.variable import FunctionVariable
 
 class HtmlChoice(_BaseStimulus):
     """
-    html elements that can be used to present a choice with a mouse press
+    Clickable HTML choice screen.
+
+    Renders an array of arbitrary HTML elements; a mouse click selects one item.
+    Records `choice` (0-based index) and `value` of the selected item from the
+    provided lists, and mirrors them to `bean_response` and `bean_value`.
+    Supports an optional post-response delay to allow animations to complete.
     """
 
     type = "jsPsychHtmlChoice"
@@ -22,12 +27,27 @@ class HtmlChoice(_BaseStimulus):
     ):
         """
         Arguments:
-            duration (int): The duration of the stimulus
-            html_array (list): An array of html elements that can be clicked
-            values (list): An array of values corresponding to the html elements
-            time_after_response (int): The time after a response is made
-                (for example, for animations)
-            side_effects (dict): A dictionary of side effects
+            duration (int | None): Stimulus display time in ms. If None, runs until a choice is
+                made.
+            html_array (list): List of HTML strings to display as clickable options. Must align 1:1
+                with `values`.
+            values (list): List of opaque values (numbers/strings/objects) mapped to `html_array`
+                items. The selected entry is emitted as both `value` and `bean_value`.
+            time_after_response (int): Extra time in ms after a click before ending the trial
+                (useful for short animations/visual confirmation).
+            side_effects (dict | None): Optional side-effect configuration passed through to the
+            runtime.
+
+        Emits (adds to jsPsych data):
+            - choice (int): 0-based index of the clicked item
+            - value (any): the corresponding entry from `values`
+            - bean_response (int): copy of `choice` for downstream consistency
+            - bean_value (any): copy of `value`
+
+        Notes:
+            - `len(html_array)` should equal `len(values)`. Empty lists are allowed but will yield
+                no clickable options.
+            - This stimulus collects responses via mouse/touch clicks on the provided elements.
         """
         if values is None:
             values = []
@@ -51,7 +71,14 @@ class HtmlChoice(_BaseStimulus):
 
 class Bandit(HtmlChoice):
     """
-    A bandit task.
+    Multi-armed bandit screen built on HtmlChoice.
+
+    Displays N colored “slot machine” squares laid out in a grid. Clicking a square
+    selects that bandit. The grid HTML and the `values` array are generated from
+    `bandits=[{"color": <css_color>, "value": <number/label>}, ...]`. Records the
+    selected index as `choice` and its associated `value`, mirrored to `bean_response`
+    and `bean_value`. Exposes a short post-response window that shows the value of the
+    chosen bandit.
     """
 
     type = "jsPsychHtmlChoice"
@@ -65,12 +92,21 @@ class Bandit(HtmlChoice):
     ):
         """
         Arguments:
-            duration (int): The duration of the stimulus
-            bandits (list): A list of bandits
-                (in the form of dictionaries with entries for color and value)
-            time_after_response (int): The time after a response is made
-                (for example, for animations)
-            side_effects (dict): A dictionary of side effects
+            duration (int | None): Stimulus display time in ms. If None, runs until a bandit is
+                chosen.
+            bandits (list): List of dicts, each with:
+                - color (str): CSS color to outline the square
+                - value (any): payout/label recorded when the bandit is chosen
+            time_after_response (int): Extra time in ms after a click for “slot machine” animation.
+            side_effects (dict | None): Optional side-effect configuration.
+
+        Layout & styling:
+            - Squares are arranged in a near-square grid (rows × cols) computed from N.
+            - CSS custom properties are set before the trial:
+                --slotmachine-time, --slotmachine-time-after  (both ~ time_after_response/2)
+
+        Emits (adds to jsPsych data) — same as HtmlChoice:
+            - choice (int), value (any), bean_response (int), bean_value (any)
         """
         if bandits is None:
             bandits = []

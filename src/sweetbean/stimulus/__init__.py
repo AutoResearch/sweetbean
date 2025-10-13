@@ -1,4 +1,5 @@
 from sweetbean.stimulus.Choice import Bandit, HtmlChoice
+from sweetbean.stimulus.Foraging import Foraging
 from sweetbean.stimulus.Generic import Generic
 from sweetbean.stimulus.HtmlKeyboardResponse import (
     Blank,

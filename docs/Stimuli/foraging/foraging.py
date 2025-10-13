@@ -1,8 +1,6 @@
 from sweetbean.block import Block
 from sweetbean.experiment import Experiment
 from sweetbean.stimulus import Text
-
-# If you put the Foraging wrapper where we discussed:
 from sweetbean.stimulus.Foraging import Foraging
 from sweetbean.variable import TimelineVariable
 
