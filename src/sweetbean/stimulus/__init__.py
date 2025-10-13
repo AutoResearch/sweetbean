@@ -6,6 +6,7 @@ from sweetbean.stimulus.HtmlKeyboardResponse import (
     Feedback,
     Fixation,
     Flanker,
+    HtmlKeyboardResponse,
     Stroop,
     Symbol,
     Text,
