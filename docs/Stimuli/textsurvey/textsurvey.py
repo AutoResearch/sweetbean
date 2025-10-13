@@ -24,4 +24,4 @@ event_sequence = [stim_1, stim_2]
 
 block = Block(event_sequence)
 experiment = Experiment([block])
-experiment.to_html("text_survey.html")
+experiment.to_html("textsurvey.html")

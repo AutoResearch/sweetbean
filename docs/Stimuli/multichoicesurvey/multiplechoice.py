@@ -30,4 +30,4 @@ event_sequence = [stim_1, stim_2]
 
 block = Block(event_sequence)
 experiment = Experiment([block])
-experiment.to_html("multi_choice.html")
+experiment.to_html("multichoice.html")
