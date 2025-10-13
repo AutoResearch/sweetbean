@@ -35,22 +35,13 @@ class RSVP(_BaseStimulus):
         end_on_response: bool = False,
         response_window: Optional[int] = None,  # None => unlimited
         correct_keys: Optional[str] = None,  # e.g., "f,j"
-        # Targets (PLAIN DICTS)
-        # targets: list of {
-        #   stream_id: str, index: int, label?: str, response_window?: int|null,
-        #   correct_keys?: ["f","j"]|"ALL"|null, shape?: "none"|"circle"|"square"|"underline",
-        #   color?: str, stroke?: str, padding?: str
-        # }
         decorate_targets: bool = True,  # OFF by default
         target_shape: str = "none",  # default decoration
         target_stroke: str = "3px",
         targets: Optional[List[Dict[str, Any]]] = None,
-        # Lifetime / data
         trial_duration: Optional[int] = None,
         record_timestamps: bool = True,
-        # SweetBean “duration” (optional) maps to trial_duration for parity with other stimuli
         duration: Optional[int] = None,
-        # SweetBean side effects
         side_effects: Optional[Dict[str, Any]] = None,
     ):
         if streams is None:
