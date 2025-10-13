@@ -5,11 +5,11 @@ The rok presents orientated objects (triangles).
 """
 
 from sweetbean import Block, Experiment
-from sweetbean.stimulus import ROK
+from sweetbean.stimulus import RandomObjectKinematogram
 
 # EVENT SEQUENCE
 
-rok = ROK(
+rok = RandomObjectKinematogram(
     duration=3000,
     number_of_oobs=500,
     coherent_movement_direction=100,
@@ -30,4 +30,4 @@ block.to_image("./", data=None, sequence=False, timeline_idx="random", zoom_fact
 
 # Create an HTML file of the experiment
 experiment = Experiment([block])
-experiment.to_html("rok.html")
+experiment.to_html("randomobjectkinematogram.html")
