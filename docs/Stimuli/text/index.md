@@ -1,6 +1,12 @@
-# Text Stimuli
+# Text
 
-Display colored text (including special characters).
+Show a text string in a chosen color. Optionally collect keyboard responses while the text is on screen.
+
+## When To Use
+
+- Present brief instructions, cues, or labels in text form.
+- Simple Stroop-style text displays (color/word).
+- A lightweight alternative to full HTML when you just need colored text.
 
 ## Example: Flanker Task
 

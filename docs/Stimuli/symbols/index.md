@@ -1,6 +1,11 @@
-# Symbols
+# Symbol
 
-Display colored symbols.
+Show a simple geometric symbol (square, triangle, circle) in a specified color. Can optionally collect keyboard responses.
+
+## When To Use
+
+- Minimal, highly controlled visual tokens.
+- Cues or placeholders with low visual complexity.
 
 ## Example
 
