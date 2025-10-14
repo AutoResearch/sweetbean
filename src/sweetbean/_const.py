@@ -20,6 +20,9 @@ HTML_PREAMBLE = (
     "<script "
     'src="https://unpkg.com/@sweet-jspsych/plugin-foraging@0.2.1/dist/index.browser.min.js">'
     "</script>\n"
+    "<script "
+    'src="https://unpkg.com/@sweet-jspsych/plugin-gabor-array@0.1.1/dist/index.browser.min.js">'
+    "</script>\n"
     '<link href="https://cdn.jsdelivr.net/npm/sweetbean@0.0.6/dist/style/main.css" '
     'rel="stylesheet" type="text/css"/>\n'
     '<link href="https://cdn.jsdelivr.net/npm/sweetbean@0.0.6/dist/style/bandit.css" '
@@ -48,6 +51,7 @@ DEPENDENCIES = {
     "jsPsychHtmlChoice": {"@jspsych-contrib/plugin-html-choice": "1.0.0"},
     "jsPsychRSVP": {"@sweet-jspsych/plugin-rsvp": "0.2.2"},
     "jsPsychForaging": {"@sweet-jspsych/plugin-foraging": "0.2.1"},
+    "jsPsychGaborArray": {"@sweet-jspsych/plugin-gabor-array": "0.1.1"},
 }
 
 AUTORA_PREAMBLE = (
