@@ -67,6 +67,126 @@ class Gabor(_BaseStimulus):
         ] = None,  # alias for trial_duration (consistent with RSVP)
         side_effects: Optional[Dict[str, Any]] = None,
     ):
+        """
+        Arguments:
+            patches (list[dict] | TimelineVariable | None):
+                The Gabor patch specification for this trial. Accepts either a
+                concrete list or a TimelineVariable that evaluates per trial to a
+                list. Each patch dict supports:
+
+                  Required geometry/appearance
+                  - x_px (float): X center in pixels, relative to canvas center.
+                  - y_px (float): Y center in pixels, relative to canvas center.
+                  - orientation_deg (float): Orientation in degrees [0..180).
+                  - contrast (float): Michelson contrast in [0..1].
+                  - phase_deg (float): Phase in degrees [0..360).
+
+                  Spatial frequency (choose one)
+                  - sf_cpp (float): Cycles per pixel, OR
+                  - sf_cpd (float): Cycles per degree (requires px_per_deg).
+
+                  Gaussian size (choose one)
+                  - sigma_px (float): Sigma in pixels, OR
+                  - sigma_deg (float): Sigma in degrees (requires px_per_deg).
+
+                  Optional
+                  - size_px (int): Square draw size in px (defaults to ~6*sigma_px).
+                  - label (str): Arbitrary tag copied to data.
+
+                Example single patch:
+                {
+                    "x_px": 0.0, "y_px": 0.0,
+                    "orientation_deg": 45, "contrast": 0.5, "phase_deg": 0,
+                    "sf_cpd": 3.0,   # uses px_per_deg if provided
+                    "sigma_deg": 0.4 # uses px_per_deg if provided
+                }
+
+            canvas_width (int):
+                Canvas width in pixels. Default 800.
+            canvas_height (int):
+                Canvas height in pixels. Default 600.
+            bg_gray (float):
+                Mean background luminance in [0..1]. Default 0.5.
+            px_per_deg (float | None):
+                Pixels per degree for converting *deg* fields (sigma_deg, sf_cpd)
+                to pixels. If None, deg-based fields are not allowed. Default None.
+            gamma (float):
+                Gamma correction factor for display (1.0 = no correction). Default 1.0.
+
+            trial_duration (int | None):
+                Hard timeout (ms) for the trial. None = no forced timeout. Default None.
+            timeout_ms (int | None):
+                Alias for trial_duration; if set, this takes precedence. Default None.
+            end_on_response (bool):
+                If True, end the trial immediately after a valid response. Default True.
+
+            response_keys (list[str] | None):
+                Allowed keys. If None, defaults to ["ArrowLeft", "ArrowRight"] to
+                match the plugin’s default. Keys can be remapped with
+                keymap_to_patch_index.
+            allow_mouse (bool):
+                If True, clicking selects the nearest patch center. Default True.
+            keymap_to_patch_index (dict[str, int] | None):
+                Optional explicit key→patch index map (e.g., {"f":0, "j":1}).
+                If omitted, the plugin can infer a side-based mapping for arrow keys.
+
+            duration (int | None):
+                SweetBean convenience alias mirrored to `trial_duration` during build.
+                If provided, `trial_duration` is set to this value. Default None.
+            side_effects (dict | None):
+                Optional side-effect configuration passed to the runtime.
+
+        Emits (added to jsPsych data):
+            - bean_rt (number | None): Reaction time in ms.
+            - bean_resp_key (str | None): Key pressed, if any.
+            - bean_resp_side (str | None): Side label derived by the plugin, if any.
+            - bean_chosen_patch (int | None): Selected patch index (0-based).
+            - bean_n_patches (int): Number of patches rendered.
+            - bean_patches (list[dict]): Patch descriptors used on this trial.
+            - bean_onset_ms / bean_offset_ms (number | None): Timing markers.
+
+        Notes:
+            - Provide either pixel- or degree-based size/frequency per patch
+              (sigma_px vs sigma_deg, sf_cpp vs sf_cpd). Degree-based fields require
+              `px_per_deg` to be set.
+            - Use TimelineVariable("patches") if patches vary per trial.
+            - If both `duration` and `trial_duration` are given, `duration` is copied
+              into `trial_duration` (matching other SweetBean stimuli).
+            - Null/None optionals are dropped to let the plugin use its internal defaults.
+
+        Example:
+            from sweetbean import Block, Experiment
+            from sweetbean.variable import TimelineVariable
+            timeline = [
+                {
+                    "patches": [
+                        {
+                            "x_px": -150, "y_px": 0,
+                            "orientation_deg": 30, "contrast": 0.6, "phase_deg": 0,
+                            "sf_cpd": 2.5, "sigma_deg": 0.3,  # requires px_per_deg
+                            "label": "left"
+                        },
+                        {
+                            "x_px": 150, "y_px": 0,
+                            "orientation_deg": 120, "contrast": 0.6, "phase_deg": 90,
+                            "sf_cpd": 2.5, "sigma_deg": 0.3,
+                            "label": "right"
+                        },
+                    ]
+                }
+            ]
+            stim = Gabor(
+                patches=TimelineVariable("patches"),
+                canvas_width=800, canvas_height=600,
+                bg_gray=0.5, px_per_deg=40.0, gamma=1.0,
+                trial_duration=None, end_on_response=True,
+                response_keys=["f","j"],
+                keymap_to_patch_index={"f":0, "j":1},
+            )
+            block = Block([stim], timeline=timeline)
+            Experiment([block]).to_html("gabor.html")
+        """
+
         if patches is None:
             patches = []
 

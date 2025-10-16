@@ -8,8 +8,6 @@ class RSVP(_BaseStimulus):
     RSVP stimulus (wraps the jsPsych RSVP plugin)
     """
 
-    # IMPORTANT: the browser bundle must expose `window.jsPsychRsvp`.
-    # Using a string type keeps SweetBean fully declarative.
     type = "jsPsychRsvp"
 
     def __init__(
@@ -44,6 +42,103 @@ class RSVP(_BaseStimulus):
         duration: Optional[int] = None,
         side_effects: Optional[Dict[str, Any]] = None,
     ):
+        """
+        Arguments:
+            background (str | None):
+                CSS color for the stimulus background. Default "#000000".
+            color (str | None):
+                CSS color for tokens when an item has no explicit color. Default "#ffffff".
+            direction (str):
+                Layout of the streams. "row" (left→right) or "column" (top→bottom).
+                Default "row".
+            stream_order (str | None):
+                Comma-separated order of stream IDs as rendered (e.g., "left,right").
+                If None and there are exactly two streams with direction=="row", the
+                order is auto-filled to "<id0>,<id1>".
+            gap (str):
+                CSS gap between streams (e.g., "2rem", "24px"). Default "6rem".
+
+            token_box_size (str):
+                CSS size of each token’s containing box. Default "18vmin".
+            token_font_size (str):
+                CSS font size for tokens. Default "10vmin".
+            token_padding (str):
+                CSS padding inside each token box. Default "0.25em 0.45em".
+
+            streams (list | None):
+                List describing the RSVP streams. Each item is a dict:
+                  {
+                    "id": str,   # e.g., "left", "right"
+                    "items": list[str] | TimelineVariable | FunctionVariable,
+                    # optional:
+                    "offset_ms": int,              # delay before first item in this stream
+                    "attrs": dict[str, Any],       # extra per-stream attributes
+                  }
+                If a TimelineVariable/FunctionVariable is used for "items", it must
+                evaluate per trial to list[str] (e.g., ["A","B","3","Q"]). Default [].
+
+            stimulus_duration (int):
+                Milliseconds each token is shown. Default 100.
+            isi (int):
+                Inter-stimulus interval within a stream (ms). Default 0.
+            mask_html (str | None):
+                Optional HTML mask shown between items. Default None.
+
+            choices (str | list[str]):
+                Allowed keys during RSVP:
+                  • "ALL"      → any key is accepted
+                  • "NO_KEYS"  → key presses ignored during RSVP
+                  • list[str]  → explicit set, e.g., ["f","j"]
+                Default "ALL".
+            end_on_response (bool):
+                If True and a valid key is pressed, the RSVP ends early. Default False.
+            response_window (int | None):
+                If set, time window (ms) during which responses are accepted. Default None.
+            correct_keys (str | None):
+                Comma-separated correct keys for scoring (e.g., "f,j"). Default None.
+
+            decorate_targets (bool):
+                Whether to visually decorate target items. Default True.
+            target_shape (str):
+                Default decoration shape used when a target omits "shape".
+                Typical values: "circle", "square", "none". Default "none".
+            target_stroke (str):
+                CSS stroke width for target outlines (e.g., "3px", "4px"). Default "3px".
+            targets (list | None):
+                Target annotations (zero-based indices). Each item is a dict:
+                  {
+                    "stream_id": str,                                 # must match a stream "id"
+                    "index": int | TimelineVariable | FunctionVariable,  # 0-based
+                    # optional:
+                    "shape": str | TimelineVariable | FunctionVariable,  # "circle"|"square"|"none"
+                    "attrs": dict[str, Any],                           # extra per-target attributes
+                  }
+                Multiple targets may be specified. Default [].
+
+            trial_duration (int | None):
+                Overall RSVP duration (ms). If `duration` is provided (see below),
+                it is mirrored into `trial_duration`. Default None.
+            record_timestamps (bool):
+                If True, records per-token presentation timestamps. Default True.
+            duration (int | None):
+                Generic SweetBean duration alias; when set, it is copied into
+                `trial_duration` for convenience. Default None.
+            side_effects (dict | None):
+                Optional side-effect configuration passed to the runtime. Default None.
+
+        Emits (added to jsPsych trial data):
+            - bean_key (str | None): key pressed (if any).
+            - bean_rt (number | None): reaction time (ms) for the key press.
+            - bean_any_hit (bool): True if any declared target was hit.
+
+        Notes:
+            - Stream item lists and target indices are per-trial; use TimelineVariable
+              or FunctionVariable to bind them from your timeline dicts.
+            - Target indices are 0-based.
+            - If exactly two streams are provided and direction=="row" and stream_order
+              is not set, the order is auto-filled using the given stream IDs.
+            - If `duration` is provided, it is mirrored into `trial_duration`.
+        """
         if streams is None:
             streams = []
         if targets is None:
