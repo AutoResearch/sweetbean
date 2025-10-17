@@ -143,7 +143,7 @@ class RSVP(_BaseStimulus):
             streams = []
         if targets is None:
             targets = []
-        if all(isinstance(s, str) for s in streams):
+        if isinstance(streams, list) and all(isinstance(s, str) for s in streams):
             identifier = ["left", "right"]
             if len(streams) > 2:
                 identifier = [f"stream{i+1}" for i in range(len(streams))]
@@ -151,7 +151,7 @@ class RSVP(_BaseStimulus):
                 {"id": identifier[idx], "items": list(str(s))}
                 for idx, s in enumerate(streams)
             ]
-        if all(isinstance(s, list) for s in streams):
+        if isinstance(streams, list) and all(isinstance(s, list) for s in streams):
             identifier = ["left", "right"]
             if len(streams) > 2:
                 identifier = [f"stream{i+1}" for i in range(len(streams))]
