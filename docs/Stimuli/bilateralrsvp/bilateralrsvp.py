@@ -34,7 +34,6 @@ timeline = [
 ]
 
 
-# --- mapping helpers (as FunctionVariables) ---
 def pick_target_side(left_shape, right_shape):
     ls = str(left_shape).strip().lower()
     rs = str(right_shape).strip().lower()
@@ -92,7 +91,7 @@ var_target_shape = FunctionVariable(
     ],
 )
 
-# NOTE: We do not set distractor_index; your js plugin defaults it to target_index.
+# NOTE: If we do not set distractor_index; it defaults to target_index.
 var_distractor_shape = FunctionVariable(
     name="distractor_shape",
     fct=pick_distractor_shape,
@@ -112,11 +111,8 @@ rsvp = BilateralRSVP(
     target_shape=var_target_shape,
     # opposite-stream distractor, same index as target by default:
     distractor_shape=var_distractor_shape,
-    # Timing
     stimulus_duration=200,
     isi=40,
-    # We want responses after the RSVP, so ignore keys during RSVP:
-    choices="NO_KEYS",
 )
 
 response_window = Text(

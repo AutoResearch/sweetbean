@@ -364,7 +364,7 @@ class BilateralRSVP(_BaseStimulus):
             target_side:
                 "left" or "right". Which stream contains the target. Default "left".
             target_index:
-                Zero-based index of the target within the chosen stream. May be an int
+                Zero-based index of the target within the chosen stream. Can be an int
                 or a Variable. Default 0.
             target_shape:
                 Decoration for the target: "circle" | "square" | "underline" | "none".
@@ -405,12 +405,6 @@ class BilateralRSVP(_BaseStimulus):
                 SweetBean convenience alias; mirrored into `trial_duration` if set.
             side_effects:
                 Optional dictionary of side effects to pass along.
-
-        Notes:
-            - This is a thin wrapper that forwards to the underlying `Rsvp` implementation
-              with a simpler two-stream interface.
-            - If you need multiple targets, per-target response windows, or more complex
-              layouts, use `RSVP` instead.
         """
         # We do NOT normalize left/right (could be Variables).
         # Ensure lists at runtime in your mapping.
