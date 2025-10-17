@@ -40,6 +40,10 @@ rsvp = RSVP(
     ],
     stimulus_duration=200,
     isi=40,
+    # IMPORTANT: disable responses during RSVP since you ask afterward
+    choices="NO_KEYS",
+    # (explicit for clarity; your plugin defaults to True)
+    decorate_targets=True,
     targets=[
         {
             "stream_id": "left",
@@ -53,53 +57,15 @@ rsvp = RSVP(
         },
     ],
 )
+
 response_window = Text(
     text="What was the circled symbol?",
-    choices=[
-        "a",
-        "b",
-        "c",
-        "d",
-        "e",
-        "f",
-        "g",
-        "h",
-        "i",
-        "j",
-        "k",
-        "l",
-        "m",
-        "n",
-        "o",
-        "p",
-        "q",
-        "r",
-        "s",
-        "t",
-        "u",
-        "v",
-        "w",
-        "x",
-        "y",
-        "z",
-        "1",
-        "2",
-        "3",
-        "4",
-        "5",
-        "6",
-        "7",
-        "8",
-        "9",
-        "0",
-    ],
+    choices=list("abcdefghijklmnopqrstuvwxyz0123456789"),
     correct_key=TimelineVariable("correct_key"),
 )
 
 feedback = Feedback(duration=300)
 
-stimulus_sequence = [rsvp, response_window, feedback]
-
-block = Block(stimulus_sequence, timeline=timeline)
+block = Block([rsvp, response_window, feedback], timeline=timeline)
 exp = Experiment([block])
 exp.to_html("rsvp.html")

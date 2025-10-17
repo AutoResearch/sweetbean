@@ -13,6 +13,6 @@ from sweetbean.stimulus.HtmlKeyboardResponse import (
 )
 from sweetbean.stimulus.Image import Image
 from sweetbean.stimulus.RO import RDP, ROK, RandomDotPatterns, RandomObjectKinematogram
-from sweetbean.stimulus.RSVP import RSVP
+from sweetbean.stimulus.RSVP import RSVP, BilateralRSVP
 from sweetbean.stimulus.Survey import LikertSurvey, MultiChoiceSurvey, TextSurvey
 from sweetbean.stimulus.Video import Video
