@@ -31,7 +31,9 @@ class TextSurvey(_Survey):
         """
         Arguments:
             questions: a list of strings representing the questions
-            side_effects: a dictionary of side effects
+            side_effects: Optional side-effect configuration passed to the runtime. This expects
+                a list of SideEffect definitions (see SweetBean docs) which can be
+                used to update global data like overall score or trial counter.
         """
         if not questions:
             questions = []

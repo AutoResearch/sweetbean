@@ -35,8 +35,9 @@ class HtmlChoice(_BaseStimulus):
                 items. The selected entry is emitted as both `value` and `bean_value`.
             time_after_response (int): Extra time in ms after a click before ending the trial
                 (useful for short animations/visual confirmation).
-            side_effects (dict | None): Optional side-effect configuration passed through to the
-            runtime.
+            side_effects Optional side-effect configuration passed to the runtime. This expects
+                a list of SideEffect definitions (see SweetBean docs) which can be
+                used to update global data like overall score or trial counter.
 
         Emits (adds to jsPsych data):
             - choice (int): 0-based index of the clicked item

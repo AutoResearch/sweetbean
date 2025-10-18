@@ -90,7 +90,9 @@ class Blank(HtmlKeyboardResponse):
             duration: time in ms the stimulus is presented
             choices: the keys that will be recorded if pressed
             correct_key: the correct key to press
-            side_effects: a dictionary of side effects
+            side_effects: Optional side-effect configuration passed to the runtime. This expects
+                a list of SideEffect definitions (see SweetBean docs) which can be
+                used to update global data like overall score or trial counter.
         """
         super().__init__(
             duration=duration,

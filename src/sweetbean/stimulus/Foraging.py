@@ -171,8 +171,9 @@ class Foraging(_BaseStimulus):
                 SweetBean convenience alias mirrored to `trial_duration` during build
                 (consistent with RSVP). If provided, `trial_duration` is set to this
                 value. Default None.
-            side_effects (dict | None):
-                Optional side-effect configuration passed through to the runtime.
+            side_effects: Optional side-effect configuration passed to the runtime. This expects
+                a list of SideEffect definitions (see SweetBean docs) which can be
+                used to update global data like overall score or trial counter.
 
         Emits (added to jsPsych data):
             - clicks (list[dict]): Raw click events ({kind, index, id?, t}).

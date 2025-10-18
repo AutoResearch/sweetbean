@@ -367,8 +367,10 @@ class BilateralRSVP(_BaseStimulus):
 
         duration : int | None | Variable
             SweetBean alias mirrored into `trial_duration`.
-        side_effects : dict | None
-            Optional side effects dictionary passed along.
+        side_effects :
+            Optional side-effect configuration passed to the runtime. This expects
+                a list of SideEffect definitions (see SweetBean docs) which can be
+                used to update global data like overall score or trial counter.
         """
         super().__init__(locals(), side_effects)
 

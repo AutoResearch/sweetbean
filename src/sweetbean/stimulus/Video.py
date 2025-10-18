@@ -40,7 +40,9 @@ class Video(_KeyboardResponseStimulus):
             controls: show native video controls
             width, height: optional pixel dimensions
             muted: mute audio (often required for autoplay)
-            side_effects: a dictionary of side effects
+            side_effects: Optional side-effect configuration passed to the runtime. This expects
+                a list of SideEffect definitions (see SweetBean docs) which can be
+                used to update global data like overall score or trial counter.
         """
         if isinstance(stimulus, str):
             stimulus = [stimulus]

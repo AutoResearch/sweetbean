@@ -105,7 +105,9 @@ class RandomDotPatterns(ROK):
             background_color: the background color
             choices: the valid keys that the subject can press to indicate a response
             correct_key: the correct key to press
-            side_effects: a dictionary of side effects
+            side_effects: Optional side-effect configuration passed to the runtime. This expects
+                a list of SideEffect definitions (see SweetBean docs) which can be
+                used to update global data like overall score or trial counter.
         """
         if choices is None:
             choices = []
