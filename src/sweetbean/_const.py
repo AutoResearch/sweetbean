@@ -15,7 +15,7 @@ HTML_PREAMBLE = (
     '<script src="https://unpkg.com/@jspsych-contrib/plugin-rok@1.1.1"></script>\n'
     '<script src="https://unpkg.com/@jspsych-contrib/plugin-html-choice@1.0.0"></script>\n'
     '<script src="https://cdn.jsdelivr.net/npm/sweetbean@0.0.6/dist/runtime-script.js"></script>\n'
-    '<script src="https://unpkg.com/@sweet-jspsych/plugin-rsvp@0.2.4/dist/index.browser.min.js">'
+    '<script src="https://unpkg.com/@sweet-jspsych/plugin-rsvp@0.2.5/dist/index.browser.min.js">'
     "</script>\n"
     "<script "
     'src="https://unpkg.com/@sweet-jspsych/plugin-foraging@0.2.1/dist/index.browser.min.js">'

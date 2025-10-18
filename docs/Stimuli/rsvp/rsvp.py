@@ -3,11 +3,12 @@ from sweetbean.experiment import Experiment
 from sweetbean.stimulus import RSVP, Feedback, Text
 from sweetbean.variable import TimelineVariable
 
+# Trial table (streams are pure content)
 timeline = [
     {
         "left_stream": ["O", "O", "Q", "Q", "O", "Q"],
         "right_stream": ["1", "1", "2", "3", "4", "5"],
-        "left_target_index": 4,  # zero-based index
+        "left_target_index": 4,  # zero-based
         "left_target_shape": "circle",
         "right_target_index": 4,
         "right_target_shape": "square",
@@ -34,32 +35,32 @@ timeline = [
 ]
 
 rsvp = RSVP(
+    # Streams are pure content (no "circle"/"square"/color tokens here)
     streams=[
         {"id": "left", "items": TimelineVariable("left_stream")},
         {"id": "right", "items": TimelineVariable("right_stream")},
     ],
     stimulus_duration=200,
     isi=40,
-    # IMPORTANT: disable responses during RSVP since you ask afterward
+    # Disable responses during the RSVP; we ask afterward on a blank screen
     choices="NO_KEYS",
-    # (explicit for clarity; your plugin defaults to True)
-    decorate_targets=True,
-    targets=[
-        {
-            "stream_id": "left",
-            "index": TimelineVariable("left_target_index"),
-            "shape": TimelineVariable("left_target_shape"),
-        },
-        {
-            "stream_id": "right",
-            "index": TimelineVariable("right_target_index"),
-            "shape": TimelineVariable("right_target_shape"),
-        },
+    # Convenience arrays — plugin broadcasts & renders per item
+    target_index=[
+        TimelineVariable("left_target_index"),
+        TimelineVariable("right_target_index"),
     ],
+    target_side=["left", "right"],
+    target_shape=[
+        TimelineVariable("left_target_shape"),
+        TimelineVariable("right_target_shape"),
+    ],
+    # (optional) default outline thickness for targets
+    target_stroke="3px",
+    # No explicit `targets=[...]` needed now; the three arrays above define them
 )
 
 response_window = Text(
-    text="What was the circled symbol?",
+    text="What was the target symbol?",
     choices=list("abcdefghijklmnopqrstuvwxyz0123456789"),
     correct_key=TimelineVariable("correct_key"),
 )
