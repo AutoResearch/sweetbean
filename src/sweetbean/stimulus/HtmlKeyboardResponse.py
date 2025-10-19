@@ -17,6 +17,17 @@ class HtmlKeyboardResponse(_KeyboardResponseStimulus):
         correct_key="",
         side_effects=None,
     ):
+        """
+        Arguments:
+            duration: time in ms the stimulus is presented
+            stimulus: the html string representing that is rendered
+            choices: the keys that will be recorded if pressed
+            correct_key: the correct key to press
+            side_effects: Optional side-effect configuration passed to the runtime. This expects
+                a list of SideEffect definitions (see SweetBean docs) which can be
+                used to update global data like overall score or trial counter.s
+        """
+
         if choices is None:
             choices = []
         super().__init__(locals(), side_effects)
@@ -56,7 +67,9 @@ class Text(HtmlKeyboardResponse):
             color: the color of the text
             choices: the keys that will be recorded if pressed
             correct_key: the correct key to press
-            side_effects: a dictionary of side effects
+            side_effects: Optional side-effect configuration passed to the runtime. This expects
+                a list of SideEffect definitions (see SweetBean docs) which can be
+                used to update global data like overall score or trial counter.s
         """
         if choices is None:
             choices = []
@@ -112,7 +125,9 @@ class Fixation(Text):
         """
         Arguments:
             duration: time in ms the stimulus is presented
-            side_effects: a dictionary of side effects
+            side_effects: Optional side-effect configuration passed to the runtime. This expects
+                a list of SideEffect definitions (see SweetBean docs) which can be
+                used to update global data like overall score or trial counter.
         """
         super().__init__(
             duration=duration,
@@ -148,7 +163,9 @@ class Feedback(Text):
             false_color: the color of the message if the response was false
             window: how far back is the stimulus to check
                     (that stimulus needs to have a choice and a correct_key parameter)
-            side_effects: a dictionary of side effects
+            side_effects: Optional side-effect configuration passed to the runtime. This expects
+                a list of SideEffect definitions (see SweetBean docs) which can be
+                used to update global data like overall score or trial counter.
         """
         correct = DataVariable("correct", window)
 
@@ -199,7 +216,9 @@ class Flanker(Text):
             correct_key: the correct key to press
             color: the color of the text
             n_flankers: the number of distractors
-            side_effects: a dictionary of side effects
+            side_effects: Optional side-effect configuration passed to the runtime. This expects
+                a list of SideEffect definitions (see SweetBean docs) which can be
+                used to update global data like overall score or trial counter.
         """
 
         def _txt(dr, dst, n):
@@ -251,7 +270,9 @@ class Symbol(HtmlKeyboardResponse):
             color: the color of the symbol
             choices: the keys that will be recorded if pressed
             correct_key: the correct key to press
-            side_effects: a dictionary of side effects
+            side_effects: Optional side-effect configuration passed to the runtime. This expects
+                a list of SideEffect definitions (see SweetBean docs) which can be
+                used to update global data like overall score or trial counter.
         """
 
         def stim(symbl, clr):
