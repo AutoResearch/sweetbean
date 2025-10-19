@@ -6,6 +6,7 @@ import re
 import sys
 import tempfile
 import textwrap
+from typing import Dict, List, Optional, Tuple
 
 from transcrypt.__main__ import main as transcrypt_main
 
@@ -87,10 +88,11 @@ def _fct_to_js(func):
     Convert a Python function to JavaScript using Transcrypt, without using subprocess.
 
     Examples:
-    # >>> def add(a, b):
-    # ...     return a + b
-    # >>> _fct_to_js(add)
-    # '(a,b) => {return a+b}'
+    >>> def add(a, b):
+    ...     return a + b
+    >>> _fct_to_js(add)
+    '(a,b) => {return __add__(a,b)}'
+
 
     >>> a = lambda color: "f" if color == "red" else "j"
     >>> _fct_to_js(a)
@@ -99,6 +101,19 @@ def _fct_to_js(func):
     >>> b = lambda score, n: f"Score: {score/n}"
     >>> _fct_to_js(b)
     '(score,n) => {return"Score: {}".format(__truediv__(score,n))}'
+
+    >>> def out_function(var):
+    ...     def inner_function(a):
+    ...         if a == 1:
+    ...             return 45
+    ...         if a == 2:
+    ...             return 135
+    ...         return 90
+    ...     prime_deg = inner_function(var)
+    ...     return prime_deg
+    >>> fct = _fct_to_js(out_function)
+    >>> fct
+
 
     """
     global_vars = func.__globals__
@@ -129,6 +144,10 @@ def _fct_to_js(func):
     try:
         source_code = inspect.getsource(func)
         source_code = textwrap.dedent(source_code)
+        tree = ast.parse(source_code)
+        tree = _JSReservedArgRenamer().visit(tree)
+        ast.fix_missing_locations(tree)
+        source_code = ast.unparse(tree)
         source_code = replace_operators_with_functions(source_code)
 
         tree = ast.parse(source_code)
@@ -196,23 +215,103 @@ def _fct_to_js(func):
     return _extract_arrow_function(full_js_code)
 
 
-def _extract_arrow_function(js_code):
+def _extract_arrow_function(js_code: str, func_name: Optional[str] = None):
     js_code = _clean_function(js_code)
 
-    match = re.search(r"function\((.*?)\)\{(.*?)\};", js_code, re.DOTALL)
-    if not match:
-        match = re.search(r"function\((.*?)\)\{(.*?)\},", js_code, re.DOTALL)
-    if not match:
-        match = re.search(r"function\((.*?)\)\{(.*?)\}", js_code, re.DOTALL)
+    # Try to find the specific exported binding for this function name
+    starts = []
+    if func_name and func_name != "<lambda>":
+        n = re.escape(func_name)
+        starts = [
+            rf"(?:export\s+)?var\s+{n}\s*=\s*function\s*\(",
+            rf"(?:export\s+)?let\s+{n}\s*=\s*function\s*\(",
+            rf"(?:export\s+)?const\s+{n}\s*=\s*function\s*\(",
+            rf"{n}\s*=\s*function\s*\(",
+        ]
+        start_idx = _find_first(js_code, starts)
+    else:
+        # Lambda or unknown: grab the first top-level export/var/let/const function binding
+        starts = [
+            r"(?:export\s+)?var\s+[A-Za-z_$][\w$]*\s*=\s*function\s*\(",
+            r"(?:export\s+)?let\s+[A-Za-z_$][\w$]*\s*=\s*function\s*\(",
+            r"(?:export\s+)?const\s+[A-Za-z_$][\w$]*\s*=\s*function\s*\(",
+        ]
+        start_idx = _find_first(js_code, starts)
 
-    if match:
-        # Convert to an arrow function
-        params = match.group(1)
-        body = match.group(2).strip()
-        arrow_function = f"({params}) => {{{body}}}"
-        # arrow_function = _postprocess_format(arrow_function)
-        arrow_function = _postprocess_functions(arrow_function)
-        return arrow_function
+    if start_idx is None:
+        # Last-resort fallback: first 'function(' (may catch an inner one)
+        m = re.search(r"function\s*\(", js_code)
+        if not m:
+            raise RuntimeError("Could not locate a compiled function binding.")
+        start_idx = m.start()
+
+    # We have "... function(" at (or near) start_idx — read balanced params and body.
+    func_paren = js_code.find("(", start_idx)
+    if func_paren == -1:
+        raise RuntimeError("Malformed function: missing '(' after binding.")
+
+    params, after_params = _read_balanced(js_code, func_paren, "(", ")")
+
+    i = after_params
+    while i < len(js_code) and js_code[i].isspace():
+        i += 1
+    if i >= len(js_code) or js_code[i] != "{":
+        raise RuntimeError("Malformed function: expected '{' after parameter list.")
+
+    body, after_body = _read_balanced(js_code, i, "{", "}")
+
+    params = params[1:-1]  # strip the surrounding ()
+    arrow = f"({params}) => {body}"
+    return _postprocess_functions(arrow)
+
+
+def _find_first(s: str, patterns: List[str]) -> Optional[int]:
+    best = None
+    for pat in patterns:
+        m = re.search(pat, s)
+        if m:
+            pos = s.find("function", m.start())
+            if pos != -1 and (best is None or pos < best):
+                best = pos
+    return best
+
+
+def _read_balanced(
+    s: str, start_idx: int, open_char: str, close_char: str
+) -> Tuple[str, int]:
+    """
+    Return (substring_including_delims, index_after_substring) for (), {}, [] starting at start_idx.
+    Handles quotes/backticks/escapes so braces in strings don't break parsing.
+    """
+    assert s[start_idx] == open_char
+    i = start_idx
+    depth = 0
+    in_str: Optional[str] = None
+    esc = False
+    while i < len(s):
+        ch = s[i]
+        if in_str:
+            if esc:
+                esc = False
+            elif ch == "\\":
+                esc = True
+            elif ch == in_str:
+                in_str = None
+            i += 1
+            continue
+        if ch in ("'", '"', "`"):
+            in_str = ch
+            i += 1
+            continue
+        if ch == open_char:
+            depth += 1
+        elif ch == close_char:
+            depth -= 1
+            if depth == 0:
+                i += 1
+                return s[start_idx:i], i
+        i += 1
+    raise RuntimeError(f"Unbalanced {open_char}{close_char} starting at {start_idx}")
 
 
 def _clean_function(js_code):
@@ -432,3 +531,116 @@ def replace_operators_with_functions(code):
     transformed_tree = transformer.visit(tree)
     ast.fix_missing_locations(transformed_tree)
     return ast.unparse(transformed_tree)
+
+
+JS_RESERVED_WORDS = {
+    # ES keywords + strict mode + future (core set; extend if needed)
+    "var",
+    "let",
+    "const",
+    "function",
+    "class",
+    "default",
+    "enum",
+    "export",
+    "import",
+    "extends",
+    "super",
+    "return",
+    "if",
+    "else",
+    "switch",
+    "case",
+    "break",
+    "new",
+    "for",
+    "while",
+    "do",
+    "try",
+    "catch",
+    "finally",
+    "with",
+    "yield",
+    "await",
+    "this",
+    "delete",
+    "in",
+    "instanceof",
+    "typeof",
+    "void",
+    "of",
+    "public",
+    "private",
+    "protected",
+    "static",
+    "package",
+    "interface",
+    "implements",
+}
+
+
+class _JSReservedArgRenamer(ast.NodeTransformer):
+    """
+    Renames any function/lambda parameter that collides with a JS reserved word.
+    Updates all references within the function body (including inner functions)
+    by tracking nested scopes on a stack.
+    """
+
+    def __init__(self, suffix: str = "_py"):
+        super().__init__()
+        self._stack: List[Dict[str, str]] = []
+        self._suffix = suffix
+
+    def _maybe_rename_arg(self, arg: ast.arg) -> None:
+        if arg and arg.arg in JS_RESERVED_WORDS:
+            new_name = f"{arg.arg}{self._suffix}"
+            # record mapping in current scope
+            self._stack[-1][arg.arg] = new_name
+            arg.arg = new_name
+
+    def _push_scope(self) -> None:
+        self._stack.append({})
+
+    def _pop_scope(self) -> None:
+        self._stack.pop()
+
+    def visit_FunctionDef(self, node: ast.FunctionDef) -> ast.AST:
+        self._push_scope()
+        # positional args
+        for a in node.args.args:
+            self._maybe_rename_arg(a)
+        # *args
+        if node.args.vararg:
+            self._maybe_rename_arg(node.args.vararg)
+        # keyword-only args
+        for a in node.args.kwonlyargs:
+            self._maybe_rename_arg(a)
+        # **kwargs
+        if node.args.kwarg:
+            self._maybe_rename_arg(node.args.kwarg)
+
+        # visit defaults/annotations/body with mapping active
+        self.generic_visit(node)
+        self._pop_scope()
+        return node
+
+    def visit_Lambda(self, node: ast.Lambda) -> ast.AST:
+        self._push_scope()
+        for a in node.args.args:
+            self._maybe_rename_arg(a)
+        if node.args.vararg:
+            self._maybe_rename_arg(node.args.vararg)
+        for a in node.args.kwonlyargs:
+            self._maybe_rename_arg(a)
+        if node.args.kwarg:
+            self._maybe_rename_arg(node.args.kwarg)
+        self.generic_visit(node)
+        self._pop_scope()
+        return node
+
+    def visit_Name(self, node: ast.Name) -> ast.AST:
+        for scope in reversed(self._stack):
+            if node.id in scope:
+                node.id = scope[node.id]
+                break
+        return node
