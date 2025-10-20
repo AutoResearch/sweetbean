@@ -61,4 +61,4 @@ block.to_image(
 
 # Create an HTML file of the experiment
 experiment = Experiment([block])
-experiment.to_html("feedback_manual.html")
+experiment.to_html("stroop.html")

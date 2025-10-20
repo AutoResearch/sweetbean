@@ -249,36 +249,38 @@ class Flanker(Text):
         )
 
 
-class Symbol(HtmlKeyboardResponse):
-    """
-    show a symbol
-    """
-
-    def __init__(
-        self,
-        duration=None,
-        symbol="",
-        color="white",
-        choices=None,
-        correct_key="",
-        side_effects=None,
-    ):
-        """
-        Arguments:
-            duration: time in ms the stimulus is presented
-            symbol: the symbol to show (allowed: square, triangle, circle)
-            color: the color of the symbol
-            choices: the keys that will be recorded if pressed
-            correct_key: the correct key to press
-            side_effects: Optional side-effect configuration passed to the runtime. This expects
-                a list of SideEffect definitions (see SweetBean docs) which can be
-                used to update global data like overall score or trial counter.
-        """
-
-        def stim(symbl, clr):
-            return (
-                f"<div class='sweetbean-{symbl}' style='background-color:{clr}'></div>"
-            )
-
-        stimulus_ = FunctionVariable("stimulus", stim, [symbol, color])
-        super().__init__(duration, stimulus_, choices, correct_key, side_effects)
+#
+#
+# class Symbol(HtmlKeyboardResponse):
+#     """
+#     show a symbol
+#     """
+#
+#     def __init__(
+#         self,
+#         duration=None,
+#         symbol="",
+#         color="white",
+#         choices=None,
+#         correct_key="",
+#         side_effects=None,
+#     ):
+#         """
+#         Arguments:
+#             duration: time in ms the stimulus is presented
+#             symbol: the symbol to show (allowed: square, triangle, circle)
+#             color: the color of the symbol
+#             choices: the keys that will be recorded if pressed
+#             correct_key: the correct key to press
+#             side_effects: Optional side-effect configuration passed to the runtime. This expects
+#                 a list of SideEffect definitions (see SweetBean docs) which can be
+#                 used to update global data like overall score or trial counter.
+#         """
+#
+#         def stim(symbl, clr):
+#             return (
+#                 f"<div class='sweetbean-{symbl}' style='background-color:{clr}'></div>"
+#             )
+#
+#         stimulus_ = FunctionVariable("stimulus", stim, [symbol, color])
+#         super().__init__(duration, stimulus_, choices, correct_key, side_effects)

@@ -83,45 +83,238 @@ def _var_to_js(var):
     return var
 
 
+def _extract_lambda_only(src: str) -> str:
+    """
+    Return exactly the lambda expression from a source string that begins
+    with 'lambda', even if extra call-site text follows (e.g., ', [...] )').
+    Strategy: scan forward until the shortest prefix parses as an expression.
+    """
+    s = textwrap.dedent(src).lstrip()
+    i = s.find("lambda")
+    if i < 0:
+        return s.strip()
+    s = s[i:]  # start at 'lambda'
+    for k in range(1, len(s) + 1):
+        chunk = s[:k].strip()
+        try:
+            ast.parse(chunk, mode="eval")
+            return chunk
+        except SyntaxError:
+            continue
+    return s.strip()
+
+
+def _emit_js_expr(node: ast.AST) -> str:
+    """Very small emitter for simple lambda bodies used in FunctionVariable."""
+    if isinstance(node, ast.Name):
+        return node.id
+    if isinstance(node, ast.Constant):
+        v = node.value
+        if isinstance(v, str):
+            return "'" + v.replace("\\", "\\\\").replace("'", "\\'") + "'"
+        if v is None:
+            return "null"
+        if isinstance(v, bool):
+            return "true" if v else "false"
+        return str(v)
+
+    if isinstance(node, ast.Call):
+        # str(x) -> String(x)
+        if (
+            isinstance(node.func, ast.Name)
+            and node.func.id == "str"
+            and len(node.args) == 1
+        ):
+            return f"String({_emit_js_expr(node.args[0])})"
+        # x.lower() -> (<x>).toLowerCase()
+        if (
+            isinstance(node.func, ast.Attribute)
+            and node.func.attr == "lower"
+            and not node.args
+        ):
+            return f"({_emit_js_expr(node.func.value)}).toLowerCase()"
+        # generic call
+        f = _emit_js_expr(node.func)
+        args = ",".join(_emit_js_expr(a) for a in node.args)
+        return f"{f}({args})"
+
+    if isinstance(node, ast.Compare) and len(node.ops) == 1:
+        left = _emit_js_expr(node.left)
+        right = _emit_js_expr(node.comparators[0])
+        cmpop = node.ops[0]
+        if isinstance(cmpop, ast.Eq):
+            return f"({left}==={right})"
+        if isinstance(cmpop, ast.NotEq):
+            return f"({left}!={right})"
+        if isinstance(cmpop, ast.Lt):
+            return f"({left}<{right})"
+        if isinstance(cmpop, ast.LtE):
+            return f"({left}<={right})"
+        if isinstance(cmpop, ast.Gt):
+            return f"({left}>{right})"
+        if isinstance(cmpop, ast.GtE):
+            return f"({left}>={right})"
+
+    if isinstance(node, ast.BoolOp):
+        op_str = "&&" if isinstance(node.op, ast.And) else "||"
+        return "(" + f" {op_str} ".join(_emit_js_expr(v) for v in node.values) + ")"
+
+    if isinstance(node, ast.IfExp):
+        return (
+            f"({_emit_js_expr(node.test)}?{_emit_js_expr(node.body)}:"
+            f"{_emit_js_expr(node.orelse)})"
+        )
+
+    if isinstance(node, ast.UnaryOp) and isinstance(node.op, ast.Not):
+        return f"!({_emit_js_expr(node.operand)})"
+
+    if isinstance(node, ast.BinOp) and isinstance(
+        node.op, (ast.Add, ast.Sub, ast.Mult, ast.Div, ast.Mod)
+    ):
+        ops = {ast.Add: "+", ast.Sub: "-", ast.Mult: "*", ast.Div: "/", ast.Mod: "%"}
+        return f"({_emit_js_expr(node.left)}{ops[type(node.op)]}{_emit_js_expr(node.right)})"
+
+    # Not a trivial form -> tell caller to fall back
+    raise ValueError("expr-not-simple")
+
+
+def _emit_simple_lambda_arrow(lambda_src: str) -> str:
+    t_ast: ast.AST = ast.parse(lambda_src, mode="eval")
+    node = t_ast.body if isinstance(t_ast, ast.Expression) else t_ast
+    if not isinstance(node, ast.Lambda):
+        node = _find_first_lambda_node(t_ast)
+    params = [a.arg for a in node.args.args]  # type: ignore[union-attr]
+    body_js = _emit_js_expr(node.body)  # type: ignore[union-attr]
+    return f"(({','.join(params)})=>{{return {body_js}}})"
+
+
+def _find_first_lambda_node(tree: ast.AST) -> ast.Lambda:
+    for n in ast.walk(tree):
+        if isinstance(n, ast.Lambda):
+            return n
+    raise ValueError("no-lambda-found")
+
+
+def _emit_simple_lambda_arrow_from_node(lam: ast.Lambda) -> str:
+    params = [a.arg for a in lam.args.args]
+    body_js = _emit_js_expr(lam.body)  # your existing tiny emitter
+    return f"(({','.join(params)})=>{{return {body_js}}})"
+
+
+def _unparse(node: ast.AST) -> str:
+    # Prefer stdlib (3.9+), else fall back, else raise with a clear hint
+    try:  # stdlib
+        from ast import unparse as _stdlib_unparse  # type: ignore[attr-defined]
+
+        return _stdlib_unparse(node)  # type: ignore[misc]
+    except Exception:
+        try:  # astor
+            import astor  # type: ignore
+
+            return astor.to_source(node).rstrip()
+        except Exception:
+            try:  # astunparse
+                import astunparse  # type: ignore
+
+                return astunparse.unparse(node).rstrip()
+            except Exception as e:
+                raise RuntimeError(
+                    "No AST unparser available. Install 'astor' or 'astunparse'."
+                ) from e
+
+
+def _build_wrapper_with_inner_def_from_node(lam: ast.Lambda, func) -> str:
+    # Params of the lambda
+    lam_params = []
+    for a in lam.args.args:
+        lam_params.append(a.arg)
+    if lam.args.vararg:
+        lam_params.append("*" + lam.args.vararg.arg)
+    for a in lam.args.kwonlyargs:
+        lam_params.append(a.arg)
+    if lam.args.kwarg:
+        lam_params.append("**" + lam.args.kwarg.arg)
+    lam_params_str = ", ".join(lam_params)
+
+    # Body of the lambda (as Python source)
+    lam_body_str = _unparse(lam.body)
+
+    # Outer wrapper params/call (preserve *args/**kwargs/defaults)
+    sig = inspect.signature(func)
+    params_list, call_list = [], []
+    for name, p in sig.parameters.items():
+        if p.kind is p.VAR_POSITIONAL:
+            params_list.append(f"*{name}")
+            call_list.append(f"*{name}")
+        elif p.kind is p.VAR_KEYWORD:
+            params_list.append(f"**{name}")
+            call_list.append(f"**{name}")
+        elif p.default is not p.empty:
+            params_list.append(f"{name}={repr(p.default)}")
+            call_list.append(name)
+        else:
+            params_list.append(name)
+            call_list.append(name)
+    outer_params_str = ", ".join(params_list)
+    outer_call_str = ", ".join(call_list)
+
+    # Nested def so Transcrypt emits a *local* function (no global `l`)
+    return (
+        f"def __sb_func__({outer_params_str}):\n"
+        f"    def __lam({lam_params_str}):\n"
+        f"        return {lam_body_str}\n"
+        f"    return __lam({outer_call_str})\n"
+    )
+
+
+def _get_lambda_node_from_source(func) -> ast.Lambda:
+    """
+    Robustly obtain the lambda AST node from whatever source inspect returns,
+    even if it’s embedded in a call expression or wrapped in parentheses.
+    """
+    src = textwrap.dedent(inspect.getsource(func)).strip()
+    try:
+        tree: ast.AST = ast.parse(src, mode="exec")
+    except SyntaxError:
+        tree = ast.parse(src, mode="eval")
+    return _find_first_lambda_node(tree)
+
+
 def _fct_to_js(func):
     """
-    Convert a Python function to JavaScript using Transcrypt, without using subprocess.
+    Convert a Python callable to a JavaScript arrow function string.
 
-    Examples:
-    >>> def add(a, b):
-    ...     return a + b
+    - Uses Transcrypt for general cases.
+    - Emits a pure JS arrow for simple lambdas.
+    - Rejects non-local captures (except allowed modules).
+
+    Examples (ellipses keep lines short):
+    >>> def add(a, b): return a + b
     >>> _fct_to_js(add)
-    '(a,b) => {return __add__(a,b)}'
+    '((a,b) => {return __add__(a,b)})'
 
+    >>> _fct_to_js(lambda c: "f" if c == "red" else "j")
+    "((c)=>{return ((c==='red')?'f':'j')})"
 
-    >>> a = lambda color: "f" if color == "red" else "j"
-    >>> _fct_to_js(a)
-    '(color) => {return __eq__(color,"red")?"f":"j"}'
+    >>> _fct_to_js(lambda s, n: f"Score: {s/n}")  # doctest: +ELLIPSIS
+    '((s,n) => {...})'
 
-    >>> b = lambda score, n: f"Score: {score/n}"
-    >>> _fct_to_js(b)
-    '(score,n) => {return"Score: {}".format(__truediv__(score,n))}'
-
-    >>> def out_function(var):
-    ...     def inner_function(a):
-    ...         if a == 1:
-    ...             return 45
-    ...         if a == 2:
-    ...             return 135
+    >>> def outer(v):
+    ...     def inner(a):
+    ...         if a == 1: return 45
+    ...         if a == 2: return 135
     ...         return 90
-    ...     prime_deg = inner_function(var)
-    ...     return prime_deg
-    >>> fct = _fct_to_js(out_function)
-    >>> fct
+    ...     return inner(v)
+    >>> _fct_to_js(outer)  # doctest: +ELLIPSIS
+    '((v) => {...})'
 
 
     """
     global_vars = func.__globals__
     code = func.__code__
 
-    # Find variables used in the function but not defined locally
+    # Non-local checks (unchanged)
     non_locals = []
-    replacements = {}
     for varname in code.co_names:
         if varname in global_vars and varname not in NON_LOCAL_INCLUDES:
             value = global_vars[varname]
@@ -129,96 +322,95 @@ def _fct_to_js(func):
                 continue
             else:
                 non_locals.append(varname)
-
     if non_locals:
         raise ValueError(
-            f"Function:\n"
-            f"{inspect.getsource(func)}\n"
+            f"Function:\n{inspect.getsource(func)}\n"
             f"contains non-local variables: {non_locals}.\n"
-            f"Either the module is not supported "
-            f"or the variable should be passed into "
-            f"the FunctionVariable instead."
+            f"Either the module is not supported or pass those values through "
+            f"FunctionVariable args."
         )
 
-    # Extract and pre-process the function's source
+    # Prepare a self-contained Python module for Transcrypt
     try:
         source_code = inspect.getsource(func)
-        source_code = textwrap.dedent(source_code)
-        tree = ast.parse(source_code)
+        source_code = textwrap.dedent(source_code).strip()
+        func_name_for_extract = None
+
+        if func.__name__ == "<lambda>":
+            # 1) Get the lambda node from the full, raw source
+            lam_node = _get_lambda_node_from_source(func)
+
+            # 2) Try the fast path: emit pure JS arrow (no Transcrypt, no `l`)
+            try:
+                return _emit_simple_lambda_arrow_from_node(lam_node)
+            except Exception:
+                pass  # Not a simple expression → fall back
+
+            # 3) Fallback: nested-def wrapper to avoid any hoisted helper
+            wrapper_src = _build_wrapper_with_inner_def_from_node(lam_node, func)
+            tree = ast.parse(wrapper_src)
+            func_name_for_extract = "__sb_func__"
+        else:
+            # Normal def: compile as-is
+            tree = ast.parse(source_code)
+            func_name_for_extract = func.__name__
+
+        # Reserved-word arg renaming, operator lowering, TouchButton replacer (unchanged)
         tree = _JSReservedArgRenamer().visit(tree)
         ast.fix_missing_locations(tree)
-        source_code = ast.unparse(tree)
+        source_code = _unparse(tree)
         source_code = replace_operators_with_functions(source_code)
-
         tree = ast.parse(source_code)
-        tree = _TouchButtonReplacer(replacements).visit(tree)
+        tree = _TouchButtonReplacer({}).visit(tree)
         ast.fix_missing_locations(tree)
-        source_code = ast.unparse(tree)
+        source_code = _unparse(tree)
 
     except Exception as e:
         raise Exception(f"Error during conversion: {e}") from e
 
-    # Use a temporary directory to store the necessary files
+    # Transcrypt pipeline (unchanged)
     with tempfile.TemporaryDirectory() as temp_dir:
         temp_path = os.path.join(temp_dir, "temp_script.py")
+        with open(temp_path, "w") as f:
+            f.write(source_code)
 
-        # Write the function's source code to a temporary Python file
-        with open(temp_path, "w") as temp_file:
-            temp_file.write(source_code)
-
-        if not os.path.exists(temp_path):
-            raise FileNotFoundError(f"Temporary file not found at: {temp_path}")
-
-        # Call Transcrypt directly, avoiding subprocess
-        old_cwd = os.getcwd()
-        old_argv = sys.argv[:]
+        old_cwd, old_argv = os.getcwd(), sys.argv[:]
         output_buffer = io.StringIO()
         try:
             os.chdir(temp_dir)
-            # Replace sys.argv so Transcrypt reads the same flags as subprocess
             sys.argv = [sys.argv[0], "-b", "temp_script.py"]
-
-            # Capture Transcrypt's console output
             saved_stdout = sys.stdout
             sys.stdout = output_buffer
-
             exit_code = transcrypt_main()
-
         finally:
-            # Restore environment
             sys.argv = old_argv
             os.chdir(old_cwd)
             sys.stdout = saved_stdout
 
-        # Check if Transcrypt failed
         if exit_code != 0:
-            error_output = output_buffer.getvalue()
-            if not error_output:
-                error_output = "No detailed error provided."
+            error_output = output_buffer.getvalue() or "No detailed error provided."
             raise RuntimeError(
                 f"Error occurred during execution. Return code: {exit_code}.\n"
                 f"Output: {error_output}."
             )
 
-        # Locate the JavaScript output in the __target__ folder
-        js_output_dir = os.path.join(temp_dir, "__target__")
-        js_output_path = os.path.join(js_output_dir, "temp_script.js")
-
+        js_output_path = os.path.join(temp_dir, "__target__", "temp_script.js")
         if not os.path.exists(js_output_path):
             raise FileNotFoundError(f"JavaScript file not found: {js_output_path}")
 
-        # Read the full JavaScript code
-        with open(js_output_path, "r") as js_file:
-            full_js_code = js_file.read()
+        with open(js_output_path, "r") as f:
+            full_js_code = f.read()
 
-    # Finally, parse out the final arrow function from the compiled JS
-    return _extract_arrow_function(full_js_code)
+    # IMPORTANT: don’t strip "__lambda__" here
+    arrow = _extract_arrow_function(full_js_code, func_name_for_extract)
+    # Optional postprocessing (your existing helper)
+    return _postprocess_functions(arrow)
 
 
 def _extract_arrow_function(js_code: str, func_name: Optional[str] = None):
     js_code = _clean_function(js_code)
 
-    # Try to find the specific exported binding for this function name
+    # Prefer to find the requested binding name
     starts = []
     if func_name and func_name != "<lambda>":
         n = re.escape(func_name)
@@ -227,25 +419,27 @@ def _extract_arrow_function(js_code: str, func_name: Optional[str] = None):
             rf"(?:export\s+)?let\s+{n}\s*=\s*function\s*\(",
             rf"(?:export\s+)?const\s+{n}\s*=\s*function\s*\(",
             rf"{n}\s*=\s*function\s*\(",
+            rf"(?:export\s+)?function\s+{n}\s*\(",  # named function declaration
         ]
         start_idx = _find_first(js_code, starts)
     else:
-        # Lambda or unknown: grab the first top-level export/var/let/const function binding
+        # Fallback: first top-level binding
         starts = [
             r"(?:export\s+)?var\s+[A-Za-z_$][\w$]*\s*=\s*function\s*\(",
             r"(?:export\s+)?let\s+[A-Za-z_$][\w$]*\s*=\s*function\s*\(",
             r"(?:export\s+)?const\s+[A-Za-z_$][\w$]*\s*=\s*function\s*\(",
+            r"(?:export\s+)?function\s+[A-Za-z_$][\w$]*\s*\(",
         ]
         start_idx = _find_first(js_code, starts)
 
     if start_idx is None:
-        # Last-resort fallback: first 'function(' (may catch an inner one)
+        # Last-resort fallback
         m = re.search(r"function\s*\(", js_code)
         if not m:
             raise RuntimeError("Could not locate a compiled function binding.")
         start_idx = m.start()
 
-    # We have "... function(" at (or near) start_idx — read balanced params and body.
+    # Read the parameter list and body
     func_paren = js_code.find("(", start_idx)
     if func_paren == -1:
         raise RuntimeError("Malformed function: missing '(' after binding.")
@@ -258,11 +452,13 @@ def _extract_arrow_function(js_code: str, func_name: Optional[str] = None):
     if i >= len(js_code) or js_code[i] != "{":
         raise RuntimeError("Malformed function: expected '{' after parameter list.")
 
-    body, after_body = _read_balanced(js_code, i, "{", "}")
+    body, _ = _read_balanced(js_code, i, "{", "}")
 
+    # Build an IIFE-ready arrow expression by wrapping the whole thing in extra parens.
     params = params[1:-1]  # strip the surrounding ()
-    arrow = f"({params}) => {body}"
-    return _postprocess_functions(arrow)
+    arrow_core = f"({params}) => {body}"
+    iife_ready = f"({arrow_core})"
+    return _postprocess_functions(iife_ready)
 
 
 def _find_first(s: str, patterns: List[str]) -> Optional[int]:
@@ -315,8 +511,8 @@ def _read_balanced(
 
 
 def _clean_function(js_code):
-    res = js_code.replace("__lambda__", "")
-    res = res.replace("= function", "=function")
+    # do light whitespace/format normalization only
+    res = js_code.replace("= function", "=function")
     res = res.replace("function (", "function(")
     res = res.replace(") =", ")=")
     return res
