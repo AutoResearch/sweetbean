@@ -1,4 +1,4 @@
-# Random Dot Patterns
+# RandomDotPatterns
 
 Present static arrays of oriented objects where a proportion share a **coherent orientation** and the remainder are random; no coherent **motion** is present. Supports multiple apertures to show two arrays simultaneously for comparison or discrimination tasks.
 
