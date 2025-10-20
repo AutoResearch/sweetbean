@@ -1,8 +1,10 @@
 # Gabor
 
-Render one or more procedural Gabor patches on a canvas and collect keyboard and/or mouse responses. Each patch is defined by position, size (sigma), spatial frequency, orientation, phase, and contrast. Supports pixel or degree units (via px_per_deg). Overlapping patches are allowed.
+Render one or more **true sinusoidal Gabor patches** (grating × Gaussian). Each patch exposes **orientation**, **spatial frequency** (sf_cpp / sf_cpd), **phase**, **contrast**, and **Gaussian sigma/size**; positions are in pixels (or degrees with `px_per_deg`). Multiple patches can be shown at once, and you can collect keyboard and/or mouse responses.
+
+**Not for** flat geometric shapes, annuli, bars/stripe fills, or noise masks — use **Symbol** (with stripe/noise textures and layering) for those.
 
 ## When To Use
-
-- 2AFC/left–right discrimination with Gabors (e.g., “which side is higher contrast?”).
-- Orientation / contrast / phase judgments with one or multiple patches.
+- Orientation / contrast / **phase** judgments where **sf/phase/sigma** must be controlled precisely.
+- 2AFC with **Gabor** patches (e.g., which side has higher contrast?).
+- Spatial-frequency tuning, phase sweeps, or multi-patch Gabor arrays (crowding/surround interactions).
