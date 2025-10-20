@@ -1,6 +1,6 @@
 # BilateralRSVP
 
-Present two synchronized RSVP streams (left and right) where one item per side appears each frame. Participants detect or identify a target on one stream (by feature/shape or content) while the opposite stream can carry a simultaneous distractor. You control per-frame timing (duration/ISI), per-side item sequences, optional masks, target/distractor annotations (shape/underline), keyboard response handling, and overall trial duration. Only works with simple visual items (text, simple shapes); for more complex or layered stimuli, consider the Symbol or Html plugins.
+Present two synchronized RSVP streams (left and right) where one item per side appears each frame. Participants detect or identify a target on one stream (by feature/shape or content) while the opposite stream can carry a simultaneous distractor. You control per-frame timing (duration/ISI), per-side item sequences, optional masks, target/distractor annotations (shape/underline), keyboard response handling, and overall trial duration. Only works with simple visual items (text, single symbols); for more complex or layered stimuli, consider the Symbol or Html plugins.
 
 ## When To Use
 
