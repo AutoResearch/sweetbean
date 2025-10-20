@@ -60,12 +60,7 @@ class Symbol(_BaseStimulus):
         side_effects: Optional[Dict[str, Any]] = None,
     ):
         """
-        Build a symbol trial: layered shapes with optional textures.
-
-        Canvas/appearance use pixels. Origin is canvas center. Angles rotate
-        clockwise from vertical.
-
-        Args:
+        Arguments:
             canvas_width (int): Canvas width in px. Default 800.
             canvas_height (int): Canvas height in px. Default 600.
             background (str): Page background CSS color. Default "transparent".
@@ -125,46 +120,25 @@ class Symbol(_BaseStimulus):
 
             side_effects (dict | None): SweetBean side-effects configuration.
 
-        Texture:
-            A texture is a dict with a "type" and type-specific fields.
+            Texture:
+                A texture is a dict with a "type" and type-specific fields.
 
-            - type: "stripes"
-              Fields:
-                bar    : int period in px (stripe A + stripe B). Default 20.
-                duty   : float 0..1 fraction for stripe A. Default 0.5.
-                angle  : float deg; extra rotation added to item.rotation. Default 0.
-                phase  : int px shift along stripe normal. Default 0.
-                colors : [str, str] optional two-color palette. If omitted, a
-                         light/dark pair is derived from the item "color".
+                - type: "stripes"
+                  Fields:
+                    bar    : int period in px (stripe A + stripe B). Default 20.
+                    duty   : float 0..1 fraction for stripe A. Default 0.5.
+                    angle  : float deg; extra rotation added to item.rotation. Default 0.
+                    phase  : int px shift along stripe normal. Default 0.
+                    colors : [str, str] optional two-color palette. If omitted, a
+                             light/dark pair is derived from the item "color".
 
-            - type: "noise"
-              Fields:
-                cell   : int size of each block in px. Default 4.
-                seed   : int optional RNG seed.
-                colors : [str, str] optional two-color palette. If omitted, a
-                         light/dark pair is derived from the item "color".
-                mix    : float 0..1 mean toward second color. Default 0.5.
-
-        Behavior:
-            - If an item has `texture`, it fills the shape; otherwise `color` fills it.
-            - Stroke (if set) is drawn on top.
-            - `blend` controls compositing when shapes overlap.
-
-        Data (added to jsPsych trial data):
-            - bean_key, bean_rt, bean_onset, bean_offset, bean_n_items
-            - bean_correct (bool) when `correct_key` is provided
-
-        Examples:
-            Symbol(shape="circle", color="tomato", duration=500)
-
-            Symbol(
-                items=[
-                  {"shape":"ring","innerRadius":40,"outerRadius":80,"color":"#777"},
-                  {"shape":"circle","radius":40,
-                   "texture":{"type":"stripes","bar":12,"angle":45}}
-                ],
-                duration=300
-            )
+                - type: "noise"
+                  Fields:
+                    cell   : int size of each block in px. Default 4.
+                    seed   : int optional RNG seed.
+                    colors : [str, str] optional two-color palette. If omitted, a
+                             light/dark pair is derived from the item "color".
+                    mix    : float 0..1 mean toward second color. Default 0.5.
         """
         # ---------------- items construction / broadcasting ----------------
         items_final: Any = items
