@@ -199,6 +199,8 @@ class RSVP(_BaseStimulus):
             targets = []
         if distractors is None:
             distractors = []
+        if distractor_index is None and distractors is None:
+            distractor_index = target_index
 
         # ⛔️ Do NOT normalize/transform streams here—must support Variables unchanged.
         super().__init__(locals(), side_effects)
