@@ -1,0 +1,5787 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://autoresearch.github.io/sweetbean/reference/sweetbean/stimulus/Foraging/">
+      
+      
+        <link rel="prev" href="../Choice/">
+      
+      
+        <link rel="next" href="../Gabor/">
+      
+      
+      <link rel="icon" href="../../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.22">
+    
+    
+      
+        <title>Foraging - SweetBean</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.84d31ad4.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/_mkdocstrings.css">
+    
+      <link rel="stylesheet" href="../../../../styles.css">
+    
+    <script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#sweetbeanstimulusforaging" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+        <aside class="md-banner">
+          <div class="md-banner__inner md-grid md-typeset">
+            
+              <button class="md-banner__button md-icon" aria-label="Don't show this again">
+                
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+              </button>
+            
+            
+<span style="display:flex; justify-content:space-between">
+<span class="show-on-small">
+    <span class="twemoji right-margin show-on-small move-down">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M214.6 470.6c-12.5 12.5-32.8 12.5-45.3 0l-160-160c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L192 402.7l137.4-137.3c12.5-12.5 32.8-12.5 45.3 0s12.5 32.8 0 45.3l-160 160zm160-352-160 160c-12.5 12.5-32.8 12.5-45.3 0l-160-160c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L192 210.7 329.4 73.4c12.5-12.5 32.8-12.5 45.3 0s12.5 32.8 0 45.3z"/></svg>
+    </span>
+    Navigate the site here!
+</span>
+<span>
+    Newest release: <a style="vertical-align: middle;" href="https://pypi.org/project/sweetbean/">
+        <img src="https://img.shields.io/pypi/v/sweetbean" alt="PyPI">
+    </a>
+</span>
+<span>
+    <span class="twemoji">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 3C9.23 3 6.19 5.95 6 9.66l-1.92 2.53c-.24.31 0 .81.42.81H6v3c0 1.11.89 2 2 2h1v3h7v-4.69c2.37-1.12 4-3.51 4-6.31 0-3.86-3.12-7-7-7m1 11h-2v-2h2zm1.75-5.19c-.29.4-.66.69-1.11.93-.25.16-.42.33-.51.52-.09.18-.13.43-.13.74h-2c0-.5.11-.92.31-1.18.19-.27.54-.57 1.05-.91.26-.16.47-.36.61-.59.16-.23.23-.5.23-.82 0-.3-.08-.56-.26-.75-.18-.18-.44-.28-.75-.28a1 1 0 0 0-.66.23c-.18.16-.27.39-.28.69h-1.93l-.01-.03c-.01-.79.25-1.36.77-1.77.54-.39 1.24-.59 2.11-.59.93 0 1.66.23 2.19.68.54.45.81 1.06.81 1.82 0 .5-.15.91-.44 1.31"/></svg>
+    </span>
+    Issues or Feature requests?
+    <a href="https://github.com/AutoResearch/sweetbean/issues">
+        Open an issue!
+    </a>
+</span>
+</span>
+
+          </div>
+          
+            <script>var el=document.querySelector("[data-md-component=announce]");if(el){var content=el.querySelector(".md-typeset");__md_hash(content.innerHTML)===__md_get("__announce")&&(el.hidden=!0)}</script>
+          
+        </aside>
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../.." title="SweetBean" class="md-header__button md-logo" aria-label="SweetBean" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            SweetBean
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Foraging
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/AutoResearch/sweetbean" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../.." title="SweetBean" class="md-nav__button md-logo" aria-label="SweetBean" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    SweetBean
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/AutoResearch/sweetbean" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Introduction
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Installation & Compatibility
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../../Basic%20Tutorials/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    Basic Tutorials
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Basic Tutorials
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Basic%20Tutorials/%281%29%20First%20Experiment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    (1) First Experiment
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Basic%20Tutorials/%282%29%20Instruction%20Block/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    (2) Instruction Block
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Basic%20Tutorials/%283%29%20Trial%20Block/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    (3) Trial Block
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Basic%20Tutorials/%284%29%20Responses%20and%20Feedback/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    (4) Responses and Feedback
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Basic%20Tutorials/%285%29%20Combining%20Instructions%2C%20Stimuli%2C%20and%20Responses/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    (5) Combining Instructions, Stimuli, and Responses
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Basic%20Tutorials/%286%29%20Side%20Effects/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    (6) Side Effects
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Basic%20Tutorials/%287%29%20Generating%20Text-Based%20Experiments%20for%20LLMs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    (7) Generating Text-Based Experiments for LLMs
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../../Use%20Case%20Tutorials/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    Use Case Tutorials
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Use Case Tutorials
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_1" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../../Use%20Case%20Tutorials/Comparing%20LLM%20and%20human%20behavior/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    Comparing LLM and human behavior
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_1" id="__nav_4_1_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_1">
+            <span class="md-nav__icon md-icon"></span>
+            Comparing LLM and human behavior
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Use%20Case%20Tutorials/Comparing%20LLM%20and%20human%20behavior/Bandit%20Task/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Reinforcement Learning
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Use%20Case%20Tutorials/Comparing%20LLM%20and%20human%20behavior/Trolley%20Problem/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Trolley Problem
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../../Use%20Case%20Tutorials/Piloting%20Experiments%20with%20LLMs/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    Piloting Experiments with LLMs
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_2" id="__nav_4_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            Piloting Experiments with LLMs
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Use%20Case%20Tutorials/Piloting%20Experiments%20with%20LLMs/Bandit%20Task%20with%20Model%20Confidence/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Bandit Task with Model Confidence
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Use%20Case%20Tutorials/Piloting%20Experiments%20with%20LLMs/Bandit%20Task%20with%20Target%20Value/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Bandit Task with Target Value
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../../Use%20Case%20Tutorials/Psychophysics/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    Psychophysics
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_3" id="__nav_4_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_3">
+            <span class="md-nav__icon md-icon"></span>
+            Psychophysics
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Use%20Case%20Tutorials/Psychophysics/psychophysics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Psychophysics Study
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Use%20Case%20Tutorials/Psychophysics/sweetpea/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Generating Trial Sequences for a Closed-Loop Psychophysics Study
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../../User%20Guide/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    User Guide
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            User Guide
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../User%20Guide/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../User%20Guide/timeline_variables/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Timeline Variables
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../User%20Guide/function_variables/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Function Variables
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../User%20Guide/data_variables/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Data Variables
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../User%20Guide/shared_variables_and_side_effects/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Shared Variables And Side Effects
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../User%20Guide/llm_synthetic_participant/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    LLM - Synthetic Participant
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../User%20Guide/documentation_stimulus_sequence/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Automated Generation of Stimulus Sequence Figures
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_9" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../../Stimuli/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    Stimuli
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5_9" id="__nav_5_9_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_9">
+            <span class="md-nav__icon md-icon"></span>
+            Stimuli
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_9_1" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../../Stimuli/bandit/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    Bandit
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5_9_1" id="__nav_5_9_1_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_5_9_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_9_1">
+            <span class="md-nav__icon md-icon"></span>
+            Bandit
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Stimuli/bandit/bandit/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Bandit
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_9_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../../Stimuli/bilateralrsvp/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    Bilateralrsvp
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5_9_2" id="__nav_5_9_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_5_9_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_9_2">
+            <span class="md-nav__icon md-icon"></span>
+            Bilateralrsvp
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Stimuli/bilateralrsvp/bilateralrsvp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Bilateralrsvp
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Stimuli/bilateralrsvp/bilateralrsvp_simple/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Bilateralrsvp simple
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Stimuli/blank/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Blank
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Stimuli/feedback/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Feedback
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Stimuli/fixation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Fixation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_9_6" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../../Stimuli/flanker/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    Flanker
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5_9_6" id="__nav_5_9_6_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_5_9_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_9_6">
+            <span class="md-nav__icon md-icon"></span>
+            Flanker
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Stimuli/flanker/flanker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Flanker
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_9_7" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../../Stimuli/foraging/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    Foraging
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5_9_7" id="__nav_5_9_7_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_5_9_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_9_7">
+            <span class="md-nav__icon md-icon"></span>
+            Foraging
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Stimuli/foraging/foraging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Foraging
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_9_8" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../../Stimuli/gabor/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    Gabor
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5_9_8" id="__nav_5_9_8_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_5_9_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_9_8">
+            <span class="md-nav__icon md-icon"></span>
+            Gabor
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Stimuli/gabor/gabor/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Gabor
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Stimuli/generic/generic/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Generic
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_9_10" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../../Stimuli/htmlChoice/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    htmlChoice
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5_9_10" id="__nav_5_9_10_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_5_9_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_9_10">
+            <span class="md-nav__icon md-icon"></span>
+            htmlChoice
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Stimuli/htmlChoice/htmlChoice/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    htmlChoice
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_9_11" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../../Stimuli/htmlkeyboardresponse/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    Htmlkeyboardresponse
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5_9_11" id="__nav_5_9_11_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_5_9_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_9_11">
+            <span class="md-nav__icon md-icon"></span>
+            Htmlkeyboardresponse
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Stimuli/htmlkeyboardresponse/htmlkeyboardresponse/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Htmlkeyboardresponse
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_9_12" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../../Stimuli/image/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    Image
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5_9_12" id="__nav_5_9_12_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_5_9_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_9_12">
+            <span class="md-nav__icon md-icon"></span>
+            Image
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Stimuli/image/image/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Image
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Stimuli/image/image_language/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Image language
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_9_13" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../../Stimuli/likertsurvey/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    Likertsurvey
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5_9_13" id="__nav_5_9_13_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_5_9_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_9_13">
+            <span class="md-nav__icon md-icon"></span>
+            Likertsurvey
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Stimuli/likertsurvey/likertsurvey/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Likertsurvey
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_9_14" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../../Stimuli/multichoicesurvey/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    Multichoicesurvey
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5_9_14" id="__nav_5_9_14_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_5_9_14_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_9_14">
+            <span class="md-nav__icon md-icon"></span>
+            Multichoicesurvey
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Stimuli/multichoicesurvey/multiplechoice/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Multiplechoice
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_9_15" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../../Stimuli/randomdotpatterns/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    Randomdotpatterns
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5_9_15" id="__nav_5_9_15_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_5_9_15_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_9_15">
+            <span class="md-nav__icon md-icon"></span>
+            Randomdotpatterns
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Stimuli/randomdotpatterns/randomdotpatterns/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Randomdotpatterns
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_9_16" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../../Stimuli/randomobjectkinematogram/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    Randomobjectkinematogram
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5_9_16" id="__nav_5_9_16_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_5_9_16_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_9_16">
+            <span class="md-nav__icon md-icon"></span>
+            Randomobjectkinematogram
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Stimuli/randomobjectkinematogram/randomobjectkinematogram/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Randomobjectkinematogram
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_9_17" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../../Stimuli/rsvp/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    Rsvp
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5_9_17" id="__nav_5_9_17_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_5_9_17_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_9_17">
+            <span class="md-nav__icon md-icon"></span>
+            Rsvp
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Stimuli/rsvp/rsvp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Rsvp
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_9_18" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../../Stimuli/stroop/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    Stroop
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5_9_18" id="__nav_5_9_18_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_5_9_18_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_9_18">
+            <span class="md-nav__icon md-icon"></span>
+            Stroop
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Stimuli/stroop/stroop/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Stroop
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_9_19" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../../Stimuli/symbols/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    Symbols
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5_9_19" id="__nav_5_9_19_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_5_9_19_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_9_19">
+            <span class="md-nav__icon md-icon"></span>
+            Symbols
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Stimuli/symbols/dm_same_diff/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Dm same diff
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Stimuli/symbols/plaid_demo/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Plaid demo
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Stimuli/symbols/posner/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Posner
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Stimuli/symbols/symbols/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Symbols
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Stimuli/symbols/visual_search/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Visual search
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_9_20" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../../Stimuli/text/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    Text
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5_9_20" id="__nav_5_9_20_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_5_9_20_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_9_20">
+            <span class="md-nav__icon md-icon"></span>
+            Text
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Stimuli/text/text/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Text
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_9_21" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../../Stimuli/textsurvey/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    Textsurvey
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5_9_21" id="__nav_5_9_21_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_5_9_21_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_9_21">
+            <span class="md-nav__icon md-icon"></span>
+            Textsurvey
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Stimuli/textsurvey/textsurvey/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Textsurvey
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_9_22" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../../Stimuli/video/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    Video
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5_9_22" id="__nav_5_9_22_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_5_9_22_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_9_22">
+            <span class="md-nav__icon md-icon"></span>
+            Video
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Stimuli/video/video/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Video
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_10" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../../Extensions/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    Extensions
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5_10" id="__nav_5_10_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_10">
+            <span class="md-nav__icon md-icon"></span>
+            Extensions
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_10_1" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../../Extensions/Touchscreen/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    Touchscreen
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5_10_1" id="__nav_5_10_1_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_5_10_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_10_1">
+            <span class="md-nav__icon md-icon"></span>
+            Touchscreen
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../Extensions/Touchscreen/touchbutton/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Touchbutton
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../CONTRIBUTING/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Contributor Guide
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Code Reference
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            Code Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_1" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    sweetbean
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_7_1" id="__nav_7_1_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_7_1">
+            <span class="md-nav__icon md-icon"></span>
+            sweetbean
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../block/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    block
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    data
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../experiment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    experiment
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+          
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_1_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../extension/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    extension
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_7_1_5" id="__nav_7_1_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_7_1_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7_1_5">
+            <span class="md-nav__icon md-icon"></span>
+            extension
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../extension/TouchButton/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    TouchButton
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_1_6" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../llm_utils/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    llm_utils
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_7_1_6" id="__nav_7_1_6_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_7_1_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7_1_6">
+            <span class="md-nav__icon md-icon"></span>
+            llm_utils
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../llm_utils/prompts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    prompts
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+          
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_1_7" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    stimulus
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_7_1_7" id="__nav_7_1_7_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_7_1_7_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_7_1_7">
+            <span class="md-nav__icon md-icon"></span>
+            stimulus
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Choice/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Choice
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Foraging
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Foraging
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#sweetbean.stimulus.Foraging" class="md-nav__link">
+    <span class="md-ellipsis">
+      Foraging
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sweetbean.stimulus.Foraging.Foraging" class="md-nav__link">
+    <span class="md-ellipsis">
+      Foraging
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Foraging">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sweetbean.stimulus.Foraging.Foraging.__init__" class="md-nav__link">
+    <span class="md-ellipsis">
+      __init__
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Gabor/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Gabor
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Generic/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Generic
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../HtmlKeyboardResponse/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    HtmlKeyboardResponse
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Image/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Image
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../RO/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    RO
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../RSVP/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    RSVP
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Survey/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Survey
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Symbol/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Symbol
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Video/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Video
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_1_8" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../util/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    util
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_7_1_8" id="__nav_7_1_8_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_7_1_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7_1_8">
+            <span class="md-nav__icon md-icon"></span>
+            util
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../util/data_process/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    data_process
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../util/io/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    io
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_1_9" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../variable/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    variable
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_7_1_9" id="__nav_7_1_9_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_7_1_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7_1_9">
+            <span class="md-nav__icon md-icon"></span>
+            variable
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#sweetbean.stimulus.Foraging" class="md-nav__link">
+    <span class="md-ellipsis">
+      Foraging
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sweetbean.stimulus.Foraging.Foraging" class="md-nav__link">
+    <span class="md-ellipsis">
+      Foraging
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Foraging">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sweetbean.stimulus.Foraging.Foraging.__init__" class="md-nav__link">
+    <span class="md-ellipsis">
+      __init__
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+<div style="position: relative;">
+    
+
+                  
+
+
+  
+  
+
+
+<h1 id="sweetbeanstimulusforaging">sweetbean.stimulus.Foraging</h1>
+
+
+<div class="doc doc-object doc-module">
+
+
+
+<a id="sweetbean.stimulus.Foraging"></a>
+    <div class="doc doc-contents first">
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="sweetbean.stimulus.Foraging.Foraging" class="doc doc-heading">
+            <code>Foraging</code>
+
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="sweetbean.stimulus.Stimulus._BaseStimulus">_BaseStimulus</span></code></p>
+
+
+        <p>Visual Foraging stimulus (wraps @sweet-jspsych/plugin-foraging)</p>
+
+
+<details class="arrays-only-api" open>
+  <summary>Arrays-only API</summary>
+  <ul>
+<li>targets:     list[ItemSpec]</li>
+<li>distractors: list[ItemSpec]</li>
+</ul>
+</details>        <p>ItemSpec fields (each item defines ONE of {html|text|shape|src}, plus options):
+  - html: str
+  - text: str
+  - shape: Literal["circle","square","triangle"]
+  - src: str
+  - color: str                      # overrides overlay_pool sampling
+  - rotationDeg: int                # overrides rotation_pool sampling
+  - pos: dict                       # {mode:"abs"|"grid"|"circle", ...}
+  - size: str                       # e.g., "12vmin"
+  - fontSize: str
+  - id: str
+  - attrs: dict[str,str]</p>
+
+
+<details class="notes" open>
+  <summary>Notes</summary>
+  <ul>
+<li>By default, randomized non-overlapping placement in a centered square arena.</li>
+<li>Trial ends when all targets found unless you change <code>end_when_found=False</code>
+  or set an explicit <code>trial_duration</code>.</li>
+</ul>
+</details>
+
+
+
+
+
+
+
+              <details class="quote">
+                <summary>Source code in <code>sweetbean/stimulus/Foraging.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">  7</span>
+<span class="normal">  8</span>
+<span class="normal">  9</span>
+<span class="normal"> 10</span>
+<span class="normal"> 11</span>
+<span class="normal"> 12</span>
+<span class="normal"> 13</span>
+<span class="normal"> 14</span>
+<span class="normal"> 15</span>
+<span class="normal"> 16</span>
+<span class="normal"> 17</span>
+<span class="normal"> 18</span>
+<span class="normal"> 19</span>
+<span class="normal"> 20</span>
+<span class="normal"> 21</span>
+<span class="normal"> 22</span>
+<span class="normal"> 23</span>
+<span class="normal"> 24</span>
+<span class="normal"> 25</span>
+<span class="normal"> 26</span>
+<span class="normal"> 27</span>
+<span class="normal"> 28</span>
+<span class="normal"> 29</span>
+<span class="normal"> 30</span>
+<span class="normal"> 31</span>
+<span class="normal"> 32</span>
+<span class="normal"> 33</span>
+<span class="normal"> 34</span>
+<span class="normal"> 35</span>
+<span class="normal"> 36</span>
+<span class="normal"> 37</span>
+<span class="normal"> 38</span>
+<span class="normal"> 39</span>
+<span class="normal"> 40</span>
+<span class="normal"> 41</span>
+<span class="normal"> 42</span>
+<span class="normal"> 43</span>
+<span class="normal"> 44</span>
+<span class="normal"> 45</span>
+<span class="normal"> 46</span>
+<span class="normal"> 47</span>
+<span class="normal"> 48</span>
+<span class="normal"> 49</span>
+<span class="normal"> 50</span>
+<span class="normal"> 51</span>
+<span class="normal"> 52</span>
+<span class="normal"> 53</span>
+<span class="normal"> 54</span>
+<span class="normal"> 55</span>
+<span class="normal"> 56</span>
+<span class="normal"> 57</span>
+<span class="normal"> 58</span>
+<span class="normal"> 59</span>
+<span class="normal"> 60</span>
+<span class="normal"> 61</span>
+<span class="normal"> 62</span>
+<span class="normal"> 63</span>
+<span class="normal"> 64</span>
+<span class="normal"> 65</span>
+<span class="normal"> 66</span>
+<span class="normal"> 67</span>
+<span class="normal"> 68</span>
+<span class="normal"> 69</span>
+<span class="normal"> 70</span>
+<span class="normal"> 71</span>
+<span class="normal"> 72</span>
+<span class="normal"> 73</span>
+<span class="normal"> 74</span>
+<span class="normal"> 75</span>
+<span class="normal"> 76</span>
+<span class="normal"> 77</span>
+<span class="normal"> 78</span>
+<span class="normal"> 79</span>
+<span class="normal"> 80</span>
+<span class="normal"> 81</span>
+<span class="normal"> 82</span>
+<span class="normal"> 83</span>
+<span class="normal"> 84</span>
+<span class="normal"> 85</span>
+<span class="normal"> 86</span>
+<span class="normal"> 87</span>
+<span class="normal"> 88</span>
+<span class="normal"> 89</span>
+<span class="normal"> 90</span>
+<span class="normal"> 91</span>
+<span class="normal"> 92</span>
+<span class="normal"> 93</span>
+<span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span>
+<span class="normal">126</span>
+<span class="normal">127</span>
+<span class="normal">128</span>
+<span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span>
+<span class="normal">136</span>
+<span class="normal">137</span>
+<span class="normal">138</span>
+<span class="normal">139</span>
+<span class="normal">140</span>
+<span class="normal">141</span>
+<span class="normal">142</span>
+<span class="normal">143</span>
+<span class="normal">144</span>
+<span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span>
+<span class="normal">148</span>
+<span class="normal">149</span>
+<span class="normal">150</span>
+<span class="normal">151</span>
+<span class="normal">152</span>
+<span class="normal">153</span>
+<span class="normal">154</span>
+<span class="normal">155</span>
+<span class="normal">156</span>
+<span class="normal">157</span>
+<span class="normal">158</span>
+<span class="normal">159</span>
+<span class="normal">160</span>
+<span class="normal">161</span>
+<span class="normal">162</span>
+<span class="normal">163</span>
+<span class="normal">164</span>
+<span class="normal">165</span>
+<span class="normal">166</span>
+<span class="normal">167</span>
+<span class="normal">168</span>
+<span class="normal">169</span>
+<span class="normal">170</span>
+<span class="normal">171</span>
+<span class="normal">172</span>
+<span class="normal">173</span>
+<span class="normal">174</span>
+<span class="normal">175</span>
+<span class="normal">176</span>
+<span class="normal">177</span>
+<span class="normal">178</span>
+<span class="normal">179</span>
+<span class="normal">180</span>
+<span class="normal">181</span>
+<span class="normal">182</span>
+<span class="normal">183</span>
+<span class="normal">184</span>
+<span class="normal">185</span>
+<span class="normal">186</span>
+<span class="normal">187</span>
+<span class="normal">188</span>
+<span class="normal">189</span>
+<span class="normal">190</span>
+<span class="normal">191</span>
+<span class="normal">192</span>
+<span class="normal">193</span>
+<span class="normal">194</span>
+<span class="normal">195</span>
+<span class="normal">196</span>
+<span class="normal">197</span>
+<span class="normal">198</span>
+<span class="normal">199</span>
+<span class="normal">200</span>
+<span class="normal">201</span>
+<span class="normal">202</span>
+<span class="normal">203</span>
+<span class="normal">204</span>
+<span class="normal">205</span>
+<span class="normal">206</span>
+<span class="normal">207</span>
+<span class="normal">208</span>
+<span class="normal">209</span>
+<span class="normal">210</span>
+<span class="normal">211</span>
+<span class="normal">212</span>
+<span class="normal">213</span>
+<span class="normal">214</span>
+<span class="normal">215</span>
+<span class="normal">216</span>
+<span class="normal">217</span>
+<span class="normal">218</span>
+<span class="normal">219</span>
+<span class="normal">220</span>
+<span class="normal">221</span>
+<span class="normal">222</span>
+<span class="normal">223</span>
+<span class="normal">224</span>
+<span class="normal">225</span>
+<span class="normal">226</span>
+<span class="normal">227</span>
+<span class="normal">228</span>
+<span class="normal">229</span>
+<span class="normal">230</span>
+<span class="normal">231</span>
+<span class="normal">232</span>
+<span class="normal">233</span>
+<span class="normal">234</span>
+<span class="normal">235</span>
+<span class="normal">236</span>
+<span class="normal">237</span>
+<span class="normal">238</span>
+<span class="normal">239</span>
+<span class="normal">240</span>
+<span class="normal">241</span>
+<span class="normal">242</span>
+<span class="normal">243</span>
+<span class="normal">244</span>
+<span class="normal">245</span>
+<span class="normal">246</span>
+<span class="normal">247</span>
+<span class="normal">248</span>
+<span class="normal">249</span>
+<span class="normal">250</span>
+<span class="normal">251</span>
+<span class="normal">252</span>
+<span class="normal">253</span>
+<span class="normal">254</span>
+<span class="normal">255</span>
+<span class="normal">256</span>
+<span class="normal">257</span>
+<span class="normal">258</span>
+<span class="normal">259</span>
+<span class="normal">260</span>
+<span class="normal">261</span>
+<span class="normal">262</span>
+<span class="normal">263</span>
+<span class="normal">264</span>
+<span class="normal">265</span>
+<span class="normal">266</span>
+<span class="normal">267</span>
+<span class="normal">268</span>
+<span class="normal">269</span>
+<span class="normal">270</span>
+<span class="normal">271</span>
+<span class="normal">272</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Foraging</span><span class="p">(</span><span class="n">_BaseStimulus</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Visual Foraging stimulus (wraps @sweet-jspsych/plugin-foraging)</span>
+
+<span class="sd">    Arrays-only API:</span>
+<span class="sd">      - targets:     list[ItemSpec]</span>
+<span class="sd">      - distractors: list[ItemSpec]</span>
+
+<span class="sd">    ItemSpec fields (each item defines ONE of {html|text|shape|src}, plus options):</span>
+<span class="sd">      - html: str</span>
+<span class="sd">      - text: str</span>
+<span class="sd">      - shape: Literal[&quot;circle&quot;,&quot;square&quot;,&quot;triangle&quot;]</span>
+<span class="sd">      - src: str</span>
+<span class="sd">      - color: str                      # overrides overlay_pool sampling</span>
+<span class="sd">      - rotationDeg: int                # overrides rotation_pool sampling</span>
+<span class="sd">      - pos: dict                       # {mode:&quot;abs&quot;|&quot;grid&quot;|&quot;circle&quot;, ...}</span>
+<span class="sd">      - size: str                       # e.g., &quot;12vmin&quot;</span>
+<span class="sd">      - fontSize: str</span>
+<span class="sd">      - id: str</span>
+<span class="sd">      - attrs: dict[str,str]</span>
+
+<span class="sd">    Notes:</span>
+<span class="sd">      - By default, randomized non-overlapping placement in a centered square arena.</span>
+<span class="sd">      - Trial ends when all targets found unless you change `end_when_found=False`</span>
+<span class="sd">        or set an explicit `trial_duration`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># IMPORTANT: For SweetBean, keep a string &quot;type&quot; so SweetBean emits</span>
+    <span class="c1"># a declarative config object. The browser bundle must set window.jsPsychForaging.</span>
+    <span class="nb">type</span> <span class="o">=</span> <span class="s2">&quot;jsPsychForaging&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="c1"># Required-ish (can be empty)</span>
+        <span class="n">targets</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]],</span> <span class="n">TimelineVariable</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">distractors</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]],</span> <span class="n">TimelineVariable</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="c1"># Layout &amp; placement</span>
+        <span class="n">position_mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;random&quot;</span><span class="p">,</span>  <span class="c1"># &quot;random&quot; | &quot;grid&quot; | &quot;circle&quot;</span>
+        <span class="n">grid_cols</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">grid_rows</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">ring_radius_vmin</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">30</span><span class="p">,</span>
+        <span class="n">randomize_positions</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>  <span class="c1"># grid/circle only</span>
+        <span class="c1"># Arena &amp; spacing</span>
+        <span class="n">arena_size_vmin</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">92</span><span class="p">,</span>  <span class="c1"># centered square side (vmin)</span>
+        <span class="n">placement_inset_vmin</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">6</span><span class="p">,</span>  <span class="c1"># inner margin</span>
+        <span class="n">min_gap_vmin</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">2.5</span><span class="p">,</span>  <span class="c1"># extra pairwise gap</span>
+        <span class="c1"># Visuals</span>
+        <span class="n">background</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;#000000&quot;</span><span class="p">,</span>  <span class="c1"># default black</span>
+        <span class="n">color</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;#ffffff&quot;</span><span class="p">,</span>  <span class="c1"># default foreground (text/border)</span>
+        <span class="n">token_box_size</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;12vmin&quot;</span><span class="p">,</span>
+        <span class="n">token_font_size</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;10vmin&quot;</span><span class="p">,</span>
+        <span class="c1"># Pools (defaults are in the plugin too; pass to control sampling)</span>
+        <span class="n">overlay_pool</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">rotation_pool</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="c1"># Timing &amp; control</span>
+        <span class="n">trial_duration</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span>
+            <span class="nb">int</span>
+        <span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>  <span class="c1"># None =&gt; ends when all targets found (if end_when_found=True)</span>
+        <span class="n">end_when_found</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">response_ends_trial</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="c1"># Determinism</span>
+        <span class="n">seed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="c1"># Feedback</span>
+        <span class="n">show_star_feedback</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>  <span class="c1"># OFF by default</span>
+        <span class="n">star_color</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;#f6b500&quot;</span><span class="p">,</span>
+        <span class="c1"># Hooks / triggers</span>
+        <span class="c1"># Example: {&quot;on_all_targets_collected&quot;: &quot;end_trial&quot;}</span>
+        <span class="n">triggers</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="c1"># SweetBean convenience</span>
+        <span class="n">duration</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>  <span class="c1"># mirrors RSVP: alias for trial_duration</span>
+        <span class="n">side_effects</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Arguments:</span>
+<span class="sd">            targets (list[dict] | TimelineVariable | None):</span>
+<span class="sd">                Trial’s target items. Accepts a concrete list or a TimelineVariable</span>
+<span class="sd">                that evaluates per trial to a list. Each item is an ItemSpec dict</span>
+<span class="sd">                that defines exactly ONE of {html | text | shape | src} plus</span>
+<span class="sd">                optional styling/placement fields:</span>
+
+<span class="sd">                  Content (choose exactly one)</span>
+<span class="sd">                  - html (str): Raw HTML.</span>
+<span class="sd">                  - text (str): Plain text (rendered in a token box).</span>
+<span class="sd">                  - shape (str): One of &quot;circle&quot;, &quot;square&quot;, &quot;triangle&quot;.</span>
+<span class="sd">                  - src (str): Image URL/path.</span>
+
+<span class="sd">                  Optional appearance/identity</span>
+<span class="sd">                  - color (str): CSS color; overrides overlay_pool sampling.</span>
+<span class="sd">                  - rotationDeg (int): Rotation in degrees; overrides rotation_pool.</span>
+<span class="sd">                  - size (str): CSS size of the token box (e.g., &quot;12vmin&quot;).</span>
+<span class="sd">                  - fontSize (str): For text content (e.g., &quot;10vmin&quot;).</span>
+<span class="sd">                  - id (str): Opaque label copied to data.</span>
+<span class="sd">                  - attrs (dict[str,str]): Arbitrary HTML attributes.</span>
+
+<span class="sd">                  Placement override (optional; else global placement rules apply)</span>
+<span class="sd">                  - pos (dict): One of the following shapes:</span>
+<span class="sd">                        {&quot;mode&quot;: &quot;abs&quot;, &quot;x_vmin&quot;: &lt;float&gt;, &quot;y_vmin&quot;: &lt;float&gt;}</span>
+<span class="sd">                        {&quot;mode&quot;: &quot;grid&quot;, &quot;row&quot;: &lt;int&gt;, &quot;col&quot;: &lt;int&gt;}</span>
+<span class="sd">                        {&quot;mode&quot;: &quot;circle&quot;, &quot;angle_deg&quot;: &lt;float&gt;, &quot;radius_vmin&quot;: &lt;float&gt;}</span>
+
+<span class="sd">            distractors (list[dict] | TimelineVariable | None):</span>
+<span class="sd">                Same ItemSpec structure as `targets`. May be empty.</span>
+
+<span class="sd">            position_mode (str):</span>
+<span class="sd">                Global placement policy when items don’t provide an explicit `pos`.</span>
+<span class="sd">                One of &quot;random&quot; | &quot;grid&quot; | &quot;circle&quot;. Default &quot;random&quot;.</span>
+<span class="sd">            grid_cols (int | None):</span>
+<span class="sd">                Number of columns for &quot;grid&quot; placement. If None, inferred from count.</span>
+<span class="sd">            grid_rows (int | None):</span>
+<span class="sd">                Number of rows for &quot;grid&quot; placement. If None, inferred from count.</span>
+<span class="sd">            ring_radius_vmin (float):</span>
+<span class="sd">                Ring radius for &quot;circle&quot; placement, in vmin units. Default 30.</span>
+<span class="sd">            randomize_positions (bool):</span>
+<span class="sd">                If True, jitter positions within the grid cell / along the ring for</span>
+<span class="sd">                &quot;grid&quot;/&quot;circle&quot; modes. Default True.</span>
+
+<span class="sd">            arena_size_vmin (float):</span>
+<span class="sd">                Side length (vmin) of the centered square arena. Default 92.</span>
+<span class="sd">            placement_inset_vmin (float):</span>
+<span class="sd">                Inner safety margin from arena edges. Default 6.</span>
+<span class="sd">            min_gap_vmin (float):</span>
+<span class="sd">                Extra minimum pairwise spacing between item centers. Default 2.5.</span>
+
+<span class="sd">            background (str):</span>
+<span class="sd">                Arena background color. Default &quot;#000000&quot;.</span>
+<span class="sd">            color (str):</span>
+<span class="sd">                Default foreground color (text/borders). Default &quot;#ffffff&quot;.</span>
+<span class="sd">            token_box_size (str):</span>
+<span class="sd">                Default token box size (CSS). Default &quot;12vmin&quot;.</span>
+<span class="sd">            token_font_size (str):</span>
+<span class="sd">                Default font size for text tokens (CSS). Default &quot;10vmin&quot;.</span>
+
+<span class="sd">            overlay_pool (list[str] | None):</span>
+<span class="sd">                Optional pool of overlay symbols/colors; sampled per item unless the</span>
+<span class="sd">                ItemSpec provides an explicit `color`. Omit/None to use plugin defaults.</span>
+<span class="sd">            rotation_pool (list[int] | None):</span>
+<span class="sd">                Optional pool of rotations in degrees; sampled per item unless the</span>
+<span class="sd">                ItemSpec provides `rotationDeg`. Omit/None to use plugin defaults.</span>
+
+<span class="sd">            trial_duration (int | None):</span>
+<span class="sd">                Hard timeout in ms. If None and `end_when_found=True`, the trial ends</span>
+<span class="sd">                when all targets are collected. Default None.</span>
+<span class="sd">            end_when_found (bool):</span>
+<span class="sd">                If True, automatically end the trial once all targets are found.</span>
+<span class="sd">                Default True.</span>
+<span class="sd">            response_ends_trial (bool):</span>
+<span class="sd">                If True, any user interaction that counts as a response ends the trial,</span>
+<span class="sd">                even if not all targets are collected. Default False.</span>
+
+<span class="sd">            seed (int | None):</span>
+<span class="sd">                Seed for deterministic placement/sampling. Default None.</span>
+
+<span class="sd">            show_star_feedback (bool):</span>
+<span class="sd">                If True, briefly show a star animation on successful target clicks.</span>
+<span class="sd">                Default False.</span>
+<span class="sd">            star_color (str):</span>
+<span class="sd">                Star feedback color. Default &quot;#f6b500&quot;.</span>
+
+<span class="sd">            triggers (dict | None):</span>
+<span class="sd">                Optional event→action mapping, e.g.,</span>
+<span class="sd">                {&quot;on_all_targets_collected&quot;: &quot;end_trial&quot;}.</span>
+<span class="sd">                Default: {&quot;on_all_targets_collected&quot;: &quot;end_trial&quot;}.</span>
+
+<span class="sd">            duration (int | None):</span>
+<span class="sd">                SweetBean convenience alias mirrored to `trial_duration` during build</span>
+<span class="sd">                (consistent with RSVP). If provided, `trial_duration` is set to this</span>
+<span class="sd">                value. Default None.</span>
+<span class="sd">            side_effects: Optional side-effect configuration passed to the runtime. This expects</span>
+<span class="sd">                a list of SideEffect definitions (see SweetBean docs) which can be</span>
+<span class="sd">                used to update global data like overall score or trial counter.</span>
+
+<span class="sd">        Emits (added to jsPsych data):</span>
+<span class="sd">            - clicks (list[dict]): Raw click events ({kind, index, id?, t}).</span>
+<span class="sd">            - n_targets (int): Number of target items in the trial.</span>
+<span class="sd">            - n_collected (int): Number of targets collected.</span>
+<span class="sd">            - tps (list[number]): Timestamps for target pickups.</span>
+<span class="sd">            - bean_clicks (list[dict]): Mirror of `clicks`.</span>
+<span class="sd">            - bean_n_targets (int): Mirror of `n_targets`.</span>
+<span class="sd">            - bean_n_found (int): Mirror of `n_collected`.</span>
+<span class="sd">            - bean_tps (list[number]): Mirror of `tps`.</span>
+<span class="sd">            - bean_all_found (bool): Convenience flag (n_collected &gt;= n_targets).</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            - Provide item-level `pos` to bypass global placement for specific items.</span>
+<span class="sd">            - If both `duration` and `trial_duration` are given, `duration` takes</span>
+<span class="sd">              precedence by being copied into `trial_duration`.</span>
+<span class="sd">            - Null/None optionals are dropped so the plugin falls back to its defaults.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            from sweetbean import Block, Experiment</span>
+<span class="sd">            from sweetbean.variable import TimelineVariable</span>
+
+<span class="sd">            timeline = [</span>
+<span class="sd">                {</span>
+<span class="sd">                    &quot;targets&quot;: [</span>
+<span class="sd">                        {&quot;text&quot;: &quot;T&quot;, &quot;color&quot;: &quot;#66ff66&quot;},</span>
+<span class="sd">                        {&quot;shape&quot;: &quot;circle&quot;, &quot;color&quot;: &quot;#66ff66&quot;},</span>
+<span class="sd">                    ],</span>
+<span class="sd">                    &quot;distractors&quot;: [</span>
+<span class="sd">                        {&quot;text&quot;: &quot;L&quot;, &quot;color&quot;: &quot;#ff6666&quot;},</span>
+<span class="sd">                        {&quot;shape&quot;: &quot;square&quot;, &quot;color&quot;: &quot;#ff6666&quot;},</span>
+<span class="sd">                        {&quot;shape&quot;: &quot;triangle&quot;, &quot;color&quot;: &quot;#ff6666&quot;},</span>
+<span class="sd">                    ],</span>
+<span class="sd">                }</span>
+<span class="sd">            ]</span>
+
+<span class="sd">            stim = Foraging(</span>
+<span class="sd">                targets=TimelineVariable(&quot;targets&quot;),</span>
+<span class="sd">                distractors=TimelineVariable(&quot;distractors&quot;),</span>
+<span class="sd">                position_mode=&quot;grid&quot;,</span>
+<span class="sd">                grid_cols=6, grid_rows=4,</span>
+<span class="sd">                arena_size_vmin=90, min_gap_vmin=2.5,</span>
+<span class="sd">                background=&quot;#000000&quot;, color=&quot;#ffffff&quot;,</span>
+<span class="sd">                token_box_size=&quot;10vmin&quot;, token_font_size=&quot;8vmin&quot;,</span>
+<span class="sd">                end_when_found=True, response_ends_trial=False,</span>
+<span class="sd">                show_star_feedback=True, star_color=&quot;#f6b500&quot;,</span>
+<span class="sd">            )</span>
+
+<span class="sd">            block = Block([stim], timeline=timeline)</span>
+<span class="sd">            Experiment([block]).to_html(&quot;foraging.html&quot;)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">targets</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">targets</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">distractors</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">distractors</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">triggers</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">triggers</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;on_all_targets_collected&quot;</span><span class="p">:</span> <span class="s2">&quot;end_trial&quot;</span><span class="p">}</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="nb">locals</span><span class="p">(),</span> <span class="n">side_effects</span><span class="p">)</span>
+
+    <span class="c1"># ---- SweetBean hooks ----</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_add_special_param</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Use SweetBean `duration` as jsPsych `trial_duration` (consistent with RSVP).</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">arg_js</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;duration&quot;</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;null&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">arg_js</span><span class="p">[</span><span class="s2">&quot;trial_duration&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">arg_js</span><span class="p">[</span><span class="s2">&quot;duration&quot;</span><span class="p">]</span>
+
+        <span class="c1"># If user didn’t specify pools, omit them; plugin will fall back to its defaults.</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">arg_js</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;overlay_pool&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">arg_js</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;overlay_pool&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">arg_js</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rotation_pool&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">arg_js</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;rotation_pool&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+        <span class="c1"># Keep `type` as string so SweetBean emits declarative config</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">arg_js</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_process_response</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Convenience mirrors (prefixed with bean_)</span>
+        <span class="c1"># clicks is already an array of {kind,index,id?,t}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">js_data</span> <span class="o">+=</span> <span class="s1">&#39;data[&quot;bean_clicks&quot;] = data[&quot;clicks&quot;];&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">js_data</span> <span class="o">+=</span> <span class="s1">&#39;data[&quot;bean_n_targets&quot;] = data[&quot;n_targets&quot;];&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">js_data</span> <span class="o">+=</span> <span class="s1">&#39;data[&quot;bean_n_found&quot;] = data[&quot;n_collected&quot;];&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">js_data</span> <span class="o">+=</span> <span class="s1">&#39;data[&quot;bean_tps&quot;] = data[&quot;tps&quot;];&#39;</span>
+        <span class="c1"># quick all-found boolean</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">js_data</span> <span class="o">+=</span> <span class="p">(</span>
+            <span class="s1">&#39;data[&quot;bean_all_found&quot;] = (data[&quot;n_collected&quot;] &gt;= data[&quot;n_targets&quot;]);&#39;</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_set_before</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># No extra on_load code required; SweetBean preamble already sets document bg.</span>
+        <span class="k">pass</span>
+
+    <span class="c1"># Language mode not supported (same as RSVP)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">process_l</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prompts</span><span class="p">,</span> <span class="n">get_input</span><span class="p">,</span> <span class="n">multi_turn</span><span class="p">,</span> <span class="n">datum</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</code></pre></div></td></tr></table></div>
+              </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="sweetbean.stimulus.Foraging.Foraging.__init__" class="doc doc-heading">
+            <code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">targets</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">distractors</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">position_mode</span><span class="o">=</span><span class="s1">&#39;random&#39;</span><span class="p">,</span> <span class="n">grid_cols</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">grid_rows</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ring_radius_vmin</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">randomize_positions</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">arena_size_vmin</span><span class="o">=</span><span class="mi">92</span><span class="p">,</span> <span class="n">placement_inset_vmin</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">min_gap_vmin</span><span class="o">=</span><span class="mf">2.5</span><span class="p">,</span> <span class="n">background</span><span class="o">=</span><span class="s1">&#39;#000000&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#ffffff&#39;</span><span class="p">,</span> <span class="n">token_box_size</span><span class="o">=</span><span class="s1">&#39;12vmin&#39;</span><span class="p">,</span> <span class="n">token_font_size</span><span class="o">=</span><span class="s1">&#39;10vmin&#39;</span><span class="p">,</span> <span class="n">overlay_pool</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rotation_pool</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">trial_duration</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">end_when_found</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">response_ends_trial</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">show_star_feedback</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">star_color</span><span class="o">=</span><span class="s1">&#39;#f6b500&#39;</span><span class="p">,</span> <span class="n">triggers</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">side_effects</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>targets</code>
+            </td>
+            <td>
+                  <code><span title="list">list</span>[<span title="dict">dict</span>] | <a class="autorefs autorefs-internal" title="TimelineVariable (sweetbean.variable.TimelineVariable)" href="../../variable/#sweetbean.variable.TimelineVariable">TimelineVariable</a> | None</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Trial’s target items. Accepts a concrete list or a TimelineVariable
+that evaluates per trial to a list. Each item is an ItemSpec dict
+that defines exactly ONE of {html | text | shape | src} plus
+optional styling/placement fields:</p>
+<p>Content (choose exactly one)
+  - html (str): Raw HTML.
+  - text (str): Plain text (rendered in a token box).
+  - shape (str): One of "circle", "square", "triangle".
+  - src (str): Image URL/path.</p>
+<p>Optional appearance/identity
+  - color (str): CSS color; overrides overlay_pool sampling.
+  - rotationDeg (int): Rotation in degrees; overrides rotation_pool.
+  - size (str): CSS size of the token box (e.g., "12vmin").
+  - fontSize (str): For text content (e.g., "10vmin").
+  - id (str): Opaque label copied to data.
+  - attrs (dict[str,str]): Arbitrary HTML attributes.</p>
+<p _angle_deg_:="&quot;angle_deg&quot;:" _circle_="&quot;circle&quot;," _mode_:="&quot;mode&quot;:" _radius_vmin_:="&quot;radius_vmin&quot;:" _wzxhzdk:4_="<float>," _wzxhzdk:5_="<float>">Placement override (optional; else global placement rules apply)
+  - pos (dict): One of the following shapes:
+        {"mode": "abs", "x_vmin": <float>, "y_vmin": <float>}
+        {"mode": "grid", "row": <int>, "col": <int>}</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>distractors</code>
+            </td>
+            <td>
+                  <code><span title="list">list</span>[<span title="dict">dict</span>] | <a class="autorefs autorefs-internal" title="TimelineVariable (sweetbean.variable.TimelineVariable)" href="../../variable/#sweetbean.variable.TimelineVariable">TimelineVariable</a> | None</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Same ItemSpec structure as <code>targets</code>. May be empty.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>position_mode</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Global placement policy when items don’t provide an explicit <code>pos</code>.
+One of "random" | "grid" | "circle". Default "random".</p>
+              </div>
+            </td>
+            <td>
+                  <code>&#39;random&#39;</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>grid_cols</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span> | None</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Number of columns for "grid" placement. If None, inferred from count.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>grid_rows</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span> | None</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Number of rows for "grid" placement. If None, inferred from count.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>ring_radius_vmin</code>
+            </td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Ring radius for "circle" placement, in vmin units. Default 30.</p>
+              </div>
+            </td>
+            <td>
+                  <code>30</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>randomize_positions</code>
+            </td>
+            <td>
+                  <code><span title="bool">bool</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>If True, jitter positions within the grid cell / along the ring for
+"grid"/"circle" modes. Default True.</p>
+              </div>
+            </td>
+            <td>
+                  <code>True</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>arena_size_vmin</code>
+            </td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Side length (vmin) of the centered square arena. Default 92.</p>
+              </div>
+            </td>
+            <td>
+                  <code>92</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>placement_inset_vmin</code>
+            </td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Inner safety margin from arena edges. Default 6.</p>
+              </div>
+            </td>
+            <td>
+                  <code>6</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>min_gap_vmin</code>
+            </td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Extra minimum pairwise spacing between item centers. Default 2.5.</p>
+              </div>
+            </td>
+            <td>
+                  <code>2.5</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>background</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Arena background color. Default "#000000".</p>
+              </div>
+            </td>
+            <td>
+                  <code>&#39;#000000&#39;</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>color</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Default foreground color (text/borders). Default "#ffffff".</p>
+              </div>
+            </td>
+            <td>
+                  <code>&#39;#ffffff&#39;</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>token_box_size</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Default token box size (CSS). Default "12vmin".</p>
+              </div>
+            </td>
+            <td>
+                  <code>&#39;12vmin&#39;</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>token_font_size</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Default font size for text tokens (CSS). Default "10vmin".</p>
+              </div>
+            </td>
+            <td>
+                  <code>&#39;10vmin&#39;</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>overlay_pool</code>
+            </td>
+            <td>
+                  <code><span title="list">list</span>[<span title="str">str</span>] | None</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Optional pool of overlay symbols/colors; sampled per item unless the
+ItemSpec provides an explicit <code>color</code>. Omit/None to use plugin defaults.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>rotation_pool</code>
+            </td>
+            <td>
+                  <code><span title="list">list</span>[<span title="int">int</span>] | None</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Optional pool of rotations in degrees; sampled per item unless the
+ItemSpec provides <code>rotationDeg</code>. Omit/None to use plugin defaults.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>trial_duration</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span> | None</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Hard timeout in ms. If None and <code>end_when_found=True</code>, the trial ends
+when all targets are collected. Default None.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>end_when_found</code>
+            </td>
+            <td>
+                  <code><span title="bool">bool</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>If True, automatically end the trial once all targets are found.
+Default True.</p>
+              </div>
+            </td>
+            <td>
+                  <code>True</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>response_ends_trial</code>
+            </td>
+            <td>
+                  <code><span title="bool">bool</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>If True, any user interaction that counts as a response ends the trial,
+even if not all targets are collected. Default False.</p>
+              </div>
+            </td>
+            <td>
+                  <code>False</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>seed</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span> | None</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Seed for deterministic placement/sampling. Default None.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>show_star_feedback</code>
+            </td>
+            <td>
+                  <code><span title="bool">bool</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>If True, briefly show a star animation on successful target clicks.
+Default False.</p>
+              </div>
+            </td>
+            <td>
+                  <code>False</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>star_color</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Star feedback color. Default "#f6b500".</p>
+              </div>
+            </td>
+            <td>
+                  <code>&#39;#f6b500&#39;</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>triggers</code>
+            </td>
+            <td>
+                  <code><span title="dict">dict</span> | None</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Optional event→action mapping, e.g.,
+{"on_all_targets_collected": "end_trial"}.
+Default: {"on_all_targets_collected": "end_trial"}.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>duration</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span> | None</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>SweetBean convenience alias mirrored to <code>trial_duration</code> during build
+(consistent with RSVP). If provided, <code>trial_duration</code> is set to this
+value. Default None.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>side_effects</code>
+            </td>
+            <td>
+                  <code><span title="typing.Optional">Optional</span>[<span title="typing.Dict">Dict</span>[<span title="str">str</span>, <span title="typing.Any">Any</span>]]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Optional side-effect configuration passed to the runtime. This expects
+a list of SideEffect definitions (see SweetBean docs) which can be
+used to update global data like overall score or trial counter.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+        <p>Emits (added to jsPsych data):
+    - clicks (list[dict]): Raw click events ({kind, index, id?, t}).
+    - n_targets (int): Number of target items in the trial.
+    - n_collected (int): Number of targets collected.
+    - tps (list[number]): Timestamps for target pickups.
+    - bean_clicks (list[dict]): Mirror of <code>clicks</code>.
+    - bean_n_targets (int): Mirror of <code>n_targets</code>.
+    - bean_n_found (int): Mirror of <code>n_collected</code>.
+    - bean_tps (list[number]): Mirror of <code>tps</code>.
+    - bean_all_found (bool): Convenience flag (n_collected &gt;= n_targets).</p>
+
+
+<details class="notes" open>
+  <summary>Notes</summary>
+  <ul>
+<li>Provide item-level <code>pos</code> to bypass global placement for specific items.</li>
+<li>If both <code>duration</code> and <code>trial_duration</code> are given, <code>duration</code> takes
+  precedence by being copied into <code>trial_duration</code>.</li>
+<li>Null/None optionals are dropped so the plugin falls back to its defaults.</li>
+</ul>
+</details>
+
+<details class="example" open>
+  <summary>Example</summary>
+  <p>from sweetbean import Block, Experiment
+from sweetbean.variable import TimelineVariable</p>
+<p>timeline = [
+    {
+        "targets": [
+            {"text": "T", "color": "#66ff66"},
+            {"shape": "circle", "color": "#66ff66"},
+        ],
+        "distractors": [
+            {"text": "L", "color": "#ff6666"},
+            {"shape": "square", "color": "#ff6666"},
+            {"shape": "triangle", "color": "#ff6666"},
+        ],
+    }
+]</p>
+<p>stim = Foraging(
+    targets=TimelineVariable("targets"),
+    distractors=TimelineVariable("distractors"),
+    position_mode="grid",
+    grid_cols=6, grid_rows=4,
+    arena_size_vmin=90, min_gap_vmin=2.5,
+    background="#000000", color="#ffffff",
+    token_box_size="10vmin", token_font_size="8vmin",
+    end_when_found=True, response_ends_trial=False,
+    show_star_feedback=True, star_color="#f6b500",
+)</p>
+<p>block = Block([stim], timeline=timeline)
+Experiment([block]).to_html("foraging.html")</p>
+</details>
+
+            <details class="quote">
+              <summary>Source code in <code>sweetbean/stimulus/Foraging.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 38</span>
+<span class="normal"> 39</span>
+<span class="normal"> 40</span>
+<span class="normal"> 41</span>
+<span class="normal"> 42</span>
+<span class="normal"> 43</span>
+<span class="normal"> 44</span>
+<span class="normal"> 45</span>
+<span class="normal"> 46</span>
+<span class="normal"> 47</span>
+<span class="normal"> 48</span>
+<span class="normal"> 49</span>
+<span class="normal"> 50</span>
+<span class="normal"> 51</span>
+<span class="normal"> 52</span>
+<span class="normal"> 53</span>
+<span class="normal"> 54</span>
+<span class="normal"> 55</span>
+<span class="normal"> 56</span>
+<span class="normal"> 57</span>
+<span class="normal"> 58</span>
+<span class="normal"> 59</span>
+<span class="normal"> 60</span>
+<span class="normal"> 61</span>
+<span class="normal"> 62</span>
+<span class="normal"> 63</span>
+<span class="normal"> 64</span>
+<span class="normal"> 65</span>
+<span class="normal"> 66</span>
+<span class="normal"> 67</span>
+<span class="normal"> 68</span>
+<span class="normal"> 69</span>
+<span class="normal"> 70</span>
+<span class="normal"> 71</span>
+<span class="normal"> 72</span>
+<span class="normal"> 73</span>
+<span class="normal"> 74</span>
+<span class="normal"> 75</span>
+<span class="normal"> 76</span>
+<span class="normal"> 77</span>
+<span class="normal"> 78</span>
+<span class="normal"> 79</span>
+<span class="normal"> 80</span>
+<span class="normal"> 81</span>
+<span class="normal"> 82</span>
+<span class="normal"> 83</span>
+<span class="normal"> 84</span>
+<span class="normal"> 85</span>
+<span class="normal"> 86</span>
+<span class="normal"> 87</span>
+<span class="normal"> 88</span>
+<span class="normal"> 89</span>
+<span class="normal"> 90</span>
+<span class="normal"> 91</span>
+<span class="normal"> 92</span>
+<span class="normal"> 93</span>
+<span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span>
+<span class="normal">126</span>
+<span class="normal">127</span>
+<span class="normal">128</span>
+<span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span>
+<span class="normal">136</span>
+<span class="normal">137</span>
+<span class="normal">138</span>
+<span class="normal">139</span>
+<span class="normal">140</span>
+<span class="normal">141</span>
+<span class="normal">142</span>
+<span class="normal">143</span>
+<span class="normal">144</span>
+<span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span>
+<span class="normal">148</span>
+<span class="normal">149</span>
+<span class="normal">150</span>
+<span class="normal">151</span>
+<span class="normal">152</span>
+<span class="normal">153</span>
+<span class="normal">154</span>
+<span class="normal">155</span>
+<span class="normal">156</span>
+<span class="normal">157</span>
+<span class="normal">158</span>
+<span class="normal">159</span>
+<span class="normal">160</span>
+<span class="normal">161</span>
+<span class="normal">162</span>
+<span class="normal">163</span>
+<span class="normal">164</span>
+<span class="normal">165</span>
+<span class="normal">166</span>
+<span class="normal">167</span>
+<span class="normal">168</span>
+<span class="normal">169</span>
+<span class="normal">170</span>
+<span class="normal">171</span>
+<span class="normal">172</span>
+<span class="normal">173</span>
+<span class="normal">174</span>
+<span class="normal">175</span>
+<span class="normal">176</span>
+<span class="normal">177</span>
+<span class="normal">178</span>
+<span class="normal">179</span>
+<span class="normal">180</span>
+<span class="normal">181</span>
+<span class="normal">182</span>
+<span class="normal">183</span>
+<span class="normal">184</span>
+<span class="normal">185</span>
+<span class="normal">186</span>
+<span class="normal">187</span>
+<span class="normal">188</span>
+<span class="normal">189</span>
+<span class="normal">190</span>
+<span class="normal">191</span>
+<span class="normal">192</span>
+<span class="normal">193</span>
+<span class="normal">194</span>
+<span class="normal">195</span>
+<span class="normal">196</span>
+<span class="normal">197</span>
+<span class="normal">198</span>
+<span class="normal">199</span>
+<span class="normal">200</span>
+<span class="normal">201</span>
+<span class="normal">202</span>
+<span class="normal">203</span>
+<span class="normal">204</span>
+<span class="normal">205</span>
+<span class="normal">206</span>
+<span class="normal">207</span>
+<span class="normal">208</span>
+<span class="normal">209</span>
+<span class="normal">210</span>
+<span class="normal">211</span>
+<span class="normal">212</span>
+<span class="normal">213</span>
+<span class="normal">214</span>
+<span class="normal">215</span>
+<span class="normal">216</span>
+<span class="normal">217</span>
+<span class="normal">218</span>
+<span class="normal">219</span>
+<span class="normal">220</span>
+<span class="normal">221</span>
+<span class="normal">222</span>
+<span class="normal">223</span>
+<span class="normal">224</span>
+<span class="normal">225</span>
+<span class="normal">226</span>
+<span class="normal">227</span>
+<span class="normal">228</span>
+<span class="normal">229</span>
+<span class="normal">230</span>
+<span class="normal">231</span>
+<span class="normal">232</span>
+<span class="normal">233</span>
+<span class="normal">234</span>
+<span class="normal">235</span>
+<span class="normal">236</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="c1"># Required-ish (can be empty)</span>
+    <span class="n">targets</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]],</span> <span class="n">TimelineVariable</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">distractors</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]],</span> <span class="n">TimelineVariable</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="c1"># Layout &amp; placement</span>
+    <span class="n">position_mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;random&quot;</span><span class="p">,</span>  <span class="c1"># &quot;random&quot; | &quot;grid&quot; | &quot;circle&quot;</span>
+    <span class="n">grid_cols</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">grid_rows</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">ring_radius_vmin</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">30</span><span class="p">,</span>
+    <span class="n">randomize_positions</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>  <span class="c1"># grid/circle only</span>
+    <span class="c1"># Arena &amp; spacing</span>
+    <span class="n">arena_size_vmin</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">92</span><span class="p">,</span>  <span class="c1"># centered square side (vmin)</span>
+    <span class="n">placement_inset_vmin</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">6</span><span class="p">,</span>  <span class="c1"># inner margin</span>
+    <span class="n">min_gap_vmin</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">2.5</span><span class="p">,</span>  <span class="c1"># extra pairwise gap</span>
+    <span class="c1"># Visuals</span>
+    <span class="n">background</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;#000000&quot;</span><span class="p">,</span>  <span class="c1"># default black</span>
+    <span class="n">color</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;#ffffff&quot;</span><span class="p">,</span>  <span class="c1"># default foreground (text/border)</span>
+    <span class="n">token_box_size</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;12vmin&quot;</span><span class="p">,</span>
+    <span class="n">token_font_size</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;10vmin&quot;</span><span class="p">,</span>
+    <span class="c1"># Pools (defaults are in the plugin too; pass to control sampling)</span>
+    <span class="n">overlay_pool</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">rotation_pool</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="c1"># Timing &amp; control</span>
+    <span class="n">trial_duration</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span>
+        <span class="nb">int</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>  <span class="c1"># None =&gt; ends when all targets found (if end_when_found=True)</span>
+    <span class="n">end_when_found</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">response_ends_trial</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="c1"># Determinism</span>
+    <span class="n">seed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="c1"># Feedback</span>
+    <span class="n">show_star_feedback</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>  <span class="c1"># OFF by default</span>
+    <span class="n">star_color</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;#f6b500&quot;</span><span class="p">,</span>
+    <span class="c1"># Hooks / triggers</span>
+    <span class="c1"># Example: {&quot;on_all_targets_collected&quot;: &quot;end_trial&quot;}</span>
+    <span class="n">triggers</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="c1"># SweetBean convenience</span>
+    <span class="n">duration</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>  <span class="c1"># mirrors RSVP: alias for trial_duration</span>
+    <span class="n">side_effects</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Arguments:</span>
+<span class="sd">        targets (list[dict] | TimelineVariable | None):</span>
+<span class="sd">            Trial’s target items. Accepts a concrete list or a TimelineVariable</span>
+<span class="sd">            that evaluates per trial to a list. Each item is an ItemSpec dict</span>
+<span class="sd">            that defines exactly ONE of {html | text | shape | src} plus</span>
+<span class="sd">            optional styling/placement fields:</span>
+
+<span class="sd">              Content (choose exactly one)</span>
+<span class="sd">              - html (str): Raw HTML.</span>
+<span class="sd">              - text (str): Plain text (rendered in a token box).</span>
+<span class="sd">              - shape (str): One of &quot;circle&quot;, &quot;square&quot;, &quot;triangle&quot;.</span>
+<span class="sd">              - src (str): Image URL/path.</span>
+
+<span class="sd">              Optional appearance/identity</span>
+<span class="sd">              - color (str): CSS color; overrides overlay_pool sampling.</span>
+<span class="sd">              - rotationDeg (int): Rotation in degrees; overrides rotation_pool.</span>
+<span class="sd">              - size (str): CSS size of the token box (e.g., &quot;12vmin&quot;).</span>
+<span class="sd">              - fontSize (str): For text content (e.g., &quot;10vmin&quot;).</span>
+<span class="sd">              - id (str): Opaque label copied to data.</span>
+<span class="sd">              - attrs (dict[str,str]): Arbitrary HTML attributes.</span>
+
+<span class="sd">              Placement override (optional; else global placement rules apply)</span>
+<span class="sd">              - pos (dict): One of the following shapes:</span>
+<span class="sd">                    {&quot;mode&quot;: &quot;abs&quot;, &quot;x_vmin&quot;: &lt;float&gt;, &quot;y_vmin&quot;: &lt;float&gt;}</span>
+<span class="sd">                    {&quot;mode&quot;: &quot;grid&quot;, &quot;row&quot;: &lt;int&gt;, &quot;col&quot;: &lt;int&gt;}</span>
+<span class="sd">                    {&quot;mode&quot;: &quot;circle&quot;, &quot;angle_deg&quot;: &lt;float&gt;, &quot;radius_vmin&quot;: &lt;float&gt;}</span>
+
+<span class="sd">        distractors (list[dict] | TimelineVariable | None):</span>
+<span class="sd">            Same ItemSpec structure as `targets`. May be empty.</span>
+
+<span class="sd">        position_mode (str):</span>
+<span class="sd">            Global placement policy when items don’t provide an explicit `pos`.</span>
+<span class="sd">            One of &quot;random&quot; | &quot;grid&quot; | &quot;circle&quot;. Default &quot;random&quot;.</span>
+<span class="sd">        grid_cols (int | None):</span>
+<span class="sd">            Number of columns for &quot;grid&quot; placement. If None, inferred from count.</span>
+<span class="sd">        grid_rows (int | None):</span>
+<span class="sd">            Number of rows for &quot;grid&quot; placement. If None, inferred from count.</span>
+<span class="sd">        ring_radius_vmin (float):</span>
+<span class="sd">            Ring radius for &quot;circle&quot; placement, in vmin units. Default 30.</span>
+<span class="sd">        randomize_positions (bool):</span>
+<span class="sd">            If True, jitter positions within the grid cell / along the ring for</span>
+<span class="sd">            &quot;grid&quot;/&quot;circle&quot; modes. Default True.</span>
+
+<span class="sd">        arena_size_vmin (float):</span>
+<span class="sd">            Side length (vmin) of the centered square arena. Default 92.</span>
+<span class="sd">        placement_inset_vmin (float):</span>
+<span class="sd">            Inner safety margin from arena edges. Default 6.</span>
+<span class="sd">        min_gap_vmin (float):</span>
+<span class="sd">            Extra minimum pairwise spacing between item centers. Default 2.5.</span>
+
+<span class="sd">        background (str):</span>
+<span class="sd">            Arena background color. Default &quot;#000000&quot;.</span>
+<span class="sd">        color (str):</span>
+<span class="sd">            Default foreground color (text/borders). Default &quot;#ffffff&quot;.</span>
+<span class="sd">        token_box_size (str):</span>
+<span class="sd">            Default token box size (CSS). Default &quot;12vmin&quot;.</span>
+<span class="sd">        token_font_size (str):</span>
+<span class="sd">            Default font size for text tokens (CSS). Default &quot;10vmin&quot;.</span>
+
+<span class="sd">        overlay_pool (list[str] | None):</span>
+<span class="sd">            Optional pool of overlay symbols/colors; sampled per item unless the</span>
+<span class="sd">            ItemSpec provides an explicit `color`. Omit/None to use plugin defaults.</span>
+<span class="sd">        rotation_pool (list[int] | None):</span>
+<span class="sd">            Optional pool of rotations in degrees; sampled per item unless the</span>
+<span class="sd">            ItemSpec provides `rotationDeg`. Omit/None to use plugin defaults.</span>
+
+<span class="sd">        trial_duration (int | None):</span>
+<span class="sd">            Hard timeout in ms. If None and `end_when_found=True`, the trial ends</span>
+<span class="sd">            when all targets are collected. Default None.</span>
+<span class="sd">        end_when_found (bool):</span>
+<span class="sd">            If True, automatically end the trial once all targets are found.</span>
+<span class="sd">            Default True.</span>
+<span class="sd">        response_ends_trial (bool):</span>
+<span class="sd">            If True, any user interaction that counts as a response ends the trial,</span>
+<span class="sd">            even if not all targets are collected. Default False.</span>
+
+<span class="sd">        seed (int | None):</span>
+<span class="sd">            Seed for deterministic placement/sampling. Default None.</span>
+
+<span class="sd">        show_star_feedback (bool):</span>
+<span class="sd">            If True, briefly show a star animation on successful target clicks.</span>
+<span class="sd">            Default False.</span>
+<span class="sd">        star_color (str):</span>
+<span class="sd">            Star feedback color. Default &quot;#f6b500&quot;.</span>
+
+<span class="sd">        triggers (dict | None):</span>
+<span class="sd">            Optional event→action mapping, e.g.,</span>
+<span class="sd">            {&quot;on_all_targets_collected&quot;: &quot;end_trial&quot;}.</span>
+<span class="sd">            Default: {&quot;on_all_targets_collected&quot;: &quot;end_trial&quot;}.</span>
+
+<span class="sd">        duration (int | None):</span>
+<span class="sd">            SweetBean convenience alias mirrored to `trial_duration` during build</span>
+<span class="sd">            (consistent with RSVP). If provided, `trial_duration` is set to this</span>
+<span class="sd">            value. Default None.</span>
+<span class="sd">        side_effects: Optional side-effect configuration passed to the runtime. This expects</span>
+<span class="sd">            a list of SideEffect definitions (see SweetBean docs) which can be</span>
+<span class="sd">            used to update global data like overall score or trial counter.</span>
+
+<span class="sd">    Emits (added to jsPsych data):</span>
+<span class="sd">        - clicks (list[dict]): Raw click events ({kind, index, id?, t}).</span>
+<span class="sd">        - n_targets (int): Number of target items in the trial.</span>
+<span class="sd">        - n_collected (int): Number of targets collected.</span>
+<span class="sd">        - tps (list[number]): Timestamps for target pickups.</span>
+<span class="sd">        - bean_clicks (list[dict]): Mirror of `clicks`.</span>
+<span class="sd">        - bean_n_targets (int): Mirror of `n_targets`.</span>
+<span class="sd">        - bean_n_found (int): Mirror of `n_collected`.</span>
+<span class="sd">        - bean_tps (list[number]): Mirror of `tps`.</span>
+<span class="sd">        - bean_all_found (bool): Convenience flag (n_collected &gt;= n_targets).</span>
+
+<span class="sd">    Notes:</span>
+<span class="sd">        - Provide item-level `pos` to bypass global placement for specific items.</span>
+<span class="sd">        - If both `duration` and `trial_duration` are given, `duration` takes</span>
+<span class="sd">          precedence by being copied into `trial_duration`.</span>
+<span class="sd">        - Null/None optionals are dropped so the plugin falls back to its defaults.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        from sweetbean import Block, Experiment</span>
+<span class="sd">        from sweetbean.variable import TimelineVariable</span>
+
+<span class="sd">        timeline = [</span>
+<span class="sd">            {</span>
+<span class="sd">                &quot;targets&quot;: [</span>
+<span class="sd">                    {&quot;text&quot;: &quot;T&quot;, &quot;color&quot;: &quot;#66ff66&quot;},</span>
+<span class="sd">                    {&quot;shape&quot;: &quot;circle&quot;, &quot;color&quot;: &quot;#66ff66&quot;},</span>
+<span class="sd">                ],</span>
+<span class="sd">                &quot;distractors&quot;: [</span>
+<span class="sd">                    {&quot;text&quot;: &quot;L&quot;, &quot;color&quot;: &quot;#ff6666&quot;},</span>
+<span class="sd">                    {&quot;shape&quot;: &quot;square&quot;, &quot;color&quot;: &quot;#ff6666&quot;},</span>
+<span class="sd">                    {&quot;shape&quot;: &quot;triangle&quot;, &quot;color&quot;: &quot;#ff6666&quot;},</span>
+<span class="sd">                ],</span>
+<span class="sd">            }</span>
+<span class="sd">        ]</span>
+
+<span class="sd">        stim = Foraging(</span>
+<span class="sd">            targets=TimelineVariable(&quot;targets&quot;),</span>
+<span class="sd">            distractors=TimelineVariable(&quot;distractors&quot;),</span>
+<span class="sd">            position_mode=&quot;grid&quot;,</span>
+<span class="sd">            grid_cols=6, grid_rows=4,</span>
+<span class="sd">            arena_size_vmin=90, min_gap_vmin=2.5,</span>
+<span class="sd">            background=&quot;#000000&quot;, color=&quot;#ffffff&quot;,</span>
+<span class="sd">            token_box_size=&quot;10vmin&quot;, token_font_size=&quot;8vmin&quot;,</span>
+<span class="sd">            end_when_found=True, response_ends_trial=False,</span>
+<span class="sd">            show_star_feedback=True, star_color=&quot;#f6b500&quot;,</span>
+<span class="sd">        )</span>
+
+<span class="sd">        block = Block([stim], timeline=timeline)</span>
+<span class="sd">        Experiment([block]).to_html(&quot;foraging.html&quot;)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">targets</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">targets</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">distractors</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">distractors</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">triggers</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">triggers</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;on_all_targets_collected&quot;</span><span class="p">:</span> <span class="s2">&quot;end_trial&quot;</span><span class="p">}</span>
+
+    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="nb">locals</span><span class="p">(),</span> <span class="n">side_effects</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+
+
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../../../..", "features": ["navigation.indexes", "content.code.copy", "announce.dismiss"], "search": "../../../../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../../assets/javascripts/bundle.f55a23d4.min.js"></script>
+      
+        <script src="../../../../javascripts/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

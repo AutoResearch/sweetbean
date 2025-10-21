@@ -1,0 +1,35 @@
+.center {
+    display: block;
+    margin: 0 auto;
+    text-align: center;
+}
+
+/* --- keep primary/secondary sidebars within the viewport and scroll them --- */
+.md-sidebar--primary,
+.md-sidebar--secondary {
+  /* place below header AND optional announce/banner */
+  top: calc(var(--md-header-height) + var(--md-banner-height, 0px));
+  height: calc(100vh - var(--md-header-height) - var(--md-banner-height, 0px));
+}
+
+.md-sidebar__scrollwrap {
+  height: 100%;
+  overflow-y: auto;           /* scroll the nav itself */
+  overscroll-behavior: contain;
+}
+
+/* --- make sure the main content area can grow without being overlapped --- */
+.md-main__inner {
+  min-height: calc(100vh - var(--md-header-height) - var(--md-banner-height, 0px));
+}
+
+/* --- your absolute buttons in the content block: keep them inside the flow --- */
+.md-content {
+  position: relative;         /* anchor absolutely positioned children */
+}
+
+/* optional: prevent the footer from sitting under the nav stacking context */
+.md-footer {
+  position: relative;
+  z-index: 0;
+}
