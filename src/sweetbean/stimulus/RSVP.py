@@ -374,6 +374,8 @@ class BilateralRSVP(_BaseStimulus):
                 a list of SideEffect definitions (see SweetBean docs) which can be
                 used to update global data like overall score or trial counter.
         """
+        if distractor_index is None:
+            distractor_index = target_index
         super().__init__(locals(), side_effects)
 
     def _add_special_param(self):

@@ -12,7 +12,6 @@ bi_rsvp = BilateralRSVP(
     target_index=2,
     target_shape="circle",  # per-trial circle/square from table
     distractor_shape="square",
-    distractor_index=2,
     stimulus_duration=200,
     isi=40,
     choices="NO_KEYS",
