@@ -127,10 +127,7 @@ class DefaultCategoryLearning(HtmlKeyboardResponse):
       5 inner_mark (0 none, 1 star)
     """
 
-    l_template = (
-        "You see a <{{ feature_description }}>"
-        "{% if duration %} for {{duration}}ms{% endif %}."
-    )
+    l_template = "You see a {{ feature_description }}."
 
     def __init__(
         self,
@@ -138,6 +135,8 @@ class DefaultCategoryLearning(HtmlKeyboardResponse):
         feature_vector=None,
         choices=None,
         correct_key="",
+        prompt_template=None,
+        response_template=None,
         side_effects=None,
     ):
         if feature_vector is None:
@@ -167,6 +166,10 @@ class DefaultCategoryLearning(HtmlKeyboardResponse):
             correct_key=correct_key,
             side_effects=side_effects,
         )
+        if prompt_template is not None:
+            self.l_template = prompt_template
+        if response_template is not None:
+            self.response_template = response_template
         self.arg.update(
             {
                 "feature_vector": feature_vector,

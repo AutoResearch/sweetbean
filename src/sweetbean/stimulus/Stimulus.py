@@ -29,6 +29,7 @@ class _BaseStimulus(ABC):
     excludes: List[str] = []
     type = ""
     l_template: Union[str, None] = None
+    _default_prompt_template: Union[str, None] = None
     l_args: dict = {}
     l_ses: dict = {}
     extensions = None
@@ -157,12 +158,21 @@ class _BaseStimulus(ABC):
         res += "],"
         self.js_body += "extensions:" + res
 
-    def process_l(self, prompts, get_input, multi_turn, datum=None):
+    def process_l(
+        self,
+        prompts,
+        get_input,
+        multi_turn,
+        datum=None,
+        response_open_token="<<",
+        response_close_token=">>",
+    ):
         prompts.append(self._get_prompt_l())
         prompt_response = self._get_response_prompt_l()
         s_data = {}
         data = self.l_args.copy()
         if prompt_response:
+            prompt_response = prompt_response.replace("<<", response_open_token)
             prompts[-1] += " " + prompt_response
             if multi_turn:
                 _in_prompt = prompts[-1]
@@ -183,7 +193,7 @@ class _BaseStimulus(ABC):
                 _r = datum["response"].upper()
                 response = _r
             s_data = self._process_response_l(_r)
-            prompts[-1] += f"{response}>>"
+            prompts[-1] += f"{response}{response_close_token}"
         data.update(s_data)
         return data, prompts
 
@@ -191,6 +201,23 @@ class _BaseStimulus(ABC):
         if self.l_template is None:
             raise Exception("No template or function set for getting prompt")
         return Template(self.l_template).render(self.l_args)
+
+    @classmethod
+    def set_prompt(cls, prompt_template: str):
+        """
+        Override the language prompt template for this stimulus class.
+        """
+        if "_default_prompt_template" not in cls.__dict__:
+            cls._default_prompt_template = cls.l_template
+        cls.l_template = prompt_template
+
+    @classmethod
+    def reset_prompt(cls):
+        """
+        Reset language prompt template to the original class default.
+        """
+        if "_default_prompt_template" in cls.__dict__:
+            cls.l_template = cls._default_prompt_template
 
     def _get_response_prompt_l(self):
         raise Exception("No template or function set for getting response prompt")
@@ -298,6 +325,7 @@ class _KeyboardResponseStimulus(_BaseStimulus, ABC):
     """
 
     response_template = "You can press {{ choices }}. You press <<"
+    _default_response_template = response_template
 
     response_key = "response"
 
@@ -315,6 +343,23 @@ class _KeyboardResponseStimulus(_BaseStimulus, ABC):
         return Template(self.response_template).render(
             {"choices": [c.upper() for c in self.l_args["choices"]]}
         )
+
+    @classmethod
+    def set_response_prompt(cls, response_template: str):
+        """
+        Override the response-prompt template for this stimulus class.
+        """
+        if "_default_response_template" not in cls.__dict__:
+            cls._default_response_template = cls.response_template
+        cls.response_template = response_template
+
+    @classmethod
+    def reset_response_prompt(cls):
+        """
+        Reset response-prompt template to the original class default.
+        """
+        if "_default_response_template" in cls.__dict__:
+            cls.response_template = cls._default_response_template
 
     def _process_response_l(self, response):
         if not self.l_args["correct_key"]:
