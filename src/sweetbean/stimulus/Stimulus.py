@@ -302,9 +302,11 @@ class _KeyboardResponseStimulus(_BaseStimulus, ABC):
     response_key = "response"
 
     def _process_response(self):
+        self.js_data += f'data["bean_response"]=data["{self.response_key}"];'
+        self.js_data += 'data["bean_rt"]=(typeof data["rt"]==="number")?data["rt"]:null;'
         self.js_data += (
-            f'data["bean_correct"]='
-            f'data["bean_correct_key"]===data["{self.response_key}"];'
+            'if(!data["bean_correct_key"]){data["bean_correct"]=null;}'
+            f'else{{data["bean_correct"]=data["bean_correct_key"]===data["{self.response_key}"];}}'
         )
 
     def _get_response_prompt_l(self):

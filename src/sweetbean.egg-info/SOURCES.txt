@@ -1,0 +1,191 @@
+.DS_Store
+.gitattributes
+.gitignore
+.pre-commit-config.yaml
+CITATION.cff
+LICENSE
+README.md
+main.py
+mkdocs.yml
+pyproject.toml
+.github/pull_request_template.md
+.github/ISSUE_TEMPLATE/jspsych-plugin-request.md
+.github/ISSUE_TEMPLATE/new-features-for-existing-stimuli.md
+.github/ISSUE_TEMPLATE/translation-bug.md
+.github/workflows/joss-paper.yml
+.github/workflows/publish-documentation-gh-pages.yml
+.github/workflows/python-publish.yml
+.github/workflows/test-pytest.yml
+build_scripts/img_processing.py
+build_scripts/res/stroop-timeline.png
+build_scripts/res/trolley-problem.png
+docs/Announcement.md
+docs/CONTRIBUTING.md
+docs/index.md
+docs/installation.md
+docs/styles.css
+docs/Basic Tutorials/(1) First Experiment.ipynb
+docs/Basic Tutorials/(2) Instruction Block.ipynb
+docs/Basic Tutorials/(3) Trial Block.ipynb
+docs/Basic Tutorials/(4) Responses and Feedback.ipynb
+docs/Basic Tutorials/(5) Combining Instructions, Stimuli, and Responses.ipynb
+docs/Basic Tutorials/(6) Side Effects.ipynb
+docs/Basic Tutorials/(7) Generating Text-Based Experiments for LLMs.ipynb
+docs/Basic Tutorials/index.md
+docs/Extensions/index.md
+docs/Extensions/Touchscreen/index.md
+docs/Extensions/Touchscreen/touchbutton.py
+docs/Notebooks/Basic LLM Experiment.ipynb
+docs/Notebooks/tst.py
+docs/Stimuli/index.md
+docs/Stimuli/bandit/bandit.html
+docs/Stimuli/bandit/bandit.py
+docs/Stimuli/bandit/index.md
+docs/Stimuli/bilateralrsvp/bilateralrsvp.html
+docs/Stimuli/bilateralrsvp/bilateralrsvp.py
+docs/Stimuli/bilateralrsvp/bilateralrsvp_simple.py
+docs/Stimuli/bilateralrsvp/index.md
+docs/Stimuli/blank/index.md
+docs/Stimuli/feedback/index.md
+docs/Stimuli/fixation/index.md
+docs/Stimuli/flanker/flanker.html
+docs/Stimuli/flanker/flanker.py
+docs/Stimuli/flanker/index.md
+docs/Stimuli/foraging/foraging.html
+docs/Stimuli/foraging/foraging.py
+docs/Stimuli/foraging/index.md
+docs/Stimuli/gabor/gabor.html
+docs/Stimuli/gabor/gabor.py
+docs/Stimuli/gabor/index.md
+docs/Stimuli/generic/generic.py
+docs/Stimuli/htmlChoice/htmlChoice.html
+docs/Stimuli/htmlChoice/htmlChoice.py
+docs/Stimuli/htmlChoice/index.md
+docs/Stimuli/htmlkeyboardresponse/htmlkeyboardresponse.html
+docs/Stimuli/htmlkeyboardresponse/htmlkeyboardresponse.py
+docs/Stimuli/htmlkeyboardresponse/index.md
+docs/Stimuli/image/image.html
+docs/Stimuli/image/image.py
+docs/Stimuli/image/image_language.py
+docs/Stimuli/image/index.md
+docs/Stimuli/likertsurvey/index.md
+docs/Stimuli/likertsurvey/likertsurvey.html
+docs/Stimuli/likertsurvey/likertsurvey.py
+docs/Stimuli/multichoicesurvey/index.md
+docs/Stimuli/multichoicesurvey/multiplechoice.html
+docs/Stimuli/multichoicesurvey/multiplechoice.py
+docs/Stimuli/randomdotpatterns/index.md
+docs/Stimuli/randomdotpatterns/randomdotpatterns.html
+docs/Stimuli/randomdotpatterns/randomdotpatterns.py
+docs/Stimuli/randomobjectkinematogram/index.md
+docs/Stimuli/randomobjectkinematogram/randomobjectkinematogram.html
+docs/Stimuli/randomobjectkinematogram/randomobjectkinematogram.py
+docs/Stimuli/rsvp/index.md
+docs/Stimuli/rsvp/rsvp.html
+docs/Stimuli/rsvp/rsvp.py
+docs/Stimuli/stroop/index.md
+docs/Stimuli/stroop/stroop.html
+docs/Stimuli/stroop/stroop.py
+docs/Stimuli/symbols/dm_same_diff.py
+docs/Stimuli/symbols/dms_same_diff.html
+docs/Stimuli/symbols/index.md
+docs/Stimuli/symbols/plaid_demo.html
+docs/Stimuli/symbols/plaid_demo.py
+docs/Stimuli/symbols/posner.html
+docs/Stimuli/symbols/posner.py
+docs/Stimuli/symbols/symbols.html
+docs/Stimuli/symbols/symbols.py
+docs/Stimuli/symbols/visual_search.html
+docs/Stimuli/symbols/visual_search.py
+docs/Stimuli/text/index.md
+docs/Stimuli/text/text.html
+docs/Stimuli/text/text.py
+docs/Stimuli/textsurvey/index.md
+docs/Stimuli/textsurvey/textsurvey.html
+docs/Stimuli/textsurvey/textsurvey.py
+docs/Stimuli/video/index.md
+docs/Stimuli/video/video.html
+docs/Stimuli/video/video.py
+docs/Use Case Tutorials/index.md
+docs/Use Case Tutorials/Comparing LLM and human behavior/Bandit Task.ipynb
+docs/Use Case Tutorials/Comparing LLM and human behavior/Trolley Problem.ipynb
+docs/Use Case Tutorials/Comparing LLM and human behavior/index.md
+docs/Use Case Tutorials/Piloting Experiments with LLMs/Bandit Task with Model Confidence.ipynb
+docs/Use Case Tutorials/Piloting Experiments with LLMs/Bandit Task with Target Value.ipynb
+docs/Use Case Tutorials/Piloting Experiments with LLMs/index.md
+docs/Use Case Tutorials/Psychophysics/index.md
+docs/Use Case Tutorials/Psychophysics/psychophysics.ipynb
+docs/Use Case Tutorials/Psychophysics/sweetpea.ipynb
+docs/User Guide/data_variables.md
+docs/User Guide/documentation_stimulus_sequence.md
+docs/User Guide/function_variables.md
+docs/User Guide/index.md
+docs/User Guide/llm_synthetic_participant.md
+docs/User Guide/overview.md
+docs/User Guide/shared_variables_and_side_effects.md
+docs/User Guide/timeline_variables.md
+docs/img/word-cloud.png
+docs/img/stimuli/bandit.png
+docs/img/stimuli/flanker.png
+docs/img/stimuli/image.png
+docs/img/stimuli/rok.png
+docs/img/stimuli/stroop.png
+docs/img/stimuli/symbols.png
+docs/img/stimuli/weber_fechner.png
+docs/javascripts/mathjax.js
+examples/.DS_Store
+examples/AI Experiment/Basic LLM Experiment.ipynb
+examples/AI Experiment/Psychometric.ipynb
+examples/AI Experiment/Stability Flexibility.ipynb
+examples/AI Experiment/google_api.py
+examples/AI Experiment/llama_api.py
+examples/text/.DS_Store
+mkdocs/gen_ref_pages.py
+mkdocs/hooks.py
+mkdocs/overrides/main.html
+paper/paper.bib
+paper/paper.md
+src/sweetbean/__init__.py
+src/sweetbean/_const.py
+src/sweetbean/block.py
+src/sweetbean/data.py
+src/sweetbean/experiment.py
+src/sweetbean.egg-info/PKG-INFO
+src/sweetbean.egg-info/SOURCES.txt
+src/sweetbean.egg-info/dependency_links.txt
+src/sweetbean.egg-info/requires.txt
+src/sweetbean.egg-info/top_level.txt
+src/sweetbean/extension/TouchButton.py
+src/sweetbean/extension/__init__.py
+src/sweetbean/llm_utils/__init__.py
+src/sweetbean/llm_utils/prompts.py
+src/sweetbean/response_spec/__init__.py
+src/sweetbean/response_spec/spec.py
+src/sweetbean/stimulus/Choice.py
+src/sweetbean/stimulus/Foraging.py
+src/sweetbean/stimulus/Gabor.py
+src/sweetbean/stimulus/Generic.py
+src/sweetbean/stimulus/HtmlKeyboardResponse.py
+src/sweetbean/stimulus/Image.py
+src/sweetbean/stimulus/RO.py
+src/sweetbean/stimulus/RSVP.py
+src/sweetbean/stimulus/Stimulus.py
+src/sweetbean/stimulus/Survey.py
+src/sweetbean/stimulus/Symbol.py
+src/sweetbean/stimulus/Video.py
+src/sweetbean/stimulus/_Template_.py
+src/sweetbean/stimulus/__init__.py
+src/sweetbean/stimulus_spec/__init__.py
+src/sweetbean/stimulus_spec/prompt_schema.py
+src/sweetbean/stimulus_spec/render.py
+src/sweetbean/stimulus_spec/spec.py
+src/sweetbean/util/__init__.py
+src/sweetbean/util/data_process.py
+src/sweetbean/util/io.py
+src/sweetbean/util/parse.py
+src/sweetbean/variable/__init__.py
+tests/test_js_code.py
+tests/test_recursive_function.py
+tests/test_stimuli.py
+transcrypt_static/copy.js
+transcrypt_static/runtime.js

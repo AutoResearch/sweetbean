@@ -22,6 +22,7 @@ class HtmlChoice(_BaseStimulus):
         duration=None,
         html_array=None,
         values=None,
+        correct_values=None,
         time_after_response=3000,
         side_effects=None,
     ):
@@ -54,6 +55,8 @@ class HtmlChoice(_BaseStimulus):
             values = []
         if html_array is None:
             html_array = []
+        if correct_values is None:
+            correct_values = []
         super().__init__(locals(), side_effects)
 
     def _add_special_param(self):
@@ -62,6 +65,13 @@ class HtmlChoice(_BaseStimulus):
     def _process_response(self):
         self.js_data += 'data["bean_value"] = data["value"];'
         self.js_data += 'data["bean_response"] = data["choice"];'
+        correct_values = self.arg.get("correct_values", [])
+        if correct_values:
+            vals = ",".join("'" + str(v).replace("'", "\\'") + "'" for v in correct_values)
+            self.js_data += f"let _sb_correct_values=[{vals}];"
+            self.js_data += 'data["bean_correct"]=_sb_correct_values.includes(String(data["value"]));'
+        else:
+            self.js_data += 'data["bean_correct"]=null;'
 
     def _set_before(self):
         pass

@@ -14,7 +14,8 @@ dependencies = [
     "jinja2==3.1.4",
     "Transcrypt==3.9.3",
     "pyppeteer==2.0.0",
-    "pillow==11.0.0"
+    "pillow==11.0.0",
+    "pydantic>=2.8",
 ]
 
 [project.optional-dependencies]

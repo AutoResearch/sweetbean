@@ -11,6 +11,7 @@ from sweetbean.stimulus.HtmlKeyboardResponse import (
     Stroop,
     Text,
 )
+from sweetbean.stimulus.HtmlSliderResponse import HtmlSliderResponse
 from sweetbean.stimulus.Image import Image
 from sweetbean.stimulus.RO import RDP, ROK, RandomDotPatterns, RandomObjectKinematogram
 from sweetbean.stimulus.RSVP import RSVP, BilateralRSVP
