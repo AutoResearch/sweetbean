@@ -113,6 +113,8 @@ class Experiment:
         multi_turn=False,
         preamble="",
         data=None,
+        response_open_token="<<",
+        response_close_token=">>",
     ):
         """
         Run the experiment in a language
@@ -127,6 +129,8 @@ class Experiment:
                 This will rerun the experiment with the data as input.
                 If the data is not provided for the full experiment,
                 the rest of it will be simulated with the get_input function.
+            response_open_token: token used in prompt templates for "answer starts here".
+            response_close_token: token appended after model/user answer in stored prompts.
         """
         out_data = []
         prompts = []
@@ -154,6 +158,8 @@ class Experiment:
                     datum_index,
                     data,
                     preamble,
+                    response_open_token,
+                    response_close_token,
                 )
         return out_data, prompts
 
@@ -169,6 +175,8 @@ def run_stimuli(
     datum_index,
     data,
     preamble,
+    response_open_token,
+    response_close_token,
 ):
     for s in stimuli:
         if data and datum_index < len(data):
@@ -183,7 +191,14 @@ def run_stimuli(
             else:
                 return get_input(f"{preamble} {_prompt}")
 
-        s_out_data, prompts = s.process_l(prompts, _get_input, multi_turn, datum)
+        s_out_data, prompts = s.process_l(
+            prompts,
+            _get_input,
+            multi_turn,
+            datum,
+            response_open_token=response_open_token,
+            response_close_token=response_close_token,
+        )
         out_data.append(s_out_data)
         if s.side_effects:
             s._resolve_side_effects(timeline_element, out_data, shared_variables)
