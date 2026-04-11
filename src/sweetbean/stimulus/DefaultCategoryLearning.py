@@ -1,5 +1,5 @@
 from sweetbean.stimulus.HtmlKeyboardResponse import HtmlKeyboardResponse
-from sweetbean.variable import FunctionVariable
+from sweetbean.variable import FunctionVariable, Variable
 
 
 FEATURE_NAMES = (
@@ -45,41 +45,46 @@ def _decode_feature_vector(feature_vector):
 
 
 def _feature_vector_to_description(feature_vector):
-    decoded = _decode_feature_vector(feature_vector)
-    parts = []
-    if "size" in decoded:
-        parts.append(decoded["size"])
-    if "color" in decoded:
-        parts.append(decoded["color"])
-    if "pattern" in decoded:
-        parts.append(decoded["pattern"])
-    if "shape" in decoded:
-        parts.append(decoded["shape"])
+    n = len(feature_vector)
+    shape = "triangle" if n >= 1 and feature_vector[0] == 1 else "circle"
+    color = "blue" if n >= 2 and feature_vector[1] == 1 else "red"
+    size = "large" if n >= 3 and feature_vector[2] == 1 else "small"
+    border = "black border" if n >= 4 and feature_vector[3] == 1 else "none"
+    pattern = "striped" if n >= 5 and feature_vector[4] == 1 else "filled"
+    inner_mark = "star" if n >= 6 and feature_vector[5] == 1 else "none"
 
-    suffix_parts = []
-    if decoded.get("border") == "black border":
-        suffix_parts.append("with a black border")
-    if decoded.get("inner_mark") == "star":
-        suffix_parts.append("with a star inside")
+    parts = []
+    if n >= 3:
+        parts.append(size)
+    if n >= 2:
+        parts.append(color)
+    if n >= 5:
+        parts.append(pattern)
+    if n >= 1:
+        parts.append(shape)
 
     description = " ".join(parts).strip()
     if not description:
         description = "object"
-    if suffix_parts:
-        description = f"{description} " + " ".join(suffix_parts)
+    if border == "black border":
+        description += " with a black border"
+    if inner_mark == "star":
+        description += " with a star inside"
     return description
 
 
 def _feature_vector_to_html(feature_vector):
-    decoded = _decode_feature_vector(feature_vector)
-    size = decoded.get("size", "small")
-    color = decoded.get("color", "red")
-    shape = decoded.get("shape", "circle")
-    pattern = decoded.get("pattern", "filled")
-    border = decoded.get("border", "none")
-    inner_mark = decoded.get("inner_mark", "none")
+    n = len(feature_vector)
+    shape = "triangle" if n >= 1 and feature_vector[0] == 1 else "circle"
+    color = "blue" if n >= 2 and feature_vector[1] == 1 else "red"
+    size = "large" if n >= 3 and feature_vector[2] == 1 else "small"
+    border = (
+        "black border" if n >= 4 and feature_vector[3] == 1 else "none"
+    )
+    pattern = "striped" if n >= 5 and feature_vector[4] == 1 else "filled"
+    inner_mark = "star" if n >= 6 and feature_vector[5] == 1 else "none"
 
-    pixel_size = 180 if size == "large" else 120
+    pixel_size = 240 if size == "large" else 90
     css_color = "#1f77b4" if color == "blue" else "#d62728"
     shape_css = "border-radius: 50%;" if shape == "circle" else "clip-path: polygon(50% 0%, 0% 100%, 100% 100%);"
     border_css = "4px solid #000000" if border == "black border" else "none"
@@ -137,7 +142,14 @@ class DefaultCategoryLearning(HtmlKeyboardResponse):
     ):
         if feature_vector is None:
             raise ValueError("feature_vector is required for DefaultCategoryLearning.")
-        _validate_feature_vector(feature_vector)
+        # TimelineVariable / other Variables are resolved at runtime; validate then.
+        if isinstance(feature_vector, list):
+            _validate_feature_vector(feature_vector)
+        elif not isinstance(feature_vector, Variable):
+            raise ValueError(
+                "feature_vector must be a list of 0/1 values or a SweetBean Variable "
+                "(e.g. TimelineVariable('feature_vector'))."
+            )
         stimulus = FunctionVariable(
             "default_category_learning_stimulus",
             _feature_vector_to_html,
