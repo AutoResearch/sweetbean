@@ -3,6 +3,7 @@ from sweetbean.stimulus.DefaultCategoryLearning import DefaultCategoryLearning
 from sweetbean.stimulus.Foraging import Foraging
 from sweetbean.stimulus.Gabor import Gabor
 from sweetbean.stimulus.Generic import Generic
+from sweetbean.stimulus.InformedConsent import InformedConsent
 from sweetbean.stimulus.HtmlKeyboardResponse import (
     Blank,
     Feedback,
