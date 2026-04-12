@@ -107,6 +107,48 @@ class Experiment:
         text += FUNCTION_APPENDIX(is_async) if as_function else TEXT_APPENDIX(is_async)
         return text
 
+    def compile(self, as_function=True, is_async=True):
+        """
+        Compile the experiment structure once, returning a JS template string
+        with placeholders for timeline data.
+
+        Use ``to_js_string_from_template(template, timelines)`` to cheaply
+        produce the final JS for each subject by swapping in their timelines.
+        """
+        text = FUNCTION_PREAMBLE(is_async) if as_function else ""
+        extensions = ""
+        for idx, b in enumerate(self.blocks):
+            b.to_js_template(idx)
+            extensions += _initialize_extensions(b.extensions)
+            for s in b.stimuli:
+                shared_variables = s.return_shared_variables()
+                for s_key in shared_variables:
+                    text += f"{shared_variables[s_key].set()}\n"
+        text += f"const jsPsych = initJsPsych({extensions})\n"
+        text += "const trials = [\n"
+        for b in self.blocks:
+            text += b.js
+            text += ","
+        text = text[:-1] + "]\n"
+        text += FUNCTION_APPENDIX(is_async) if as_function else TEXT_APPENDIX(is_async)
+        return text
+
+    @staticmethod
+    def to_js_string_from_template(template, timelines):
+        """
+        Produce a final JS string by replacing timeline placeholders in *template*
+        with the actual timeline data from *timelines*.
+
+        Arguments:
+            template: the string returned by ``compile()``.
+            timelines: a list of timeline lists, one per block that had a placeholder.
+        """
+        result = template
+        for idx, tl in enumerate(timelines):
+            placeholder = f"TIMELINE_PLACEHOLDER_{idx}"
+            result = result.replace(placeholder, str(tl))
+        return result
+
     def run_on_language(
         self,
         get_input=input,

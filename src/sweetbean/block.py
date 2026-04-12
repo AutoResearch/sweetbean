@@ -45,6 +45,17 @@ class Block:
         else:
             self.js += f"], timeline_variables: {self.timeline}" + "}"
 
+    def to_js_template(self, block_index: int):
+        """Like to_js(), but embeds a placeholder for timeline_variables instead of real data."""
+        self.js = "{timeline: ["
+        for s in self.stimuli:
+            self.extensions["touch_layouts"].append(s.create_touch_layout())
+            s.to_js()
+            self.js += s.js + ","
+        self.js = self.js[:-1]
+        placeholder = f"TIMELINE_PLACEHOLDER_{block_index}"
+        self.js += f"], timeline_variables: {placeholder}" + "}"
+
     def to_image(self, path, data, sequence=True, timeline_idx="random", zoom_factor=3):
         """
         Create an image of the stimuli sequence of the block
