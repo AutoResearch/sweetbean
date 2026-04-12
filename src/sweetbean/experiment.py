@@ -144,9 +144,10 @@ class Experiment:
             timelines: a list of timeline lists, one per block that had a placeholder.
         """
         result = template
-        for idx, tl in enumerate(timelines):
-            placeholder = f"TIMELINE_PLACEHOLDER_{idx}"
-            result = result.replace(placeholder, str(tl))
+        # Replace longer indices first so placeholder_1 does not corrupt placeholder_10.
+        for idx in reversed(range(len(timelines))):
+            placeholder = f"__SWEETBEAN_TIMELINE_PLACEHOLDER_{idx}__"
+            result = result.replace(placeholder, str(timelines[idx]))
         return result
 
     def run_on_language(

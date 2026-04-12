@@ -20,7 +20,7 @@ def test_compile_returns_template_and_placeholder():
     template = exp.compile(as_function=True, is_async=True)
     assert isinstance(template, str)
     assert "runExperiment" in template
-    assert "TIMELINE_PLACEHOLDER_" in template
+    assert "__SWEETBEAN_TIMELINE_PLACEHOLDER_" in template
 
 
 def test_to_js_string_from_template_matches_original():
@@ -85,3 +85,18 @@ def test_template_reuse_across_different_block_counts():
     assert "[{'word': 'p'}, {'word': 'q'}]" in result or '{"word": "p"}' in result or "p" in result
     assert "x" not in result
     assert "y" not in result
+
+
+def test_placeholder_replacement_handles_double_digit_indices():
+    """Replacing block 1 must not corrupt block 10 placeholder."""
+    timelines = [[{"word": f"orig_{i}"}] for i in range(11)]
+    exp = _make_experiment(timelines)
+    template = exp.compile(as_function=True, is_async=True)
+
+    new_timelines = [[{"word": f"new_{i}"}] for i in range(11)]
+    result = exp.to_js_string_from_template(template, new_timelines)
+
+    assert "new_10" in result
+    assert "new_1" in result
+    assert "__SWEETBEAN_TIMELINE_PLACEHOLDER_10__" not in result
+    assert "__SWEETBEAN_TIMELINE_PLACEHOLDER_1__" not in result

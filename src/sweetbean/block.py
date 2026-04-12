@@ -53,7 +53,7 @@ class Block:
             s.to_js()
             self.js += s.js + ","
         self.js = self.js[:-1]
-        placeholder = f"TIMELINE_PLACEHOLDER_{block_index}"
+        placeholder = f"__SWEETBEAN_TIMELINE_PLACEHOLDER_{block_index}__"
         self.js += f"], timeline_variables: {placeholder}" + "}"
 
     def to_image(self, path, data, sequence=True, timeline_idx="random", zoom_factor=3):
