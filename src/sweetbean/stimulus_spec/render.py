@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import math
 from html import escape
 from pathlib import Path
 
@@ -10,6 +11,8 @@ from sweetbean.stimulus.HtmlKeyboardResponse import HtmlKeyboardResponse
 from sweetbean.stimulus.HtmlSliderResponse import HtmlSliderResponse
 from sweetbean.stimulus_spec.spec import (
     AssetStimulusSpec,
+    BanditStimulusSpec,
+    SymbolStimulusSpec,
     StimulusSpecUnion,
     TextStimulusSpec,
     TrialSpec,
@@ -124,12 +127,139 @@ def _render_asset(stim: AssetStimulusSpec, stim_id: str) -> str:
     )
 
 
+def _render_symbol(stim: SymbolStimulusSpec, stim_id: str) -> str:
+    base_style = (
+        f"{_rect_style(stim)}{_duration_style(stim)}display:flex;align-items:center;"
+        "justify-content:center;"
+    )
+    size = int(stim.size_px)
+    stroke_color = stim.stroke_color or stim.color
+    shape_style = (
+        f"position:relative;width:{size}px;height:{size}px;"
+        f"transform:rotate({float(stim.rotation_deg):.6f}deg);"
+    )
+
+    if stim.shape == "circle":
+        return (
+            f"<div data-sb-stim-id='{escape(stim_id)}' style='{base_style}'>"
+            f"<div style='{shape_style}background:{escape(stim.color)};border-radius:50%;'></div>"
+            "</div>"
+        )
+    if stim.shape == "ring":
+        stroke_width = (
+            int(stim.stroke_width_px)
+            if stim.stroke_width_px is not None
+            else max(2, round(size * 0.12))
+        )
+        return (
+            f"<div data-sb-stim-id='{escape(stim_id)}' style='{base_style}'>"
+            f"<div style='{shape_style}background:transparent;border-radius:50%;"
+            f"border:{stroke_width}px solid {escape(stroke_color)};box-sizing:border-box;'></div>"
+            "</div>"
+        )
+    if stim.shape == "rectangle":
+        stroke_css = ""
+        if stim.stroke_width_px and stim.stroke_width_px > 0:
+            stroke_css = (
+                f"border:{int(stim.stroke_width_px)}px solid {escape(stroke_color)};"
+                "box-sizing:border-box;"
+            )
+        return (
+            f"<div data-sb-stim-id='{escape(stim_id)}' style='{base_style}'>"
+            f"<div style='{shape_style}background:{escape(stim.color)};{stroke_css}'></div>"
+            "</div>"
+        )
+    if stim.shape == "triangle":
+        stroke_css = ""
+        if stim.stroke_width_px and stim.stroke_width_px > 0:
+            stroke_css = (
+                f"border:{int(stim.stroke_width_px)}px solid {escape(stroke_color)};"
+                "box-sizing:border-box;"
+            )
+        return (
+            f"<div data-sb-stim-id='{escape(stim_id)}' style='{base_style}'>"
+            f"<div style='{shape_style}background:{escape(stim.color)};"
+            "clip-path:polygon(50% 0%, 0% 100%, 100% 100%);"
+            f"{stroke_css}'></div>"
+            "</div>"
+        )
+    if stim.shape == "cross":
+        arm = max(2, round(size * 0.28))
+        if stim.stroke_width_px is not None and stim.stroke_width_px > 0:
+            arm = int(stim.stroke_width_px)
+        bar_color = escape(stim.color)
+        cross_inner = (
+            f"<div style='position:absolute;left:50%;top:0;transform:translateX(-50%);"
+            f"width:{arm}px;height:{size}px;background:{bar_color};'></div>"
+            f"<div style='position:absolute;left:0;top:50%;transform:translateY(-50%);"
+            f"width:{size}px;height:{arm}px;background:{bar_color};'></div>"
+        )
+        return (
+            f"<div data-sb-stim-id='{escape(stim_id)}' style='{base_style}'>"
+            f"<div style='{shape_style}'>{cross_inner}</div>"
+            "</div>"
+        )
+
+    raise ValueError(f"Unsupported symbol shape: {stim.shape!r}")
+
+
+def _render_bandit(stim: BanditStimulusSpec, stim_id: str) -> str:
+    n = len(stim.bandits)
+    cols = stim.grid_columns or max(1, math.ceil(math.sqrt(n)))
+    title_html = ""
+    if stim.title:
+        title_html = (
+            "<div style='grid-column:1 / -1;text-align:center;"
+            "font-size:22px;color:#e5e7eb;font-family:sans-serif;'>"
+            f"{escape(stim.title)}</div>"
+        )
+
+    arms: list[str] = []
+    for arm in stim.bandits:
+        label_html = ""
+        if arm.label:
+            label_html = (
+                "<div style='font-size:14px;color:#d1d5db;"
+                "font-family:sans-serif;margin-top:8px;'>"
+                f"{escape(arm.label)}</div>"
+            )
+        value_html = ""
+        if arm.value_text:
+            value_html = (
+                "<div style='font-size:18px;color:#f9fafb;font-family:sans-serif;"
+                "font-weight:600;'>"
+                f"{escape(arm.value_text)}</div>"
+            )
+        arms.append(
+            "<div style='display:flex;flex-direction:column;align-items:center;justify-content:center;"
+            "padding:10px;'>"
+            f"<div style='width:min(11vw,110px);height:min(11vw,110px);border:4px solid {escape(arm.color)};"
+            "border-radius:10px;background:rgba(17,24,39,0.55);display:flex;align-items:center;justify-content:center;'>"
+            f"{value_html}</div>{label_html}</div>"
+        )
+
+    inner = (
+        f"<div style='display:grid;grid-template-columns:repeat({cols}, minmax(110px, 1fr));"
+        "gap:14px;width:100%;height:100%;align-content:center;justify-items:center;'>"
+        f"{title_html}{''.join(arms)}</div>"
+    )
+    return (
+        f"<div data-sb-stim-id='{escape(stim_id)}' "
+        f"style='{_rect_style(stim)}{_duration_style(stim)}padding:16px;box-sizing:border-box;'>"
+        f"{inner}</div>"
+    )
+
+
 def _render_stimulus(stim: StimulusSpecUnion, index: int) -> tuple[str, str]:
     stim_id = _stimulus_id(stim, index)
     if isinstance(stim, TextStimulusSpec):
         return stim_id, _render_text(stim, stim_id)
+    if isinstance(stim, SymbolStimulusSpec):
+        return stim_id, _render_symbol(stim, stim_id)
     if isinstance(stim, AssetStimulusSpec):
         return stim_id, _render_asset(stim, stim_id)
+    if isinstance(stim, BanditStimulusSpec):
+        return stim_id, _render_bandit(stim, stim_id)
     raise TypeError(f"Unsupported stimulus spec: {type(stim)!r}")
 
 

@@ -12,6 +12,7 @@ from sweetbean.response_spec import (
 from sweetbean.stimulus_spec import (
     AssetStimulusSpec,
     RectangleSpec,
+    SymbolStimulusSpec,
     StimulusSpecUnion,
     TextStimulusSpec,
     TrialSpec,
@@ -44,6 +45,7 @@ __all__ = [
     "MouseClickResponseSpec",
     "RectangleSpec",
     "ResponseSpecUnion",
+    "SymbolStimulusSpec",
     "StimulusSpecUnion",
     "TextStimulusSpec",
     "TrialSpec",

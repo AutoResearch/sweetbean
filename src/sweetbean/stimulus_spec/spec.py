@@ -122,6 +122,51 @@ class TextStimulusSpec(_BaseStimulusSpec):
     )
 
 
+class SymbolStimulusSpec(_BaseStimulusSpec):
+    """Rendered geometric symbol stimulus."""
+
+    kind: Literal["symbol"] = "symbol"
+    shape: Literal["circle", "ring", "rectangle", "triangle", "cross"] = Field(
+        description="Symbol geometry to render.",
+    )
+    color: str = Field(
+        default="#111111",
+        description="Primary CSS color used for symbol fill/stroke.",
+        json_schema_extra=_PROMPT_SILENT,
+    )
+    size_px: int | None = Field(
+        default=None,
+        ge=1,
+        description=(
+            "Optional symbol size in pixels. If omitted, defaults to 160."
+        ),
+        json_schema_extra=_PROMPT_SILENT,
+    )
+    stroke_color: str | None = Field(
+        default=None,
+        description=(
+            "Optional outline color for symbol variants that support stroke."
+        ),
+        json_schema_extra=_PROMPT_SILENT,
+    )
+    stroke_width_px: int | None = Field(
+        default=None,
+        ge=0,
+        description=(
+            "Optional outline width in pixels. If omitted, renderer picks a "
+            "shape-specific default when needed."
+        ),
+        json_schema_extra=_PROMPT_SILENT,
+    )
+    rotation_deg: float | None = Field(
+        default=None,
+        description=(
+            "Optional clockwise symbol rotation in degrees. If omitted, defaults to 0."
+        ),
+        json_schema_extra=_PROMPT_SILENT,
+    )
+
+
 class AssetStimulusSpec(_BaseStimulusSpec):
     """Rendered visual asset stimulus (image/gif/other browser image asset)."""
 
@@ -141,8 +186,47 @@ class AssetStimulusSpec(_BaseStimulusSpec):
     )
 
 
+class BanditArmSpec(_SpecBaseModel):
+    """One arm rendered in a bandit stimulus."""
+
+    color: str = Field(
+        description="CSS color for the arm border/accent.",
+    )
+    label: str | None = Field(
+        default=None,
+        description="Optional arm label shown under the bandit tile.",
+    )
+    value_text: str | None = Field(
+        default=None,
+        description="Optional value text shown inside the tile.",
+    )
+
+
+class BanditStimulusSpec(_BaseStimulusSpec):
+    """Rendered static multi-armed bandit display."""
+
+    kind: Literal["bandit"] = "bandit"
+    bandits: tuple[BanditArmSpec, ...] = Field(
+        default_factory=tuple,
+        min_length=1,
+        description="Bandit arms shown as clickable-style tiles in a grid.",
+    )
+    title: str | None = Field(
+        default=None,
+        description="Optional heading text shown above the bandit grid.",
+    )
+    grid_columns: int | None = Field(
+        default=None,
+        ge=1,
+        description=(
+            "Optional explicit number of columns in the grid. "
+            "If omitted, renderer picks a near-square layout."
+        ),
+    )
+
+
 StimulusSpecUnion = Annotated[
-    TextStimulusSpec | AssetStimulusSpec,
+    TextStimulusSpec | SymbolStimulusSpec | AssetStimulusSpec | BanditStimulusSpec,
     Field(discriminator="kind"),
 ]
 
@@ -193,6 +277,11 @@ class TrialSpec(_SpecBaseModel):
                     updates["font_family"] = "sans-serif"
                 if s.align is None:
                     updates["align"] = "center"
+            if isinstance(s, SymbolStimulusSpec):
+                if s.size_px is None:
+                    updates["size_px"] = 160
+                if s.rotation_deg is None:
+                    updates["rotation_deg"] = 0.0
             if isinstance(s, AssetStimulusSpec):
                 if s.object_fit is None:
                     updates["object_fit"] = "contain"

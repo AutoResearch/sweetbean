@@ -12,6 +12,7 @@ from sweetbean.stimulus_spec.render import compile_trial
 from sweetbean.stimulus_spec.spec import (
     AssetStimulusSpec,
     RectangleSpec,
+    SymbolStimulusSpec,
     StimulusSpecUnion,
     TextStimulusSpec,
     TrialSpec,
@@ -20,6 +21,7 @@ from sweetbean.stimulus_spec.spec import (
 __all__ = [
     "AssetStimulusSpec",
     "RectangleSpec",
+    "SymbolStimulusSpec",
     "StimulusSpecUnion",
     "TextStimulusSpec",
     "TrialSpec",
