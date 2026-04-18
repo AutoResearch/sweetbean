@@ -13,9 +13,9 @@ FEATURE_NAMES = (
 
 FEATURE_VALUES = {
     "shape": {0: "circle", 1: "triangle"},
-    "color": {0: "red", 1: "blue"},
+    "color": {0: "orange", 1: "blue"},
     "size": {0: "small", 1: "large"},
-    "border": {0: "none", 1: "black border"},
+    "border": {0: "none", 1: "pink border"},
     "pattern": {0: "filled", 1: "striped"},
     "inner_mark": {0: "none", 1: "star"},
 }
@@ -47,9 +47,9 @@ def _decode_feature_vector(feature_vector):
 def _feature_vector_to_description(feature_vector):
     n = len(feature_vector)
     shape = "triangle" if n >= 1 and feature_vector[0] == 1 else "circle"
-    color = "blue" if n >= 2 and feature_vector[1] == 1 else "red"
+    color = "blue" if n >= 2 and feature_vector[1] == 1 else "orange"
     size = "large" if n >= 3 and feature_vector[2] == 1 else "small"
-    border = "black border" if n >= 4 and feature_vector[3] == 1 else "none"
+    border = "pink border" if n >= 4 and feature_vector[3] == 1 else "none"
     pattern = "striped" if n >= 5 and feature_vector[4] == 1 else "filled"
     inner_mark = "star" if n >= 6 and feature_vector[5] == 1 else "none"
 
@@ -66,8 +66,8 @@ def _feature_vector_to_description(feature_vector):
     description = " ".join(parts).strip()
     if not description:
         description = "object"
-    if border == "black border":
-        description += " with a black border"
+    if border == "pink border":
+        description += " with a pink border"
     if inner_mark == "star":
         description += " with a star inside"
     return description
@@ -76,18 +76,19 @@ def _feature_vector_to_description(feature_vector):
 def _feature_vector_to_html(feature_vector):
     n = len(feature_vector)
     shape = "triangle" if n >= 1 and feature_vector[0] == 1 else "circle"
-    color = "blue" if n >= 2 and feature_vector[1] == 1 else "red"
+    color = "blue" if n >= 2 and feature_vector[1] == 1 else "orange"
     size = "large" if n >= 3 and feature_vector[2] == 1 else "small"
     border = (
-        "black border" if n >= 4 and feature_vector[3] == 1 else "none"
+        "pink border" if n >= 4 and feature_vector[3] == 1 else "none"
     )
     pattern = "striped" if n >= 5 and feature_vector[4] == 1 else "filled"
     inner_mark = "star" if n >= 6 and feature_vector[5] == 1 else "none"
 
     pixel_size = 240 if size == "large" else 90
-    css_color = "#1f77b4" if color == "blue" else "#d62728"
+    # Colorblind-friendly palette (Wong / Okabe–Ito style)
+    css_color = "#0072B2" if color == "blue" else "#E69F00"
     shape_css = "border-radius: 50%;" if shape == "circle" else "clip-path: polygon(50% 0%, 0% 100%, 100% 100%);"
-    border_css = "4px solid #000000" if border == "black border" else "none"
+    border_css = "4px solid #CC79A7" if border == "pink border" else "none"
     if pattern == "striped":
         background_css = (
             "repeating-linear-gradient(45deg, "
@@ -120,9 +121,9 @@ class DefaultCategoryLearning(HtmlKeyboardResponse):
 
     Feature order:
       0 shape      (0 circle, 1 triangle)
-      1 color      (0 red, 1 blue)
+      1 color      (0 orange #E69F00, 1 blue #0072B2)
       2 size       (0 small, 1 large)
-      3 border     (0 none, 1 black border)
+      3 border     (0 none, 1 pink #CC79A7)
       4 pattern    (0 filled, 1 striped)
       5 inner_mark (0 none, 1 star)
     """
