@@ -73,12 +73,10 @@ def _feature_vector_to_description(feature_vector):
     return description
 
 
-# `border` on a clip-path element only follows the box, not the triangle — use a second layer.
-_TRIANGLE_CLIP = "clip-path:polygon(50% 0%,0% 100%,100% 100%);"
-_BORDER_W_PX = 10
-
-
 def _feature_vector_to_html(feature_vector):
+    # Literals only — Transcrypt rejects non-local globals (FunctionVariable / _fct_to_js).
+    _circle_border_px = 13
+
     n = len(feature_vector)
     shape = "triangle" if n >= 1 and feature_vector[0] == 1 else "circle"
     color = "blue" if n >= 2 and feature_vector[1] == 1 else "orange"
@@ -116,7 +114,7 @@ def _feature_vector_to_html(feature_vector):
 
     if shape == "circle":
         border_css = (
-            f"{_BORDER_W_PX}px solid #CC79A7"
+            f"{_circle_border_px}px solid #CC79A7"
             if border == "pink border"
             else "none"
         )
@@ -127,26 +125,36 @@ def _feature_vector_to_html(feature_vector):
         )
         return f"<div style='{shell}'>{inner}</div>"
 
-    # Triangle: CSS `border` + `clip-path` only shows on unclipped edges — draw border as a
-    # larger backing triangle (#CC79A7) behind a smaller fill triangle.
-    if border == "pink border":
-        outer = pixel_size + 2 * _BORDER_W_PX
-        inner = (
-            f"<div style='position:relative;width:{outer}px;height:{outer}px;"
-            f"display:flex;align-items:center;justify-content:center;'>"
-            f"<div style='position:absolute;inset:0;{_TRIANGLE_CLIP}"
-            f"background:#CC79A7;'></div>"
-            f"<div style='position:relative;width:{pixel_size}px;height:{pixel_size}px;"
-            f"{_TRIANGLE_CLIP}background:{background_css};z-index:1;'>{star_html}</div>"
-            "</div>"
+    # Triangle: SVG stroke is even along the path; pad viewBox so stroke is not clipped
+    # at corners (stroke draws past the path; viewBox 0–100 cuts it off without margin).
+    # Match circle's border thickness (13 px) so both shapes read as "bordered" equally.
+    _sw = str(_circle_border_px) if border == "pink border" else "0"
+    _sc = "#CC79A7" if border == "pink border" else "none"
+    if pattern == "striped":
+        _defs = (
+            "<defs><pattern id='sbclstrp' patternUnits='userSpaceOnUse' width='20' height='20' "
+            "patternTransform='rotate(45)'><rect width='10' height='20' "
+            f"fill='{css_color}'/><rect x='10' width='10' height='20' "
+            "fill='rgba(255,255,255,0.45)'/></pattern></defs>"
         )
-        return f"<div style='{shell}'>{inner}</div>"
+        _fill = "url(#sbclstrp)"
+    else:
+        _defs = ""
+        _fill = css_color
 
-    inner = (
+    # ~24 user units padding: room for the thicker stroke (~13 px) at apex and base corners.
+    tri = (
         f"<div style='position:relative;width:{pixel_size}px;height:{pixel_size}px;"
-        f"{_TRIANGLE_CLIP}background:{background_css};'>{star_html}</div>"
+        "overflow:visible;'>"
+        f"<svg width='{pixel_size}' height='{pixel_size}' "
+        "viewBox='-24 -24 148 148' preserveAspectRatio='xMidYMid meet' "
+        "style='overflow:visible;display:block;'>"
+        f"{_defs}<polygon points='50,0 0,100 100,100' fill='{_fill}' stroke='{_sc}' "
+        f"stroke-width='{_sw}' stroke-linejoin='round' stroke-linecap='round' "
+        "paint-order='stroke fill' vector-effect='non-scaling-stroke' /></svg>"
+        f"{star_html}</div>"
     )
-    return f"<div style='{shell}'>{inner}</div>"
+    return f"<div style='{shell}'>{tri}</div>"
 
 
 class DefaultCategoryLearning(HtmlKeyboardResponse):
