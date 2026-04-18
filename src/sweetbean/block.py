@@ -8,6 +8,7 @@ from PIL import Image, ImageDraw, ImageFont
 from pyppeteer import launch
 
 from sweetbean._const import HTML_APPENDIX, HTML_PREAMBLE
+from sweetbean.util.parse import to_js as sb_to_js
 from sweetbean.variable import CodeVariable
 
 
@@ -33,7 +34,14 @@ class Block:
         self.timeline = timeline
         self.extensions["touch_layouts"] = []
 
-    def to_js(self):
+    def to_js(self, template_timeline_token=None):
+        """
+        Build jsPsych trial source for this block.
+
+        If ``template_timeline_token`` is set (see :meth:`Experiment.compile`), the
+        timeline data is omitted here and injected later via
+        :meth:`Experiment.to_js_string_from_template` for faster multi-condition builds.
+        """
         self.js = "{timeline: ["
         for s in self.stimuli:
             self.extensions["touch_layouts"].append(s.create_touch_layout())
@@ -41,9 +49,15 @@ class Block:
             self.js += s.js + ","
         self.js = self.js[:-1]
         if isinstance(self.timeline, CodeVariable):
+            if template_timeline_token is not None:
+                raise ValueError(
+                    "template_timeline_token is not supported when timeline is a CodeVariable"
+                )
             self.js += f"], timeline_variables: {self.timeline.name}" + "}"
+        elif template_timeline_token is not None:
+            self.js += f"], timeline_variables: {template_timeline_token}" + "}"
         else:
-            self.js += f"], timeline_variables: {self.timeline}" + "}"
+            self.js += f"], timeline_variables: {sb_to_js(self.timeline)}" + "}"
 
     def to_image(self, path, data, sequence=True, timeline_idx="random", zoom_factor=3):
         """

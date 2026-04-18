@@ -1,4 +1,5 @@
-from typing import List
+import re
+from typing import Any, List
 
 from sweetbean._const import (
     FUNCTION_APPENDIX,
@@ -8,6 +9,14 @@ from sweetbean._const import (
     TEXT_APPENDIX,
 )
 from sweetbean.block import Block
+from sweetbean.variable import CodeVariable
+
+# Injected by :meth:`Experiment.compile`, replaced in :meth:`Experiment.to_js_string_from_template`.
+_TIMELINE_PLACEHOLDER_RE = re.compile(r"__SB_TIMELINE_PLACEHOLDER_(\d+)__")
+
+
+def _timeline_placeholder(block_index: int) -> str:
+    return f"__SB_TIMELINE_PLACEHOLDER_{block_index}__"
 
 
 class Experiment:
@@ -106,6 +115,60 @@ class Experiment:
         text = text[:-1] + "]\n"
         text += FUNCTION_APPENDIX(is_async) if as_function else TEXT_APPENDIX(is_async)
         return text
+
+    def compile(self, as_function=True, is_async=True):
+        """
+        Build JavaScript once: stimulus graphs and ``jsPsych`` setup are emitted;
+        each block's ``timeline_variables`` is a placeholder string that
+        :meth:`to_js_string_from_template` replaces with per-condition data.
+
+        Use when multiple conditions share the same stimulus structure (e.g. Firebase
+        payloads) so timelines are "injected" without re-running Transcrypt per condition.
+        """
+        text = FUNCTION_PREAMBLE(is_async) if as_function else ""
+        extensions = ""
+        for bi, b in enumerate(self.blocks):
+            if isinstance(b.timeline, CodeVariable):
+                b.to_js()
+            else:
+                b.to_js(template_timeline_token=_timeline_placeholder(bi))
+            extensions += _initialize_extensions(b.extensions)
+            for s in b.stimuli:
+                shared_variables = s.return_shared_variables()
+                for s_key in shared_variables:
+                    text += f"{shared_variables[s_key].set()}\n"
+        text += f"const jsPsych = initJsPsych({extensions})\n"
+        text += "const trials = [\n"
+        for b in self.blocks:
+            text += b.js
+            text += ","
+        text = text[:-1] + "]\n"
+        text += FUNCTION_APPENDIX(is_async) if as_function else TEXT_APPENDIX(is_async)
+        return text
+
+    @staticmethod
+    def to_js_string_from_template(template: str, timelines: List[Any]) -> str:
+        """
+        Replace each ``__SB_TIMELINE_PLACEHOLDER_i__`` in *template* with the JS literal
+        for ``timelines[i]`` (from :func:`sweetbean.util.parse.to_js`).
+
+        *timelines* must have one entry per block that used a placeholder in
+        :meth:`compile` (same order as ``Experiment.blocks``). Blocks compiled with
+        :class:`~sweetbean.variable.CodeVariable` timelines embed real JS and are not
+        listed here — pass the full list of block timelines, including those unchanged.
+        """
+        from sweetbean.util.parse import to_js as sb_to_js
+
+        def _repl(m: re.Match) -> str:
+            idx = int(m.group(1))
+            if idx < 0 or idx >= len(timelines):
+                raise ValueError(
+                    f"Template references timeline placeholder {idx}; "
+                    f"got {len(timelines)} timeline(s)"
+                )
+            return sb_to_js(timelines[idx])
+
+        return _TIMELINE_PLACEHOLDER_RE.sub(_repl, template)
 
     def run_on_language(
         self,
