@@ -73,6 +73,11 @@ def _feature_vector_to_description(feature_vector):
     return description
 
 
+# `border` on a clip-path element only follows the box, not the triangle — use a second layer.
+_TRIANGLE_CLIP = "clip-path:polygon(50% 0%,0% 100%,100% 100%);"
+_BORDER_W_PX = 10
+
+
 def _feature_vector_to_html(feature_vector):
     n = len(feature_vector)
     shape = "triangle" if n >= 1 and feature_vector[0] == 1 else "circle"
@@ -87,8 +92,6 @@ def _feature_vector_to_html(feature_vector):
     pixel_size = 240 if size == "large" else 90
     # Colorblind-friendly palette (Wong / Okabe–Ito style)
     css_color = "#0072B2" if color == "blue" else "#E69F00"
-    shape_css = "border-radius: 50%;" if shape == "circle" else "clip-path: polygon(50% 0%, 0% 100%, 100% 100%);"
-    border_css = "4px solid #CC79A7" if border == "pink border" else "none"
     if pattern == "striped":
         background_css = (
             "repeating-linear-gradient(45deg, "
@@ -107,12 +110,43 @@ def _feature_vector_to_html(feature_vector):
             ">★</div>"
         )
 
-    return (
-        "<div style='display:flex;justify-content:center;align-items:center;height:100%;'>"
-        f"<div style='position:relative;width:{pixel_size}px;height:{pixel_size}px;"
-        f"background:{background_css};border:{border_css};{shape_css}'>"
-        f"{star_html}</div></div>"
+    shell = (
+        "display:flex;justify-content:center;align-items:center;height:100%;"
     )
+
+    if shape == "circle":
+        border_css = (
+            f"{_BORDER_W_PX}px solid #CC79A7"
+            if border == "pink border"
+            else "none"
+        )
+        inner = (
+            f"<div style='box-sizing:border-box;position:relative;width:{pixel_size}px;"
+            f"height:{pixel_size}px;background:{background_css};border:{border_css};"
+            f"border-radius:50%;'>{star_html}</div>"
+        )
+        return f"<div style='{shell}'>{inner}</div>"
+
+    # Triangle: CSS `border` + `clip-path` only shows on unclipped edges — draw border as a
+    # larger backing triangle (#CC79A7) behind a smaller fill triangle.
+    if border == "pink border":
+        outer = pixel_size + 2 * _BORDER_W_PX
+        inner = (
+            f"<div style='position:relative;width:{outer}px;height:{outer}px;"
+            f"display:flex;align-items:center;justify-content:center;'>"
+            f"<div style='position:absolute;inset:0;{_TRIANGLE_CLIP}"
+            f"background:#CC79A7;'></div>"
+            f"<div style='position:relative;width:{pixel_size}px;height:{pixel_size}px;"
+            f"{_TRIANGLE_CLIP}background:{background_css};z-index:1;'>{star_html}</div>"
+            "</div>"
+        )
+        return f"<div style='{shell}'>{inner}</div>"
+
+    inner = (
+        f"<div style='position:relative;width:{pixel_size}px;height:{pixel_size}px;"
+        f"{_TRIANGLE_CLIP}background:{background_css};'>{star_html}</div>"
+    )
+    return f"<div style='{shell}'>{inner}</div>"
 
 
 class DefaultCategoryLearning(HtmlKeyboardResponse):
