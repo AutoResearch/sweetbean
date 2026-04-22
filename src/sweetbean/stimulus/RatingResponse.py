@@ -26,9 +26,10 @@ _PIP_GAP_PX = 8
 
 
 def _validate_n_points(n_points):
-    if not isinstance(n_points, int) or n_points < 2 or n_points > 10:
+    # 1..10. n_points=1 is the binary on/off indicator (single pip).
+    if not isinstance(n_points, int) or n_points < 1 or n_points > 10:
         raise ValueError(
-            f"n_points must be an integer in 2..10, got {n_points!r}."
+            f"n_points must be an integer in 1..10, got {n_points!r}."
         )
 
 
@@ -47,7 +48,9 @@ def render_rating_html(value, n_points, label=None):
     Arguments:
         value (int | None): If int, the first `value` pips are filled.
             If None, all pips are empty (response-mode appearance).
-        n_points (int): Total number of pips, 2..10.
+        n_points (int): Total number of pips, 1..10. (n_points=1 gives a
+            single pip that is either filled or empty — a binary
+            on/off indicator.)
         label (str | None): Optional caption rendered above the pips.
 
     Returns:
