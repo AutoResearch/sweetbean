@@ -14,6 +14,7 @@ from sweetbean.stimulus.HtmlKeyboardResponse import (
 )
 from sweetbean.stimulus.InformedConsent import InformedConsent
 from sweetbean.stimulus.HtmlSliderResponse import HtmlSliderResponse
+from sweetbean.stimulus.RatingResponse import RatingResponse, render_rating_html
 from sweetbean.stimulus.Image import Image
 from sweetbean.stimulus.RO import RDP, ROK, RandomDotPatterns, RandomObjectKinematogram
 from sweetbean.stimulus.RSVP import RSVP, BilateralRSVP
