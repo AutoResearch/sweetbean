@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<head>
+<title>My awesome experiment</title>
+<!-- Serve this file over http(s); opening via file:// often breaks video/media. -->
+<script src="https://unpkg.com/jspsych@7.3.1"></script>
+<script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.2"></script>
+<script src="https://unpkg.com/@jspsych/plugin-survey-text@1.1.2"></script>
+<script src="https://unpkg.com/@jspsych/plugin-survey-multi-choice@1.1.2"></script>
+<script src="https://unpkg.com/@jspsych/plugin-survey-likert@1.1.2"></script>
+<script src="https://unpkg.com/@jspsych/plugin-html-slider-response@1.1.2"></script>
+<script src="https://unpkg.com/@jspsych/plugin-survey-likert@1.1.2"></script>
+<link href="https://unpkg.com/jspsych@7.3.1/css/jspsych.css" rel="stylesheet" type="text/css"/>
+<script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.1.2"></script>
+<script src="https://unpkg.com/@jspsych/plugin-video-keyboard-response@1.1.2"></script>
+<script src="https://unpkg.com/@jspsych-contrib/plugin-rok@1.1.1"></script>
+<script src="https://unpkg.com/@jspsych-contrib/plugin-html-choice@1.0.0"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetbean@0.0.6/dist/runtime-script.js"></script>
+<script src="https://unpkg.com/@sweet-jspsych/plugin-rsvp@0.2.5/dist/index.browser.min.js"></script>
+<script src="https://unpkg.com/@sweet-jspsych/plugin-symbol@0.4.6/dist/index.browser.min.js"></script>
+<script src="https://unpkg.com/@sweet-jspsych/plugin-foraging@0.2.1/dist/index.browser.min.js"></script>
+<script src="https://unpkg.com/@sweet-jspsych/plugin-gabor-array@0.1.1/dist/index.browser.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/sweetbean@0.0.6/dist/style/main.css" rel="stylesheet" type="text/css"/>
+<link href="https://cdn.jsdelivr.net/npm/sweetbean@0.0.6/dist/style/bandit.css" rel="stylesheet" type="text/css"/>
+<style>
+html,body{height:100%;margin:0;overflow:hidden;}
+/* Slider layout: maximize stimulus while keeping slider + Continue on screen. */
+.jspsych-display-element{width:100%!important;}
+.jspsych-content-wrapper{width:100%!important;}
+.jspsych-content{width:100%!important;max-width:100%!important;}
+#jspsych-html-slider-response-wrapper{
+  margin:0!important;
+  display:flex!important;
+  flex-direction:column!important;
+  width:100%!important;
+  height:min(calc(100vh - 88px), calc(100dvh - 88px))!important;
+  min-height:0!important;
+}
+#jspsych-html-slider-response-stimulus{
+  flex:1 1 auto!important;
+  width:100%!important;
+  min-height:0!important;
+  overflow:hidden!important;
+  display:flex!important;
+}
+#jspsych-html-slider-response-stimulus > div{
+  flex:1 1 auto!important;
+  min-height:0!important;
+  height:100%!important;
+  max-height:100%!important;
+}
+.jspsych-html-slider-response-container{
+  flex:0 0 auto!important;
+  margin:0 auto 0.5em auto!important;
+}
+#jspsych-html-slider-response-next{
+  display:block!important;
+  margin:0.5em auto 0 auto!important;
+}
+</style>
+<script>
+window.__sb_fit__=function(enabled){
+  if(enabled===undefined){enabled=true;}
+  var apply=function(){
+    var root=document.getElementById('jspsych-content');
+    if(!root)return;
+    if(!enabled){
+      root.style.zoom='';
+      document.documentElement.style.overflow='auto';
+      document.body.style.overflow='auto';
+      return;
+    }
+    document.documentElement.style.overflow='hidden';
+    document.body.style.overflow='hidden';
+    root.style.zoom='';
+    var rect=root.getBoundingClientRect();
+    if(rect.width===0||rect.height===0)return;
+    var sx=(window.innerWidth*0.95)/rect.width;
+    var sy=(window.innerHeight*0.92)/rect.height;
+    var s=Math.min(sx,sy);
+    s=Math.max(0.4,Math.min(2.5,s));
+    if(Math.abs(s-1)>0.01){root.style.zoom=s.toFixed(3);}
+  };
+  requestAnimationFrame(apply);
+};
+var __sb_resize_t__=null;
+window.addEventListener('resize',function(){
+  clearTimeout(__sb_resize_t__);
+  __sb_resize_t__=setTimeout(function(){
+    var root=document.getElementById('jspsych-content');
+    if(root&&root.style.zoom!==''){window.__sb_fit__(true);}
+  },120);
+});
+</script>
+</head>
+<body></body>
+<script>
+jsPsych = initJsPsych();
+trials = [
+{timeline: [{type: jsPsychSymbol,canvasWidth:()=>{let canvasWidth=800;return canvasWidth},canvasHeight:()=>{let canvasHeight=600;return canvasHeight},background:()=>{let background='transparent';return background},items:()=>{let items=null;return items},trialDuration:()=>{let trialDuration=null;return trialDuration},responseEndsTrial:()=>{let responseEndsTrial=true;return responseEndsTrial},choices:()=>{let choices=[];return choices},allowMouse:()=>{let allowMouse=false;return allowMouse},correct_key:()=>{let correct_key=null;return correct_key},on_load:()=>{if(window.__sb_fit__){window.__sb_fit__(true);}},on_finish:(data)=>{let canvasWidth=800;data["bean_canvasWidth"]=canvasWidth;let canvasHeight=600;data["bean_canvasHeight"]=canvasHeight;let background='transparent';data["bean_background"]=background;let items=null;data["bean_items"]=items;let trialDuration=null;data["bean_trialDuration"]=trialDuration;let responseEndsTrial=true;data["bean_responseEndsTrial"]=responseEndsTrial;let choices=[];data["bean_choices"]=choices;let allowMouse=false;data["bean_allowMouse"]=allowMouse;let correct_key=null;data["bean_correct_key"]=correct_key;let type='jsPsychSymbol';data["bean_type"]=type;data["bean_key"] = data["resp_key"];data["bean_rt"] = data["rt"];data["bean_onset"] = data["onset_ms"];data["bean_offset"] = data["offset_ms"];data["bean_n_items"] = data["n_items"];if (typeof data["correct_key"] !== "undefined" && data["correct_key"] !== null) {  var rk = (data["resp_key"] == null) ? null : String(data["resp_key"]).toLowerCase();  var ck = String(data["correct_key"]).toLowerCase();  data["bean_correct"] = (rk !== null && rk === ck);}}}], timeline_variables: []}]
+;jsPsych.run(trials)</script>
+</html>

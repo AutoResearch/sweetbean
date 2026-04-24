@@ -51,11 +51,35 @@ def _fct_args_to_js(args):
 def _var_to_js(var):
     """
     Convert a python input value to a JavaScript input value.
+
+    String values are wrapped in single quotes for the generated JS
+    literal. We escape backslashes, embedded single quotes, and the two
+    line terminators (CR / LF) that ECMAScript forbids inside single-
+    quoted string literals — without those last two, any multi-line
+    Python string passed as a stimulus parameter (e.g. a multi-line
+    ``<style>`` block in InformedConsent) compiles to invalid JS and
+    the browser raises ``SyntaxError: Invalid or unexpected token`` the
+    moment the experiment script runs.
+
+    NOTE: this body is deliberately written as a chain of ``.replace``
+    calls (rather than delegating to a module-level helper / dict) so
+    Transcrypt can ingest it cleanly. Anything more elaborate at module
+    scope here ends up on Transcrypt's import path via
+    ``sweetbean.variable.__init__`` and has historically tripped
+    Transcrypt's compiler — see ``AUTHORING.md``.
+
+    Order matters: escape backslashes first so the replacements emitted
+    for the other characters don't get themselves re-escaped.
     """
     if var is None:
         return "null"
     if isinstance(var, str):
-        _var = var.replace("'", "\\'")
+        _var = (
+            var.replace("\\", "\\\\")
+            .replace("'", "\\'")
+            .replace("\r", "\\r")
+            .replace("\n", "\\n")
+        )
         return f"'{_var}'"
     # test if is sequence
     if (
@@ -111,7 +135,17 @@ def _emit_js_expr(node: ast.AST) -> str:
     if isinstance(node, ast.Constant):
         v = node.value
         if isinstance(v, str):
-            return "'" + v.replace("\\", "\\\\").replace("'", "\\'") + "'"
+            # Same escape policy as `_var_to_js` (see its docstring for the
+            # rationale and the order constraint). Inlined here so this
+            # host-side helper stays parallel to the Transcrypt-visible
+            # path and there is no shared module-level helper to drift.
+            v = (
+                v.replace("\\", "\\\\")
+                .replace("'", "\\'")
+                .replace("\r", "\\r")
+                .replace("\n", "\\n")
+            )
+            return f"'{v}'"
         if v is None:
             return "null"
         if isinstance(v, bool):

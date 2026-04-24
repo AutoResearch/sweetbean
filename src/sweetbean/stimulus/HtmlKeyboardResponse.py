@@ -16,6 +16,8 @@ class HtmlKeyboardResponse(_KeyboardResponseStimulus):
         choices=None,
         correct_key="",
         side_effects=None,
+        fit_to_viewport=None,
+        min_rt=None,
     ):
         """
         Arguments:
@@ -26,6 +28,20 @@ class HtmlKeyboardResponse(_KeyboardResponseStimulus):
             side_effects: Optional side-effect configuration passed to the runtime. This expects
                 a list of SideEffect definitions (see SweetBean docs) which can be
                 used to update global data like overall score or trial counter.s
+            fit_to_viewport: If True (default), the rendered content is
+                CSS-zoomed to fill (but not overflow) the viewport.
+                If False, natural layout + scrolling is used. If None,
+                the class-level default (`fit_to_viewport = True` for
+                most stimuli; False for `InformedConsent`) is honored.
+                See AUTHORING.md §"Auto-fit to viewport".
+            min_rt: Minimum response time in milliseconds. While > 0,
+                a document-level capturing keydown listener swallows
+                every key press for the first `min_rt` ms so the
+                trial cannot end until the participant has plausibly
+                looked at the stimulus. Useful as a low-effort
+                guardrail against single-key spamming. Defaults to
+                `None` (use the class-level default, normally `0`).
+                See AUTHORING.md §"Minimum response time".
         """
 
         if choices is None:

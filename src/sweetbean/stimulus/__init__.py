@@ -13,6 +13,7 @@ from sweetbean.stimulus.HtmlKeyboardResponse import (
     Text,
 )
 from sweetbean.stimulus.InformedConsent import InformedConsent
+from sweetbean.stimulus.RichInstructions import RichInstructions, render_rich_instructions_html
 from sweetbean.stimulus.HtmlSliderResponse import HtmlSliderResponse
 from sweetbean.stimulus.RatingResponse import RatingResponse, render_rating_html
 from sweetbean.stimulus.Image import Image

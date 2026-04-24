@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: sweetbean
-Version: 1.3.18.dev0+gd06d7e87f.d20260410
+Version: 1.3.18.dev16+gbe8d6b498.d20260422
 Summary: A declarative language in python for creating jsPsych experiments
 Author-email: Younes Strittmatter <ystrittm@gmail.com>
 License: MIT License

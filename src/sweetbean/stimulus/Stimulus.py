@@ -33,6 +33,29 @@ class _BaseStimulus(ABC):
     l_args: dict = {}
     l_ses: dict = {}
     extensions = None
+    # When True (the default), this stimulus's trial config emits an
+    # `on_load` callback that calls `window.__sb_fit__(true)` to scale
+    # `#jspsych-content` to fit the viewport (with body overflow hidden).
+    # When False, the callback calls `window.__sb_fit__(false)` to clear
+    # any prior scaling and restore body overflow:auto so the trial can
+    # scroll naturally — the right default for text-heavy screens like
+    # `InformedConsent`. Per-instance override: pass `fit_to_viewport=`
+    # to any stimulus that exposes the kwarg, or set `stim.fit_to_viewport
+    # = ...` after construction. See AUTHORING.md §"Auto-fit to viewport".
+    fit_to_viewport: bool = True
+    # Minimum response time in milliseconds. When > 0, the trial's
+    # `on_load` installs a document-level capturing `keydown` listener
+    # that calls `event.stopImmediatePropagation()` + `event.preventDefault()`
+    # for the first `min_rt` ms, then removes itself. This blocks the
+    # jsPsych keyboard-response plugin (or any other listener) from seeing
+    # any key for that window, so participants cannot end the trial
+    # before they have plausibly looked at the stimulus. Plugin-agnostic
+    # because it's purely a DOM-level capture-phase swallow. The trial
+    # itself is unmodified — once the gate elapses, normal jsPsych
+    # listeners take over. Per-instance override: pass `min_rt=N` (ms) to
+    # any stimulus that exposes the kwarg, or set `stim.min_rt = N` after
+    # construction. See AUTHORING.md §"Minimum response time".
+    min_rt: int = 0
 
     def __init__(self, args, side_effects=None):
         self.side_effects = side_effects
@@ -42,6 +65,22 @@ class _BaseStimulus(ABC):
             del args["__class__"]
         if "side_effects" in args:
             del args["side_effects"]
+        # Honor per-instance fit_to_viewport without polluting trial data.
+        if "fit_to_viewport" in args:
+            ftv = args.pop("fit_to_viewport")
+            if ftv is not None:
+                self.fit_to_viewport = bool(ftv)
+        # Honor per-instance `min_rt` (ms response gate) without polluting
+        # trial data. Negative or non-numeric values clamp to 0 so a
+        # malformed override never throws inside the runner — `None`
+        # means "use the class-level default".
+        if "min_rt" in args:
+            mr = args.pop("min_rt")
+            if mr is not None:
+                try:
+                    self.min_rt = max(0, int(mr))
+                except (TypeError, ValueError):
+                    self.min_rt = 0
         self.arg = args
         self.arg.update({"type": self.type})
         self.arg_js = {}
@@ -49,6 +88,16 @@ class _BaseStimulus(ABC):
             self.arg_js["trial_duration"] = self.arg["duration"]
         for key in self.arg:
             self.arg_js[key] = args[key]
+        # Per-instance copy so appending here never mutates the class-level
+        # default and bleeds into other stimuli. See `excludes` for the
+        # original (less-safe) class-attribute pattern we're not repeating.
+        self.data_excludes: List[str] = []
+        # Object literal emitted as `save_trial_parameters: {...}` in the
+        # trial config. Lets us turn off jsPsych's automatic saving of
+        # specific config fields (e.g. `stimulus`) into trial data without
+        # removing the field from the trial config itself. See AUTHORING.md
+        # §"Suppressing fields from trial data" and `skip_data`.
+        self.save_trial_parameters: dict = {}
 
     def return_shared_variables(self):
         shared_variables = {}
@@ -75,6 +124,54 @@ class _BaseStimulus(ABC):
                 extract_shared_variables(se.set_variable)
         return shared_variables
 
+    def _on_load_js(self) -> str:
+        # Always emit on_load so a transition from a fit=True to a fit=False
+        # trial (e.g. instruction → consent) cleanly clears the prior zoom
+        # and restores scrolling. The window guard makes the call harmless
+        # if older sweetbean HTML preambles didn't define __sb_fit__.
+        flag = "true" if getattr(self, "fit_to_viewport", True) else "false"
+        body = f"if(window.__sb_fit__){{window.__sb_fit__({flag});}}"
+        # Optional response gate: swallow keydowns at the document
+        # capture phase for the first `min_rt` ms so jsPsych's plugin
+        # listener never sees them. The capture phase fires *before* any
+        # bubble-phase listener (which is what jsPsych's
+        # `getKeyboardResponse` registers), so this works regardless of
+        # which html-keyboard-response plugin version is loaded. We
+        # allow the participant to still see / hear other DOM events
+        # (mouse, focus, scroll) — only keyboard advance is blocked.
+        #
+        # Visual indicator: stimuli may mark answer/key UI with
+        # `data-sb-min-rt-reveal`. Such elements stay hidden during the
+        # gate and simply appear when responses become active. The
+        # stimulus itself is never dimmed and no loading/progress bar is
+        # shown.
+        # See AUTHORING.md §"Minimum response time".
+        min_rt = max(0, int(getattr(self, "min_rt", 0) or 0))
+        if min_rt > 0:
+            body += (
+                f"var __sb_min_rt={min_rt};"
+                "var __sb_reveal=[].slice.call("
+                "document.querySelectorAll('[data-sb-min-rt-reveal]'));"
+                "__sb_reveal.forEach(function(el){"
+                "el.__sb_min_rt_pointer_events=el.style.pointerEvents;"
+                "el.style.visibility='hidden';"
+                "el.style.pointerEvents='none';"
+                "});"
+                # Keyboard blocker
+                "var __sb_block=function(e){"
+                "e.stopImmediatePropagation();e.preventDefault();"
+                "};"
+                "document.addEventListener('keydown',__sb_block,true);"
+                "setTimeout(function(){"
+                "document.removeEventListener('keydown',__sb_block,true);"
+                "__sb_reveal.forEach(function(el){"
+                "el.style.visibility='visible';"
+                "el.style.pointerEvents=el.__sb_min_rt_pointer_events||'';"
+                "});"
+                "},__sb_min_rt);"
+            )
+        return f"on_load:()=>{{{body}}},"
+
     def to_js(self):
         self.js = ""
         self.js_data = ""
@@ -82,7 +179,9 @@ class _BaseStimulus(ABC):
         self.js_body = ""
         self._params_to_js()
         self.js = (
-            f"{{{self.js_body}{self.js_before}on_finish:(data)=>{{{self.js_data}}}}}"
+            f"{{{self.js_body}{self.js_before}{self._save_trial_parameters_js()}"
+            f"{self._on_load_js()}"
+            f"on_finish:(data)=>{{{self.js_data}}}}}"
         )
 
     def to_js_for_image(self):
@@ -92,8 +191,52 @@ class _BaseStimulus(ABC):
         self.js_body = ""
         self._params_to_js_from_prepared()
         self.js = (
-            f"{{{self.js_body}{self.js_before}on_finish:(data)=>{{{self.js_data}}}}}"
+            f"{{{self.js_body}{self.js_before}{self._save_trial_parameters_js()}"
+            f"{self._on_load_js()}"
+            f"on_finish:(data)=>{{{self.js_data}}}}}"
         )
+
+    def _save_trial_parameters_js(self) -> str:
+        """Emit `save_trial_parameters: {...}` as a real object literal.
+
+        We do **not** route this through `_param_to_js` because that
+        helper wraps every value in a `()=>{...}` getter. jsPsych's
+        `save_trial_parameters` is a config field that must be a plain
+        object literal — wrapping it in a function silently disables it.
+        """
+        params = getattr(self, "save_trial_parameters", None)
+        if not params:
+            return ""
+        return f"save_trial_parameters:{to_js(params)},"
+
+    def skip_data(self, *keys: str) -> "_BaseStimulus":
+        """Drop one or more trial fields from the recorded observation.
+
+        For each ``key``:
+
+        * Skips the SweetBean-emitted ``data["bean_<key>"] = <key>``
+          line in this stimulus's ``on_finish`` callback (no
+          ``bean_<key>`` in the saved data).
+        * Sets ``save_trial_parameters[key] = False`` so jsPsych's
+          built-in trial-parameter recorder also drops the raw field
+          (``stimulus``, ``choices``, etc.) from the saved data.
+
+        The participant-facing trial config is untouched — this only
+        controls what ends up in the per-trial data row that gets
+        uploaded by online runners.
+
+        Common use: long timelines on Firebase-backed runners where
+        per-trial rendered HTML would otherwise blow past the
+        Firestore 1 MB document limit. See AUTHORING.md §"Suppressing
+        fields from trial data".
+
+        Returns ``self`` for chaining.
+        """
+        for key in keys:
+            if key not in self.data_excludes:
+                self.data_excludes.append(key)
+            self.save_trial_parameters[key] = False
+        return self
 
     def _params_to_js(self):
         self.js_body += f'type: {self.arg["type"]},'
@@ -231,9 +374,12 @@ class _BaseStimulus(ABC):
         body, data = _set_param_js(key, param)
         if key not in self.excludes and key != "type" and key != "duration":
             self.js_body += body
-        self.js_data += data
+        if key not in getattr(self, "data_excludes", []):
+            self.js_data += data
 
     def _param_to_js_arg(self, key, param):
+        if key in getattr(self, "data_excludes", []):
+            return
         _, data = _set_param_js(key, param)
         self.js_data += data
 

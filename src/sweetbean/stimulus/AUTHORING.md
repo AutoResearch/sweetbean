@@ -137,6 +137,36 @@ stim.arg["option_b"] = TimelineVariable("option_b")
 Use this whenever you can. If the only thing that varies per trial is
 the HTML, you don't need a `FunctionVariable` at all.
 
+### Online runner payload rule (Firebase / Firestore)
+
+When experiments are uploaded through Firebase-backed runners, every
+trial's data row is concatenated into a single observation document.
+Firestore caps documents at ~1 MB; long timelines with rich rendered
+HTML can blow past that. The fix is to keep trial data rows compact:
+
+- Keep timeline rows to compact trial parameters only (the canonical
+  fields you also need for decoding / metrics).
+- Prefer rendering rich trial HTML at runtime from those parameters via
+  a literals-only `FunctionVariable` (Pattern B).
+- For long-timeline stimuli where the rendered HTML is fully
+  reconstructible from the trial params (true for almost everything that
+  subclasses `HtmlKeyboardResponse` and supplies its own param-driven
+  renderer), **drop `stimulus` from the saved trial data** with the
+  built-in helper:
+
+  ```python
+  trial_stim = HtmlKeyboardResponse(stimulus=..., choices=...)
+  trial_stim.skip_data("stimulus")  # see §"Suppressing fields from trial data"
+  ```
+
+- For raw `HtmlKeyboardResponse(stimulus="<custom html>")` (consent,
+  instructions, debriefs — usually one trial each), leave `stimulus` in
+  the data. The HTML is the only record there, and one trial's worth of
+  HTML is a few KB, not the bloat source.
+
+This preserves participant-facing UI while keeping uploaded observation
+payloads small.
+
 ### Pattern B: literals-only `FunctionVariable`
 
 Use this when the rendering must run in the browser (depends on
@@ -180,6 +210,163 @@ and are available to `_observations_to_df`. **Do not** also write
 them into `self.arg_js`; that would (incorrectly) emit them as
 top-level jsPsych config keys.
 
+## Auto-fit to viewport (`fit_to_viewport`)
+
+Every stimulus inherits a class-level `fit_to_viewport: bool = True`
+flag (see `Stimulus.py::_BaseStimulus`). When `True`, the trial config
+emits an `on_load` callback that calls `window.__sb_fit__(true)`, which
+CSS-`zoom`s `#jspsych-content` so it fills (but never overflows) the
+viewport, with the body's overflow set to `hidden`. The scale factor
+is clamped to `[0.4, 2.5]` — large content shrinks to fit, small
+content grows up to a "reasonable large" cap. A debounced window-resize
+listener re-fits on browser resize.
+
+When `False`, the callback calls `window.__sb_fit__(false)`, which
+clears any prior zoom and restores `body { overflow: auto }` so the
+trial scrolls naturally. **Use `False` for text-heavy screens that may
+exceed one viewport** — `InformedConsent` ships with
+`fit_to_viewport = False` for exactly this reason.
+
+Three ways to set the flag:
+
+1. **Class default** (most common). Set the class attribute on a
+   subclass so every instance opts in/out:
+   ```python
+   class InformedConsent(HtmlKeyboardResponse):
+       fit_to_viewport = False
+   ```
+2. **Per-instance kwarg.** Stimuli that expose `fit_to_viewport` in
+   their `__init__` (currently `HtmlKeyboardResponse` and everything
+   that passes through it) accept `fit_to_viewport=True/False/None`
+   directly. `None` means "use the class default".
+   ```python
+   stim = HtmlKeyboardResponse(stimulus="...", fit_to_viewport=False)
+   ```
+3. **Post-construction.** Any stimulus instance:
+   ```python
+   stim.fit_to_viewport = False
+   ```
+
+The flag is intentionally **not** part of `self.arg`, so it never
+leaks into trial data as `bean_fit_to_viewport`.
+
+When you author a new stimulus, decide:
+
+- Pure visual / fixed-size content (Gabors, choice cards, ratings) →
+  default (`True`) is right; users get auto-fit for free.
+- Long-form text (consent, debriefs, multi-screen instructions where
+  scrolling is intended) → override the class attribute to `False`.
+- Mixed: prefer the default and let users override per-instance when
+  needed.
+
+Mechanism notes (debugging):
+
+- Uses CSS `zoom`, not `transform: scale`. Zoom changes the layout
+  box (so flex/center parents see the new size); scale only changes
+  paint. We picked zoom so jsPsych's centering still works after
+  shrinking/growing the content.
+- The fit fires on every trial's `on_load`. Even a `fit_to_viewport
+  = False` stimulus emits the callback (with `false`) so transitions
+  from a fit trial back to a no-fit trial cleanly clear the prior
+  zoom and re-enable scrolling.
+- If you set inline overflow styles on `body` from your stimulus
+  HTML, the auto-fit will fight them. Don't.
+
+## Minimum response time (`min_rt`)
+
+Every stimulus inherits a class-level `min_rt: int = 0` (ms) on
+`_BaseStimulus`. When `> 0`, the trial's `on_load` callback installs a
+**document-level capturing** `keydown` listener that calls
+`event.stopImmediatePropagation()` + `event.preventDefault()` for the
+first `min_rt` ms after the stimulus renders, then removes itself via
+`setTimeout`. Because the listener runs in the capture phase, it fires
+*before* jsPsych's `getKeyboardResponse` listener (which is registered
+on bubble), so no plugin sees those keys at all — the trial cannot end
+until the gate elapses, regardless of which html-keyboard-response
+plugin version is loaded.
+
+While the gate is active, the same `on_load` also paints a small
+**visual indicator** so the participant can tell *why* their keys
+aren't doing anything:
+
+* The trial content (`#jspsych-content`, falling back to `<body>`) is
+  smoothly dimmed to `opacity:0.7;filter:saturate(0.5)` (still
+  readable, clearly muted).
+* A thin colored bar fixed at the bottom of the viewport
+  (`data-sb-min-rt-bar="1"`, default `#6a90c0`) animates from 0% →
+  100% width over exactly `min_rt` ms via CSS `transition`.
+
+When the gate releases, the bar is removed and the original
+`opacity` / `filter` / `transition` values are restored. To re-skin
+the bar, target `[data-sb-min-rt-bar]` from your own stylesheet — the
+attribute is stable across versions; the inline styles are not.
+
+Use cases:
+
+- Cheap guardrail against a participant single-key spamming through
+  an entire timeline (Prolific quality control).
+- Make sure the participant has at least glanced at the stimulus
+  before they can answer (when no real "stimulus duration" makes
+  sense).
+
+Three ways to set it (mirrors `fit_to_viewport`):
+
+1. **Class default** on a subclass:
+   ```python
+   class MyChoice(HtmlKeyboardResponse):
+       min_rt = 600
+   ```
+2. **Per-instance kwarg** on stimuli that expose it
+   (`HtmlKeyboardResponse(... , min_rt=800)`). `None` means "use the
+   class default"; negative or non-numeric values clamp to 0.
+3. **Post-construction**: `stim.min_rt = 800`.
+
+The value is **not** stored in `self.arg`, so it never leaks into
+trial data as `bean_min_rt`. It is also not part of `save_trial_parameters`.
+
+Notes:
+
+- The gate only blocks keyboard advance. Mouse, focus, and scroll
+  events are unaffected — touchscreen-button extensions or click-
+  based plugins are not gated by `min_rt`. Add a separate gate for
+  those if you need it.
+- Don't combine `min_rt` with `trial_duration < min_rt`: the trial
+  will time out before the gate releases and the participant will
+  never get a chance to respond. Sweetbean does not currently
+  cross-check these.
+- The participant should be told about the gate in the instructions
+  (otherwise the locked first ~half-second reads as "broken keys").
+  See `src/heuristic_decision_making/experiment.py:_render_instructions_html`
+  for an example of conditional instruction copy.
+
+## Cardinal rating displays (`sweetbean.util.rating`)
+
+`sweetbean.util.rating` ships small **build-time** HTML helpers for
+displaying cardinal-scale ratings (e.g. an expert score from 0–7).
+Use them when a row of "pips" (one filled circle per integer) becomes
+visually noisy — typically anywhere `rating_max` exceeds ~4.
+
+API:
+
+- `rating_bar_html(value, max_value, ...)` — single horizontal bar
+  whose fill width = `value / max_value`, plus an optional `<value>/<max>`
+  numeric label. Sensible dark-mode defaults; everything is overridable.
+- `rating_row_html(label, value, max_value, ...)` — `[label] [bar] [num]`
+  row, suitable for stacking inside a card.
+- `rating_card_html(title, rows_html, ...)` — bordered card with a
+  title, around a stack of `rating_row_html` outputs.
+- `rating_card_from_values_html(title, labels, values, max_value, ...)` —
+  one-liner that composes the above directly from parallel iterables.
+
+These are **Python-time only** (Pattern A — pre-render in Python and
+ship as a string). Do **not** import them inside a `FunctionVariable`
+callable: those callables are transpiled to JavaScript by Transcrypt,
+which cannot follow the import. If your trial render is in JS-land
+(Pattern B), inline the bar markup directly — the body of
+`rating_bar_html` is small and copy/paste-friendly. The HDM trial
+render in `src/heuristic_decision_making/experiment.py` does exactly
+this and shares only the visual conventions with the helper.
+
 ## Footguns
 
 1. **Closure scope hides non-locals from the build-time check.**
@@ -211,6 +398,16 @@ top-level jsPsych config keys.
    a multi-MB HTML file. Acceptable for typical (≤200 trial) studies;
    if it isn't, fall back to Pattern B with a literals-only
    `FunctionVariable`.
+7. **Multi-line strings as stimulus params.** Sweetbean serializes
+   string params as a single-quoted JS literal (`'...'`).
+   `_var_to_js` now escapes `\n`, `\r`, `\\`, `'`, U+2028 and U+2029
+   so multi-line HTML/CSS payloads compile to valid JS — but if you
+   ever bypass `_var_to_js` (for example, building your own raw JS
+   into `js_body`), do the same escaping yourself or you'll get
+   `Uncaught SyntaxError: Invalid or unexpected token` at trial start
+   in the browser. The regression net is
+   `scripts/_check_stim_js_syntax.py` in autopi: it parses every
+   timeline stimulus through `node --check`.
 
 ## Authoring checklist
 

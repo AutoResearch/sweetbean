@@ -8,6 +8,7 @@ README.md
 main.py
 mkdocs.yml
 pyproject.toml
+uv.lock
 .github/pull_request_template.md
 .github/ISSUE_TEMPLATE/jspsych-plugin-request.md
 .github/ISSUE_TEMPLATE/new-features-for-existing-stimuli.md
@@ -161,14 +162,19 @@ src/sweetbean/llm_utils/__init__.py
 src/sweetbean/llm_utils/prompts.py
 src/sweetbean/response_spec/__init__.py
 src/sweetbean/response_spec/spec.py
+src/sweetbean/stimulus/AUTHORING.md
 src/sweetbean/stimulus/Choice.py
+src/sweetbean/stimulus/DefaultCategoryLearning.py
 src/sweetbean/stimulus/Foraging.py
 src/sweetbean/stimulus/Gabor.py
 src/sweetbean/stimulus/Generic.py
 src/sweetbean/stimulus/HtmlKeyboardResponse.py
+src/sweetbean/stimulus/HtmlSliderResponse.py
 src/sweetbean/stimulus/Image.py
+src/sweetbean/stimulus/InformedConsent.py
 src/sweetbean/stimulus/RO.py
 src/sweetbean/stimulus/RSVP.py
+src/sweetbean/stimulus/RatingResponse.py
 src/sweetbean/stimulus/Stimulus.py
 src/sweetbean/stimulus/Survey.py
 src/sweetbean/stimulus/Symbol.py
@@ -176,6 +182,7 @@ src/sweetbean/stimulus/Video.py
 src/sweetbean/stimulus/_Template_.py
 src/sweetbean/stimulus/__init__.py
 src/sweetbean/stimulus_spec/__init__.py
+src/sweetbean/stimulus_spec/io.py
 src/sweetbean/stimulus_spec/prompt_schema.py
 src/sweetbean/stimulus_spec/render.py
 src/sweetbean/stimulus_spec/spec.py

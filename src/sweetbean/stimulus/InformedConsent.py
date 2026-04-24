@@ -9,6 +9,20 @@ Two visual styles are supported:
   Princeton University Adult Consent Form (see ``IRB.pdf`` in the autopi repo).
   Boilerplate text and IRB contact info default to Princeton's; any field can
   still be overridden from the ``consent_config`` dict.
+
+Styling notes
+-------------
+Sweetbean's bundled ``main.css`` declares a global ``div { font-size: 36pt;
+line-height: 40pt }`` rule on top of a black ``body``. Any nested ``<div>``
+inside the rendered consent that does NOT carry its own inline ``font-size``
+inherits that 36pt — which makes long-form consent text explode. To avoid
+that, both renderers prepend a single scoped ``<style>`` block that pins
+``font-size: inherit`` on every descendant of ``.sweetbean-informed-consent``;
+the more specific selector beats sweetbean's global ``div`` rule, so the
+consent's own typography survives. Visual hierarchy is then expressed
+through semantic class names (``.ic-title``, ``.ic-section-title``,
+``.ic-banner``, ``.ic-press-space``, ``.ic-meta``, ``.ic-clauses``) instead
+of brittle per-element inline styles.
 """
 
 from __future__ import annotations
@@ -34,12 +48,138 @@ def _fmt_duration(raw: Any) -> str:
 
 
 # ---------------------------------------------------------------------------
+# shared scoped stylesheet
+# ---------------------------------------------------------------------------
+
+
+# One stylesheet shared by both `default` and `princeton` renderers. The
+# critical rule is `.sweetbean-informed-consent * { font-size: inherit }`,
+# which beats sweetbean's global `div { font-size: 36pt }` via specificity
+# and stops every nested div from blowing up to 36pt. Everything else is
+# pure visual hierarchy: a max-width content column, clear section titles,
+# comfortable spacing on a dark page.
+_BASE_STYLE = """
+<style>
+  .sweetbean-informed-consent{
+    box-sizing:border-box;
+    max-width:760px;
+    margin:0 auto;
+    padding:28px 36px 32px 36px;
+    text-align:left;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,
+                'Helvetica Neue',Arial,sans-serif;
+    font-size:13px;
+    line-height:1.5;
+    color:#e8e8e8;
+    background:transparent;
+  }
+  /* Beat sweetbean's global `div { font-size: 36pt }` rule via specificity
+     so nested divs/sections inherit the wrapper's 13px instead of exploding.
+     IMPORTANT: scope the reset to DESCENDANTS only (no leading
+     `.sweetbean-informed-consent,` selector). Including the wrapper itself
+     would re-resolve its own `font-size` to `inherit` (equal specificity,
+     declared after the wrapper's `font-size:13px` → the inherit wins),
+     making the wrapper inherit `body`'s 36pt and turning every paragraph
+     into giant text while section headings (20px) ended up smaller than
+     the body. Headings re-establish their own font-size below; the
+     `.sweetbean-informed-consent *` selector has specificity (0,1,0), and
+     our `.ic-title` / `.ic-section-title` rules also have specificity
+     (0,1,0) but appear later in the stylesheet, so they win. Same for the
+     per-class `.ic-banner`, `.ic-subbanner`, `.ic-press-space`, etc. */
+  .sweetbean-informed-consent *{
+    font-size:inherit;
+    line-height:inherit;
+  }
+  .sweetbean-informed-consent h1,
+  .sweetbean-informed-consent h2,
+  .sweetbean-informed-consent h3,
+  .sweetbean-informed-consent h4{
+    color:#ffffff;
+    font-weight:600;
+    margin:0;
+  }
+  .sweetbean-informed-consent p{margin:0 0 8px 0;}
+  .sweetbean-informed-consent strong{color:#ffffff;}
+  .sweetbean-informed-consent .ic-banner{
+    font-size:12px;
+    font-style:italic;
+    color:#a8a8a8;
+    text-align:center;
+    border-bottom:1px solid #444;
+    padding-bottom:10px;
+    margin-bottom:14px;
+  }
+  .sweetbean-informed-consent .ic-subbanner{
+    font-size:11px;
+    letter-spacing:0.08em;
+    text-align:center;
+    color:#a8a8a8;
+    text-transform:uppercase;
+    margin-bottom:18px;
+  }
+  .sweetbean-informed-consent .ic-title{
+    font-size:32px;
+    text-align:center;
+    margin:0 0 12px 0;
+    letter-spacing:-0.005em;
+  }
+  .sweetbean-informed-consent .ic-meta{
+    margin:0 0 18px 0;
+    padding:12px 14px;
+    background:rgba(255,255,255,0.04);
+    border-left:3px solid #6a90c0;
+    border-radius:4px;
+    font-size:13px;
+  }
+  .sweetbean-informed-consent .ic-meta p{margin:0 0 4px 0;}
+  .sweetbean-informed-consent .ic-meta p:last-child{margin-bottom:0;}
+  .sweetbean-informed-consent section{margin:0 0 16px 0;}
+  .sweetbean-informed-consent .ic-section-title{
+    font-size:20px;
+    margin:18px 0 6px 0;
+    letter-spacing:0.01em;
+  }
+  .sweetbean-informed-consent .ic-clauses{
+    margin:6px 0 0 0;
+    padding:0 0 0 22px;
+    list-style:none;
+  }
+  .sweetbean-informed-consent .ic-clauses li{margin:0 0 8px 0;}
+  .sweetbean-informed-consent .ic-clauses li:last-child{margin-bottom:0;}
+  .sweetbean-informed-consent .ic-contact-list{
+    margin:6px 0 0 0;
+    padding:0;
+    list-style:none;
+  }
+  .sweetbean-informed-consent .ic-contact-list li{
+    margin:0 0 12px 0;
+  }
+  .sweetbean-informed-consent .ic-contact-list li:last-child{margin-bottom:0;}
+  .sweetbean-informed-consent .ic-press-space{
+    margin-top:26px;
+    padding-top:14px;
+    border-top:1px solid #444;
+    text-align:center;
+    font-size:15px;
+    color:#cfcfcf;
+  }
+  .sweetbean-informed-consent .ic-press-space strong{color:#ffffff;}
+</style>
+""".strip()
+
+
+# ---------------------------------------------------------------------------
 # default (generic) style
 # ---------------------------------------------------------------------------
 
 
 def _render_default_html(merged: dict[str, Any]) -> str:
-    """Generic, minimal consent layout (the prior default behavior)."""
+    """Generic, minimal consent layout (the prior default behavior).
+
+    Lists merged YAML-style fields under bold section headings; uses the
+    same scoped stylesheet as the Princeton layout so the global sweetbean
+    `div` font-size rule does not break the typography.
+    """
     researcher = merged.get("researcher_name") or merged.get("pi_name")
     email = merged.get("researcher_email") or merged.get("email")
 
@@ -58,23 +198,24 @@ def _render_default_html(merged: dict[str, Any]) -> str:
     ]
 
     parts: list[str] = [
-        "<div class='sweetbean-informed-consent' "
-        "style='max-width:40rem;margin:auto;text-align:left;'>",
-        "<h2 style='text-align:center;'>Informed consent</h2>",
+        _BASE_STYLE,
+        "<div class='sweetbean-informed-consent'>",
+        "<h2 class='ic-title'>Informed consent</h2>",
     ]
     for key, label, raw in sections:
         if raw is None or (isinstance(raw, str) and not raw.strip()):
             continue
         body = _fmt_duration(raw) if key == "duration" else _esc(raw)
         parts.append(
-            f"<section style='margin-bottom:1rem;'>"
-            f"<h3>{_esc(label)}</h3><p>{body}</p></section>"
+            "<section>"
+            f"<h3 class='ic-section-title'>{_esc(label)}</h3>"
+            f"<p>{body}</p>"
+            "</section>"
         )
 
     parts.append(
-        "<p style='margin-top:1.5rem;text-align:center;'>"
-        "<strong>Press SPACE to continue.</strong>"
-        "</p></div>"
+        "<p class='ic-press-space'><strong>Press SPACE to continue.</strong></p>"
+        "</div>"
     )
     return "".join(parts)
 
@@ -113,39 +254,50 @@ def _princeton_field(merged: dict[str, Any], key: str) -> str:
     return _esc(val)
 
 
-def _princeton_banner() -> str:
+def _section(label: str, body_html: str) -> str:
     return (
-        "<div style='font-style:italic;text-align:center;"
-        "border-bottom:1px solid #888;padding-bottom:6px;margin-bottom:18px;'>"
-        f"{_esc(_PRINCETON_HEADER)}</div>"
-    )
-
-
-def _princeton_section(label: str, body_html: str) -> str:
-    return (
-        "<section style='margin:0 0 16px 0;'>"
-        f"<h3 style='margin:0 0 6px 0;font-size:15px;font-weight:bold;'>"
-        f"{_esc(label)}</h3>"
-        f"<div style='margin:0;'>{body_html}</div>"
+        "<section>"
+        f"<h3 class='ic-section-title'>{_esc(label)}</h3>"
+        f"{body_html}"
         "</section>"
     )
 
 
-def _princeton_paragraph(text: Any) -> str:
-    return f"<p style='margin:0 0 8px 0;'>{_esc(text)}</p>"
-
-
 def _render_princeton_html(merged: dict[str, Any]) -> str:
-    """Render consent text in Princeton ADULT CONSENT FORM style (see IRB.pdf)."""
+    """Render consent text in Princeton ADULT CONSENT FORM style (see IRB.pdf).
+
+    Layout:
+      * IRB approval banner (italic, muted)
+      * "Adult Consent Form — Princeton University" subtitle (uppercase, muted)
+      * Title / PI / Department metadata block (subtle highlighted card)
+      * Welcome paragraph
+      * Purpose, Study Procedures, Benefits/Risks, Confidentiality, Compensation
+        as plain sections
+      * Who to contact (PI + IRB) as an unordered contact list
+      * Consent acknowledgement clauses A / B and final agreement
+      * "Press SPACE to continue." footer
+
+    The previous version intermixed an "ADULT CONSENT FORM / PRINCETON
+    UNIVERSITY" footer block in the middle of the document; that is now
+    promoted to the subtitle right under the banner so the document reads
+    top-to-bottom without an interruption.
+    """
     study_title = merged.get("study_title") or ""
     pi_name = merged.get("pi_name") or merged.get("researcher_name") or ""
-    pi_email = merged.get("pi_email") or merged.get("researcher_email") or merged.get("email") or ""
+    pi_email = (
+        merged.get("pi_email")
+        or merged.get("researcher_email")
+        or merged.get("email")
+        or ""
+    )
     institution = _princeton_field(merged, "institution")
     pi_department = _princeton_field(merged, "pi_department")
     irb_contact_name = _princeton_field(merged, "irb_contact_name")
     irb_phone = _princeton_field(merged, "irb_phone")
     irb_email = _princeton_field(merged, "irb_email")
-    welcome_text = merged.get("welcome_text") or _PRINCETON_DEFAULTS["welcome_text"]
+    welcome_text = (
+        merged.get("welcome_text") or _PRINCETON_DEFAULTS["welcome_text"]
+    )
 
     purpose = merged.get("purpose")
     procedures = merged.get("procedures")
@@ -156,101 +308,107 @@ def _render_princeton_html(merged: dict[str, Any]) -> str:
     compensation = merged.get("compensation")
 
     parts: list[str] = [
-        "<div class='sweetbean-informed-consent sweetbean-informed-consent--princeton' "
-        "style='max-width:46rem;margin:auto;text-align:left;font-size:14px;"
-        "line-height:1.5;color:#222;'>",
-        _princeton_banner(),
-        # Title block
-        "<div style='margin-bottom:18px;'>",
-        f"<p style='margin:0;'><strong>TITLE OF RESEARCH:</strong> {_esc(study_title)}</p>",
-        f"<p style='margin:0;'><strong>PRINCIPAL INVESTIGATOR:</strong> {_esc(pi_name)}</p>",
-        "<p style='margin:0;'><strong>PRINCIPAL INVESTIGATOR&rsquo;S DEPARTMENT:</strong> "
+        _BASE_STYLE,
+        "<div class='sweetbean-informed-consent "
+        "sweetbean-informed-consent--princeton'>",
+        f"<div class='ic-banner'>{_esc(_PRINCETON_HEADER)}</div>",
+        "<div class='ic-subbanner'>"
+        f"Adult Consent Form &mdash; {institution}"
+        "</div>",
+        # Metadata card: title / PI / department
+        "<div class='ic-meta'>",
+        f"<p><strong>TITLE OF RESEARCH:</strong> {_esc(study_title)}</p>",
+        f"<p><strong>PRINCIPAL INVESTIGATOR:</strong> {_esc(pi_name)}</p>",
+        "<p><strong>PRINCIPAL INVESTIGATOR&rsquo;S DEPARTMENT:</strong> "
         f"{pi_department}</p>",
         "</div>",
-        _princeton_paragraph(welcome_text),
+        f"<p>{_esc(welcome_text)}</p>",
     ]
 
     if purpose:
-        parts.append(_princeton_section("Purpose of the research:", _princeton_paragraph(purpose)))
+        parts.append(
+            _section("Purpose of the research", f"<p>{_esc(purpose)}</p>")
+        )
 
     if procedures or duration:
         body = ""
         if procedures:
-            body += _princeton_paragraph(procedures)
+            body += f"<p>{_esc(procedures)}</p>"
         if duration:
             body += (
-                "<p style='margin:0 0 8px 0;'>"
-                f"The study duration will be approximately {_fmt_duration(duration)}.</p>"
+                f"<p>The study duration will be approximately "
+                f"{_fmt_duration(duration)}.</p>"
             )
-        parts.append(_princeton_section("Study Procedures:", body))
-
-    # "ADULT CONSENT FORM / PRINCETON UNIVERSITY" footer block (matches the
-    # repeated footer between pages of the PDF). We render it once, in-line.
-    parts.append(
-        "<div style='text-align:center;margin:18px 0;font-weight:bold;letter-spacing:0.04em;'>"
-        "ADULT CONSENT FORM<br/>"
-        f"{institution.upper()}"
-        "</div>"
-    )
+        parts.append(_section("Study Procedures", body))
 
     if benefits or risks:
         body = ""
         if benefits:
-            body += _princeton_paragraph(benefits)
+            body += f"<p>{_esc(benefits)}</p>"
         if risks:
-            body += _princeton_paragraph(risks)
-        parts.append(_princeton_section("Benefits and Risks:", body))
+            body += f"<p>{_esc(risks)}</p>"
+        parts.append(_section("Benefits and Risks", body))
 
     if confidentiality:
         parts.append(
-            _princeton_section("Confidentiality:", _princeton_paragraph(confidentiality))
+            _section("Confidentiality", f"<p>{_esc(confidentiality)}</p>")
         )
 
     if compensation:
         parts.append(
-            _princeton_section("Compensation:", _princeton_paragraph(compensation))
+            _section("Compensation", f"<p>{_esc(compensation)}</p>")
         )
 
-    # "Who to contact" block — always rendered (uses Princeton IRB defaults)
-    contact_body_parts: list[str] = []
+    # Contact block: PI + IRB as a clean two-item list.
+    contact_items: list[str] = []
     if pi_name or pi_email:
-        contact_body_parts.append(
-            "<p style='margin:0 0 8px 0;'>"
-            "<strong>1.&nbsp;&nbsp;PRINCIPAL INVESTIGATOR:</strong><br/>"
-            f"{_esc(pi_name)}"
-            f"{('<br/>' + _esc(pi_email)) if pi_email else ''}"
-            "</p>"
+        pi_line = _esc(pi_name)
+        if pi_email:
+            pi_line += (
+                f"<br/><a href='mailto:{_esc(pi_email)}' "
+                f"style='color:#a8c8ff;text-decoration:none;'>{_esc(pi_email)}</a>"
+            )
+        contact_items.append(
+            "<li><strong>Principal Investigator</strong><br/>"
+            f"{pi_line}</li>"
         )
-    contact_body_parts.append(
-        "<p style='margin:0 0 8px 0;'>"
-        "<strong>2.&nbsp;&nbsp;</strong>If you have questions regarding your rights as "
-        "a research subject, or if problems arise which you do not feel you can discuss "
-        "with the Investigator, please contact the Institutional Review Board at:<br/>"
+    contact_items.append(
+        "<li><strong>Institutional Review Board</strong> "
+        "(if you have questions about your rights as a research subject, or "
+        "issues you do not feel you can discuss with the investigator)<br/>"
         f"{irb_contact_name}<br/>"
         f"Phone: {irb_phone}<br/>"
-        f"Email: {irb_email}"
-        "</p>"
+        f"Email: <a href='mailto:{irb_email}' "
+        f"style='color:#a8c8ff;text-decoration:none;'>{irb_email}</a></li>"
     )
-    parts.append(_princeton_section("Who to contact with questions:", "".join(contact_body_parts)))
-
-    # Final agreement clauses
     parts.append(
-        "<section style='margin:18px 0 12px 0;'>"
-        "<p style='margin:0 0 8px 0;'><strong>3.&nbsp;&nbsp;</strong>"
-        "I understand the information that was presented and that:</p>"
-        "<p style='margin:0 0 6px 18px;'><strong>A.</strong>&nbsp;&nbsp;My participation "
-        "is voluntary, and I may withdraw my consent and discontinue participation in "
-        "the project at any time. My refusal to participate will not result in any penalty.</p>"
-        "<p style='margin:0 0 8px 18px;'><strong>B.</strong>&nbsp;&nbsp;I do not waive "
-        "any legal rights or release "
-        f"{institution}, its agents, or you from liability for negligence.</p>"
-        "<p style='margin:0;'><strong>4.&nbsp;&nbsp;</strong>"
-        "I hereby give my consent to be the subject of your research.</p>"
+        _section(
+            "Who to contact with questions",
+            f"<ul class='ic-contact-list'>{''.join(contact_items)}</ul>",
+        )
+    )
+
+    # Final agreement clauses — A / B / C as a plain list under one heading
+    # so the numbering does not collide with the contact items above.
+    parts.append(
+        "<section>"
+        "<h3 class='ic-section-title'>Acknowledgement &amp; consent</h3>"
+        "<p>I understand the information that was presented and that:</p>"
+        "<ol class='ic-clauses' style='list-style:upper-alpha;'>"
+        "<li>My participation is voluntary, and I may withdraw my consent and "
+        "discontinue participation in the project at any time. My refusal to "
+        "participate will not result in any penalty.</li>"
+        "<li>I do not waive any legal rights or release "
+        f"{institution}, its agents, or you from liability for negligence.</li>"
+        "</ol>"
+        "<p style='margin-top:10px;'>"
+        "I hereby give my consent to be the subject of your research."
+        "</p>"
         "</section>"
     )
 
     parts.append(
-        "<p style='margin-top:1.5rem;text-align:center;'>"
+        "<p class='ic-press-space'>"
         "<strong>Press SPACE to continue.</strong>"
         "</p></div>"
     )
