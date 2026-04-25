@@ -156,19 +156,33 @@ def FUNCTION_PREAMBLE(is_async):
     )
 
 
-def FUNCTION_APPENDIX(is_async):
+def FUNCTION_APPENDIX(is_async, post_run_js: str = ""):
+    """Closing block for the ``runExperiment`` function.
+
+    ``post_run_js`` is emitted between ``jsPsych.run`` and the data snapshot
+    so any side effects (e.g. ``jsPsych.data.addProperties`` from
+    protections) are reflected in the returned ``observation``.
+    """
     async_string = ""
     if is_async:
         async_string = "await "
+    post = (post_run_js.rstrip(";\n ") + "\n") if post_run_js else ""
     return (
-        f"{async_string}jsPsych.run(trials)\nconst observation = jsPsych.data.get()\n"
+        f"{async_string}jsPsych.run(trials)\n"
+        f"{post}"
+        f"const observation = jsPsych.data.get()\n"
         + f"return {async_string}observation\n"
         + "}"
     )
 
 
-def TEXT_APPENDIX(is_async):
+def TEXT_APPENDIX(is_async, post_run_js: str = ""):
+    """Closing block for non-function (top-level) JS output.
+
+    ``post_run_js`` runs after ``jsPsych.run``.
+    """
     async_string = ""
     if is_async:
         async_string = "await "
-    return f"{async_string}jsPsych.run(trials)\n"
+    post = (post_run_js.rstrip(";\n ") + "\n") if post_run_js else ""
+    return f"{async_string}jsPsych.run(trials)\n{post}"

@@ -4,6 +4,7 @@ import sys
 
 from sweetbean.block import Block
 from sweetbean.experiment import Experiment
+from sweetbean.protection import BotDetection, Protection
 from sweetbean.response_spec import (
     KeyboardPressResponseSpec,
     MouseClickResponseSpec,
@@ -40,9 +41,11 @@ check_java()
 __all__ = [
     "AssetStimulusSpec",
     "Block",
+    "BotDetection",
     "Experiment",
     "KeyboardPressResponseSpec",
     "MouseClickResponseSpec",
+    "Protection",
     "RectangleSpec",
     "ResponseSpecUnion",
     "SymbolStimulusSpec",

@@ -64,4 +64,7 @@ documentation = "https://autoresearch.github.io/sweetbean/"
 requires = ["setuptools", "setuptools_scm"]
 build-backend = "setuptools.build_meta"
 
+[tool.setuptools.package-data]
+"sweetbean.protection" = ["assets/*.js"]
+
 [tool.setuptools_scm]

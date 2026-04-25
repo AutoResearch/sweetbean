@@ -124,6 +124,34 @@ class _BaseStimulus(ABC):
                 extract_shared_variables(se.set_variable)
         return shared_variables
 
+    def _protection_on_load_js(self) -> str:
+        """Per-trial JS contributed by active protections (see
+        :mod:`sweetbean.protection`). Empty when no protections are active."""
+        try:
+            from sweetbean.protection._context import get_active_protections
+        except Exception:
+            return ""
+        parts = []
+        for p in get_active_protections():
+            snippet = p.on_load_for_stimulus(self)
+            if snippet:
+                parts.append(snippet)
+        return "".join(parts)
+
+    def _protection_on_finish_js(self) -> str:
+        """Per-trial JS contributed by active protections, run inside the
+        ``on_finish(data)`` callback (``data`` is the trial row in scope)."""
+        try:
+            from sweetbean.protection._context import get_active_protections
+        except Exception:
+            return ""
+        parts = []
+        for p in get_active_protections():
+            snippet = p.on_finish_for_stimulus(self)
+            if snippet:
+                parts.append(snippet)
+        return "".join(parts)
+
     def _on_load_js(self) -> str:
         # Always emit on_load so a transition from a fit=True to a fit=False
         # trial (e.g. instruction → consent) cleanly clears the prior zoom
@@ -170,6 +198,7 @@ class _BaseStimulus(ABC):
                 "});"
                 "},__sb_min_rt);"
             )
+        body += self._protection_on_load_js()
         return f"on_load:()=>{{{body}}},"
 
     def to_js(self):
@@ -181,7 +210,7 @@ class _BaseStimulus(ABC):
         self.js = (
             f"{{{self.js_body}{self.js_before}{self._save_trial_parameters_js()}"
             f"{self._on_load_js()}"
-            f"on_finish:(data)=>{{{self.js_data}}}}}"
+            f"on_finish:(data)=>{{{self.js_data}{self._protection_on_finish_js()}}}}}"
         )
 
     def to_js_for_image(self):
@@ -193,7 +222,7 @@ class _BaseStimulus(ABC):
         self.js = (
             f"{{{self.js_body}{self.js_before}{self._save_trial_parameters_js()}"
             f"{self._on_load_js()}"
-            f"on_finish:(data)=>{{{self.js_data}}}}}"
+            f"on_finish:(data)=>{{{self.js_data}{self._protection_on_finish_js()}}}}}"
         )
 
     def _save_trial_parameters_js(self) -> str:

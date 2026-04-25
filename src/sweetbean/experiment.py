@@ -27,67 +27,120 @@ class Experiment:
     blocks: List[Block] = []
     js = ""
 
-    def __init__(self, blocks: List[Block]):
+    def __init__(self, blocks: List[Block], protections=None):
         """
         Arguments:
             blocks: a list of blocks
+            protections: optional list of :class:`sweetbean.protection.Protection`
+                instances. Each protection embeds its own JS into the compiled
+                experiment at well-defined hook points (head, runtime, init,
+                per-trial on_load/on_finish, summary). See
+                :mod:`sweetbean.protection` for the contract.
         """
         self.blocks = blocks
+        self.protections = list(protections) if protections else []
+
+    def _protection_head_assets(self) -> str:
+        return "".join(p.head_assets() for p in self.protections if p.head_assets())
+
+    def _protection_runtime_js(self) -> str:
+        parts = [p.runtime_js() for p in self.protections]
+        return "\n".join(part for part in parts if part)
+
+    def _protection_init_js(self) -> str:
+        parts = [p.init_js() for p in self.protections]
+        return "\n".join(part for part in parts if part)
+
+    def _protection_summary_js(self) -> str:
+        """JS statement that adds each protection's summary onto every saved
+        trial row via ``jsPsych.data.addProperties``. Empty if no protection
+        emits a summary."""
+        entries = []
+        for p in self.protections:
+            expr = p.summary_js()
+            if expr:
+                entries.append(f"{p.name}:{expr}")
+        if not entries:
+            return ""
+        return "jsPsych.data.addProperties({" + ",".join(entries) + "});"
 
     def to_js(self, path_local_download=None):
+        from sweetbean.protection._context import set_active_protections
+
         self.js = ""
         shared_variables = {}
         extensions = ""
-        for b in self.blocks:
-            b.to_js()
-            extensions += _initialize_extensions(b.extensions)
-            for s in b.stimuli:
-                shared_variables.update(s.return_shared_variables())
-        for s_key in shared_variables:
-            self.js += f"{shared_variables[s_key].set()}\n"
-        if path_local_download:
-            if path_local_download.endswith(".json"):
-                if extensions == "":
-                    self.js += "jsPsych = initJsPsych("
+        # Protection runtime libs go FIRST so window.<Lib> is in scope by the
+        # time anything else runs. Active-protections context is set BEFORE
+        # block.to_js so per-trial hooks (on_load/on_finish) are emitted.
+        runtime = self._protection_runtime_js()
+        if runtime:
+            self.js += runtime + "\n"
+        set_active_protections(self.protections)
+        try:
+            for b in self.blocks:
+                b.to_js()
+                extensions += _initialize_extensions(b.extensions)
+                for s in b.stimuli:
+                    shared_variables.update(s.return_shared_variables())
+            for s_key in shared_variables:
+                self.js += f"{shared_variables[s_key].set()}\n"
+            summary = self._protection_summary_js()
+            init = self._protection_init_js()
+            if path_local_download:
+                if path_local_download.endswith(".json"):
+                    save_call = (
+                        f"jsPsych.data.get().localSave('json',"
+                        f"'{path_local_download}')"
+                    )
+                elif path_local_download.endswith(".csv"):
+                    save_call = (
+                        f"jsPsych.data.get().localSave('csv',"
+                        f"'{path_local_download}')"
+                    )
                 else:
-                    self.js += f"jsPsych = initJsPsych({extensions},"
-                self.js += (
-                    f"{{on_finish:()=>jsPsych.data.get().localSave('json',"
-                    f"'{path_local_download}')}});\n"
-                )
-            elif path_local_download.endswith(".csv"):
+                    raise Exception(
+                        "Unknown file format for local download. "
+                        "Only .json or .csv are supported."
+                    )
+                on_finish_body = f"{summary}{save_call}"
+                opts = f"{{on_finish:()=>{{{on_finish_body}}}}}"
                 if extensions == "":
-                    self.js += "jsPsych = initJsPsych("
+                    self.js += f"jsPsych = initJsPsych({opts});\n"
                 else:
-                    self.js += f"jsPsych = initJsPsych({extensions},"
-                self.js += (
-                    f"{{on_finish:()=>jsPsych.data.get().localSave('csv',"
-                    f"'{path_local_download}')}});\n"
-                )
+                    self.js += f"jsPsych = initJsPsych({extensions}{opts});\n"
+            elif summary:
+                opts = f"{{on_finish:()=>{{{summary}}}}}"
+                if extensions == "":
+                    self.js += f"jsPsych = initJsPsych({opts});\n"
+                else:
+                    self.js += f"jsPsych = initJsPsych({extensions}{opts});\n"
             else:
-                raise Exception(
-                    "Unknown file format for local download. "
-                    "Only .json or .csv are supported."
-                )
-        else:
-            self.js += f"jsPsych = initJsPsych({extensions});\n"
-        self.js += "trials = [\n"
-        for b in self.blocks:
-            self.js += b.js
-            self.js += ","
-        self.js = self.js[:-1] + "]\n"
-        self.js += ";jsPsych.run(trials)"
+                self.js += f"jsPsych = initJsPsych({extensions});\n"
+            if init:
+                self.js += init + "\n"
+            self.js += "trials = [\n"
+            for b in self.blocks:
+                self.js += b.js
+                self.js += ","
+            self.js = self.js[:-1] + "]\n"
+            self.js += ";jsPsych.run(trials)"
+        finally:
+            set_active_protections([])
 
     def to_html(self, path, path_local_download=None):
         """
         Save the experiment to an HTML file
         """
         self.to_js(path_local_download)
+        # Protection head_assets() (extra <link>/<script> tags) are emitted
+        # right after the preamble's opening <script>; runtime_js (e.g. the
+        # inlined BotDetection IIFE) is already part of self.js, prepended
+        # in to_js so it executes before initJsPsych.
+        head_assets = self._protection_head_assets()
         html = HTML_PREAMBLE
-        blocks = 0
-
-        if blocks > 0:
-            html += "</script><script>\n"
+        if head_assets:
+            html += "</script>\n" + head_assets + "<script>\n"
         html += f"{self.js}" + HTML_APPENDIX
 
         with open(path, "w") as f:
@@ -97,23 +150,42 @@ class Experiment:
         """
         Return the experiment as a JavaScript string
         """
-        text = FUNCTION_PREAMBLE(is_async) if as_function else ""
-        extensions = ""
-        for b in self.blocks:
-            b.to_js()
-            extensions += _initialize_extensions(b.extensions)
-            for s in b.stimuli:
+        from sweetbean.protection._context import set_active_protections
 
-                shared_variables = s.return_shared_variables()
-                for s_key in shared_variables:
-                    text += f"{shared_variables[s_key].set()}\n"
-        text += f"const jsPsych = initJsPsych({extensions})\n"
-        text += "const trials = [\n"
-        for b in self.blocks:
-            text += b.js
-            text += ","
-        text = text[:-1] + "]\n"
-        text += FUNCTION_APPENDIX(is_async) if as_function else TEXT_APPENDIX(is_async)
+        text = FUNCTION_PREAMBLE(is_async) if as_function else ""
+        runtime = self._protection_runtime_js()
+        if runtime:
+            text += runtime + "\n"
+        extensions = ""
+        set_active_protections(self.protections)
+        try:
+            for b in self.blocks:
+                b.to_js()
+                extensions += _initialize_extensions(b.extensions)
+                for s in b.stimuli:
+                    shared_variables = s.return_shared_variables()
+                    for s_key in shared_variables:
+                        text += f"{shared_variables[s_key].set()}\n"
+            text += f"const jsPsych = initJsPsych({extensions})\n"
+            init = self._protection_init_js()
+            if init:
+                text += init + "\n"
+            text += "const trials = [\n"
+            for b in self.blocks:
+                text += b.js
+                text += ","
+            text = text[:-1] + "]\n"
+        finally:
+            set_active_protections([])
+        # Summary lands on every saved row by running addProperties AFTER
+        # jsPsych.run completes — that's why it goes into post_run_js, not
+        # initJsPsych's on_finish (which would race with the run loop in
+        # the function-style output).
+        post_run = self._protection_summary_js()
+        if as_function:
+            text += FUNCTION_APPENDIX(is_async, post_run)
+        else:
+            text += TEXT_APPENDIX(is_async, post_run)
         return text
 
     def compile(self, as_function=True, is_async=True):
@@ -125,25 +197,41 @@ class Experiment:
         Use when multiple conditions share the same stimulus structure (e.g. Firebase
         payloads) so timelines are "injected" without re-running Transcrypt per condition.
         """
+        from sweetbean.protection._context import set_active_protections
+
         text = FUNCTION_PREAMBLE(is_async) if as_function else ""
+        runtime = self._protection_runtime_js()
+        if runtime:
+            text += runtime + "\n"
         extensions = ""
-        for bi, b in enumerate(self.blocks):
-            if isinstance(b.timeline, CodeVariable):
-                b.to_js()
-            else:
-                b.to_js(template_timeline_token=_timeline_placeholder(bi))
-            extensions += _initialize_extensions(b.extensions)
-            for s in b.stimuli:
-                shared_variables = s.return_shared_variables()
-                for s_key in shared_variables:
-                    text += f"{shared_variables[s_key].set()}\n"
-        text += f"const jsPsych = initJsPsych({extensions})\n"
-        text += "const trials = [\n"
-        for b in self.blocks:
-            text += b.js
-            text += ","
-        text = text[:-1] + "]\n"
-        text += FUNCTION_APPENDIX(is_async) if as_function else TEXT_APPENDIX(is_async)
+        set_active_protections(self.protections)
+        try:
+            for bi, b in enumerate(self.blocks):
+                if isinstance(b.timeline, CodeVariable):
+                    b.to_js()
+                else:
+                    b.to_js(template_timeline_token=_timeline_placeholder(bi))
+                extensions += _initialize_extensions(b.extensions)
+                for s in b.stimuli:
+                    shared_variables = s.return_shared_variables()
+                    for s_key in shared_variables:
+                        text += f"{shared_variables[s_key].set()}\n"
+            text += f"const jsPsych = initJsPsych({extensions})\n"
+            init = self._protection_init_js()
+            if init:
+                text += init + "\n"
+            text += "const trials = [\n"
+            for b in self.blocks:
+                text += b.js
+                text += ","
+            text = text[:-1] + "]\n"
+        finally:
+            set_active_protections([])
+        post_run = self._protection_summary_js()
+        if as_function:
+            text += FUNCTION_APPENDIX(is_async, post_run)
+        else:
+            text += TEXT_APPENDIX(is_async, post_run)
         return text
 
     @staticmethod
