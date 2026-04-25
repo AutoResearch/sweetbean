@@ -6,7 +6,6 @@ import platform
 import sys
 
 import pytest
-from pyppeteer import launch
 
 import sweetbean
 from sweetbean import Block, Experiment
@@ -54,6 +53,13 @@ ALL_STIMULI = get_stimuli_list()
 
 async def run_experiment_in_browser(html_path: str):
     """Launch headless Chromium, load the HTML, check for errors, then close."""
+    try:
+        from pyppeteer import launch
+    except ImportError:
+        pytest.skip(
+            "pyppeteer not installed; use pip install 'sweetbean[image]' or sweetbean[test]"
+        )
+
     executable_path = os.getenv("PYPPETEER_EXECUTABLE_PATH", None)
     print("Using Chromium path:", executable_path)
 

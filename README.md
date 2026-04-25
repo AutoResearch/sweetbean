@@ -32,6 +32,12 @@ The package is available on PyPI and can be installed via pip:
 pip install sweetbean
 ```
 
+To export block timelines as PNGs (see `Block.to_image`), install the optional **image** extra (pulls in **pyppeteer** for headless Chromium and **Pillow** for PNG handling):
+
+```bash
+pip install "sweetbean[image]"
+```
+
 ## Compatibility
 
 SweetBean is compatible with the following version of jsPsych:
@@ -52,8 +58,9 @@ The following Python packages are required and will be installed automatically v
 
 - `jinja2`
 - `transcrypt`
-- `pyppeteer`
-- `pillow`
+- `pydantic`
+
+**Optional:** `pyppeteer` and `pillow` (via `pip install "sweetbean[image]"`) are only needed if you use `Block.to_image()` or other helpers that render HTML in headless Chromium and save PNGs.
 
 ### jsPsych Plugins
 SweetBean **does not support all jsPsych plugins**, but new plugins are added regularly.  

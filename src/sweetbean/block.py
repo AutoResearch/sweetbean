@@ -2,10 +2,31 @@ import asyncio
 import io
 import math
 import random
-from typing import Any, Dict, List
+from typing import Any, Callable, Dict, List
 
-from PIL import Image, ImageDraw, ImageFont
-from pyppeteer import launch
+
+def _lazy_pil():
+    """Import Pillow only when image rendering is used (optional dependency)."""
+    try:
+        from PIL import Image, ImageDraw, ImageFont
+    except ImportError as e:
+        raise ImportError(
+            "Pillow is required for Block.to_image() and related image utilities. "
+            "Install with: pip install 'sweetbean[image]'"
+        ) from e
+    return Image, ImageDraw, ImageFont
+
+
+def _lazy_pyppeteer_launch() -> Callable[..., Any]:
+    """Import pyppeteer only when headless rendering is used (optional dependency)."""
+    try:
+        from pyppeteer import launch
+    except ImportError as e:
+        raise ImportError(
+            "pyppeteer is required for render_html_to_image / Block.to_image(). "
+            "Install with: pip install 'sweetbean[image]'"
+        ) from e
+    return launch
 
 from sweetbean._const import HTML_APPENDIX, HTML_PREAMBLE
 from sweetbean.util.parse import to_js as sb_to_js
@@ -131,6 +152,8 @@ class Block:
 
 
 async def render_html_to_image(html_content):
+    Image, _, _ = _lazy_pil()
+    launch = _lazy_pyppeteer_launch()
     # Launch headless browser
     browser = await launch(
         headless=True, args=["--no-sandbox", "--disable-setuid-sandbox"]
@@ -166,6 +189,7 @@ def create_stimulus_sequence(
     arrow_color=(0, 0, 0),
     font_path=None,
 ):
+    Image, ImageDraw, ImageFont = _lazy_pil()
     if not hasattr(zoom_factor, "__iter__"):
         zoom_factor = [zoom_factor] * len(images)
     if len(images) != len(timings):

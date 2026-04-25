@@ -8,6 +8,12 @@ The package is available on PyPI and can be installed via pip:
 pip install sweetbean
 ```
 
+For HTML→PNG export (`Block.to_image`), also install the **image** extra (adds pyppeteer and Pillow):
+
+```bash
+pip install "sweetbean[image]"
+```
+
 ## Compatibility
 
 SweetBean is compatible with the following version of jsPsych:
@@ -28,8 +34,9 @@ The following Python packages are required and will be installed automatically v
 
 - `jinja2`
 - `transcrypt`
-- `pyppeteer`
-- `pillow`
+- `pydantic`
+
+**Optional:** `pyppeteer` and `pillow` (install `sweetbean[image]`) are required only for `Block.to_image()` and related rasterization helpers.
 
 ### jsPsych Plugins
 

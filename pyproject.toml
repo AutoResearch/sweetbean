@@ -13,14 +13,21 @@ requires-python = ">=3.9,<4"
 dependencies = [
     "jinja2==3.1.4",
     "Transcrypt==3.9.3",
-    "pyppeteer==2.0.0",
-    "pillow==11.0.0",
     "pydantic>=2.8",
 ]
 
 [project.optional-dependencies]
+# pyppeteer (headless Chromium) + Pillow are only needed for
+# :meth:`sweetbean.block.Block.to_image` and helpers that rasterize HTML to PNGs.
+# Core compile/jsPsych workflows do not use them.
+image = [
+    "pyppeteer==2.0.0",
+    "pillow>=10.0.0,<13",
+]
+
 dev = [
     "sweetbean[test]",
+    "sweetbean[image]",
     "sweetbean[build]",
     "sweetbean[notebook]",
     "sweetbean[docs]",
@@ -43,6 +50,8 @@ docs = [
 
 test = [
     "pytest",
+    "pyppeteer==2.0.0",
+    "pillow>=10.0.0,<13",
 ]
 
 [project.urls]
