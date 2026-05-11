@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<head>
+<title>My awesome experiment</title><script src="https://unpkg.com/jspsych@7.3.1"></script>
+<script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.2"></script>
+<script src="https://unpkg.com/@jspsych/plugin-survey-text@1.1.2"></script>
+<script src="https://unpkg.com/@jspsych/plugin-survey-multi-choice@1.1.2"></script>
+<script src="https://unpkg.com/@jspsych/plugin-survey-likert@1.1.2"></script>
+<script src="https://unpkg.com/@jspsych/plugin-survey-likert@1.1.2"></script>
+<link href="https://unpkg.com/jspsych@7.3.1/css/jspsych.css" rel="stylesheet" type="text/css"/>
+<script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.1.2"></script>
+<script src="https://unpkg.com/@jspsych/plugin-video-keyboard-response@1.1.2"></script>
+<script src="https://unpkg.com/@jspsych-contrib/plugin-rok@1.1.1"></script>
+<script src="https://unpkg.com/@jspsych-contrib/plugin-html-choice@1.0.0"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetbean@0.0.6/dist/runtime-script.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/sweetbean@0.0.6/dist/style/main.css" rel="stylesheet" type="text/css"/>
+<link href="https://cdn.jsdelivr.net/npm/sweetbean@0.0.6/dist/style/bandit.css" rel="stylesheet" type="text/css"/>
+</head>
+<body></body>
+<script>
+jsPsych = initJsPsych();
+trials = [
+{timeline: [{type: jsPsychHtmlKeyboardResponse,trial_duration:()=>{let trial_duration=null;return trial_duration},stimulus:()=>{let stimulus=((cl,txt) => {return`<div style='color:${cl}'>${txt}</div>`})('white', 'Welcome! We show a survey. Press SPACE to continue');return stimulus},choices:()=>{let choices=[' '];return choices},correct_key:()=>{let correct_key='';return correct_key},on_finish:(data)=>{let trial_duration=null;data["bean_trial_duration"]=trial_duration;let duration=null;data["bean_duration"]=duration;let stimulus=((cl,txt) => {return`<div style='color:${cl}'>${txt}</div>`})('white', 'Welcome! We show a survey. Press SPACE to continue');data["bean_stimulus"]=stimulus;let choices=[' '];data["bean_choices"]=choices;let correct_key='';data["bean_correct_key"]=correct_key;let type='jsPsychHtmlKeyboardResponse';data["bean_type"]=type;data["bean_correct"]=data["bean_correct_key"]===data["response"];}},{type: jsPsychSurveyText,questions:()=>{let questions=((_prompts) => {var prompts_=[];for(var p of _prompts)prompts_.append(dict({"prompt":p}));return prompts_})(['How old are you?','What is your gender?','What is your handedness?']);return questions},on_finish:(data)=>{let questions=((_prompts) => {var prompts_=[];for(var p of _prompts)prompts_.append(dict({"prompt":p}));return prompts_})(['How old are you?','What is your gender?','What is your handedness?']);data["bean_questions"]=questions;let type='jsPsychSurveyText';data["bean_type"]=type;data["bean_response"]=data["response"];}}], timeline_variables: []}]
+;jsPsych.run(trials)</script>
+</html>
