@@ -12,6 +12,7 @@ from sweetbean.stimulus.HtmlKeyboardResponse import (
     Stroop,
     Text,
 )
+Html = HtmlKeyboardResponse
 from sweetbean.stimulus.InformedConsent import InformedConsent
 from sweetbean.stimulus.RichInstructions import RichInstructions, render_rich_instructions_html
 from sweetbean.stimulus.HtmlSliderResponse import HtmlSliderResponse
